@@ -1,0 +1,26 @@
+{
+  "name": "anml",
+  "version": "0.1.0",
+  "description": "A language for vector graphics",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-server": "webpack-dev-server",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anderspitman/anml.git"
+  },
+  "author": "Anders Pitman",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anderspitman/anml/issues"
+  },
+  "homepage": "https://github.com/anderspitman/anml#readme",
+  "devDependencies": {
+    "webpack": "^4.16.2",
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5"
+  }
+}
