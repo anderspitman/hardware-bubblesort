@@ -3,9 +3,13 @@ body {
 }
 
 #root {
-    height: 95vh; 
+    height: 50vh; 
 }
 
 #renderer {
     height: 100%;
+}
+
+#editor textarea {
+    resize: none;
 }
