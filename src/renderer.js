@@ -1,5 +1,9 @@
 const { Vector2 } = require('./math');
-const { CircleModel, RectangleModel } = require('./model');
+const {
+  CircleModel,
+  RectangleModel,
+  SymbolModel,
+} = require('./model');
 
 
 class ANMLRenderer {
@@ -53,12 +57,19 @@ class ANMLRenderer {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (let shape of model.getShapes()) {
-      if (shape instanceof CircleModel) {
-        this.drawCircle(shape);
-      }
-      else if (shape instanceof RectangleModel) {
-        this.drawRectangle(shape);
-      }
+      this.renderShape(shape);  
+    }
+  }
+
+  renderShape(shape, offsetVec) {
+    if (shape instanceof CircleModel) {
+      this.drawCircle(shape, offsetVec);
+    }
+    else if (shape instanceof RectangleModel) {
+      this.drawRectangle(shape, offsetVec);
+    }
+    else if (shape instanceof SymbolModel) {
+      this.drawSymbol(shape, offsetVec);
     }
   }
 
@@ -74,18 +85,42 @@ class ANMLRenderer {
     this.onMouseMoveCallback = callback;
   }
 
-  drawCircle(c) {
+  drawCircle(c, offsetVec) {
+
+    let x = c.getX();
+    let y = c.getY();
+
+    if (offsetVec !== undefined) {
+      x += offsetVec.x;
+      y += offsetVec.y;
+    }
+
     this.ctx.beginPath();
-    this.ctx.arc(c.getX(), c.getY(), c.getRadius(), 0, 2*Math.PI); 
+    this.ctx.arc(x, y, c.getRadius(), 0, 2*Math.PI); 
     this.ctx.fill();
     this.ctx.stroke();
   }
 
-  drawRectangle(r) {
+  drawRectangle(r, offsetVec) {
+    let x = r.getX();
+    let y = r.getY();
+
+    if (offsetVec !== undefined) {
+      x += offsetVec.x;
+      y += offsetVec.y;
+    }
+
     this.ctx.beginPath();
-    this.ctx.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+    this.ctx.rect(x, y, r.getWidth(), r.getHeight());
     this.ctx.fill();
     this.ctx.stroke();
+  }
+
+  drawSymbol(s) {
+    const offsetVec = new Vector2({ x: s.getX(), y: s.getY() });
+    for (let child of s.getChildren()) {
+      this.renderShape(child, offsetVec);    
+    }
   }
 }
 

@@ -1,7 +1,20 @@
-const { ANMLModel, CircleModel, RectangleModel } = require('./model');
+const { capitalize } = require('./utils');
+const {
+  ANMLModel,
+  SymbolDefinitionModel,
+  SymbolModel,
+  ShapeModel,
+  CircleModel,
+  RectangleModel
+} = require('./model');
 
 
 class ANMLParser {
+
+  constructor() {
+    this._symbolDefs = {};
+  }
+
   parse(text) {
 
     const commentsRemoved = text.split('\n')
@@ -12,56 +25,125 @@ class ANMLParser {
     const model = new ANMLModel();
 
     //text = text.replace(/\s/g, '')
-    const tokens = this._tokenize(text)
+    const tokens = this._tokenize(commentsRemoved)
     //console.log(tokens)
 
     const shapes = [];
     model.setShapes(shapes);
 
     while (true) {
-      const shape = this._parse(tokens)
+      const model = this._parseExpression(tokens)
 
-      if (shape === null) {
+      if (model === null) {
         break;
       }
 
-      shapes.push(shape);
+      if (model instanceof ShapeModel) {
+        shapes.push(model);
+      }
+      else if (model instanceof SymbolDefinitionModel) {
+
+        if (this._symbolDefs[model.getName()] === undefined) {
+          this._symbolDefs[model.getName()] = model;
+        }
+        else {
+          throw "Symbol " + model.getName() + " already defined";
+        }
+      }
     }
+
+    model.setSymbolDefs(this._symbolDefs);
 
     return model;
   }
 
-  _parse(expr) {
+  _parseExpression(tokens) {
 
-    if (expr.shift() !== '(') {
+    if (tokens.shift() !== '(') {
       return null;
     }
 
-    const type = expr[0];
+    const type = tokens.shift();
 
-    let shape;
     switch(type) {
+      case 'def':
+        return this._parseSymbolDefinition(tokens);
+        break;
       case 'Circle':
-        shape = this._parseCircle(expr);
-        break;
       case 'Rectangle':
-        shape = this._parseRectangle(expr);
-        break;
+        tokens.unshift(type);
+        return this._parseShape(tokens);
       default:
-        throw "Invalid expression type";
+
+        const symbolDef = this._symbolDefs[type];
+        if (symbolDef !== undefined) {
+          const symbol = new SymbolModel();
+          symbol.setName(symbolDef.getName());
+          symbol.setChildren(symbolDef.getChildren());
+
+          this._setAttrs(symbol, tokens);
+          console.log(symbol);
+          return symbol;
+        }
+        else {
+          throw "Invalid expression type " + type;
+        }
         break;
     }
+  }
+
+  _parseShapeList(tokens) {
+
+    let tok = tokens.shift();
+
+    const shapes = [];
+
+    while (tok !== ')') {
+      const shape = this._parseShape(tokens);
+      shapes.push(shape);
+      tok = tokens.shift();
+    }
+
+    return shapes;
+  }
+
+  _parseShape(tokens) {
+
+    const type = tokens.shift();
+
+    let Con;
+    switch(type) {
+      case 'Circle':
+        Con = CircleModel;
+        break;
+      case 'Rectangle':
+        Con = RectangleModel;
+        break;
+      default:
+        throw "Invalid shape expression";
+        break;
+    }
+
+    const shape = new Con();
+
+    this._setAttrs(shape, tokens);
 
     return shape;
   }
 
   _parseSymbol(tokens) {
-    const symbol = {};
+  }
 
-    symbol.type = tokens.shift();
-    symbol.attrs = this._parseAttributes(tokens);
+  _setAttrs(shape, tokens) {
 
-    return symbol;
+    const attrs = this._parseAttributes(tokens);
+    for (let attr of attrs) {
+      const methodName = 'set' + capitalize(attr.name);
+      if (shape[methodName] === undefined) {
+        throw "Invalid attribute: " + attr.name;
+      }
+      shape[methodName](attr.value);
+    }
   }
 
   _parseAttributes(tokens) {
@@ -147,58 +229,18 @@ class ANMLParser {
     return tok;
   }
 
-  _parseCircle(tokens) {
-    const symbol = this._parseSymbol(tokens);
+  _parseSymbolDefinition(tokens) {
+    const def = new SymbolDefinitionModel();
+    const symbolName = tokens.shift();
+    def.setName(symbolName);
 
-    const circle = new CircleModel();
+    const shapes = this._parseShapeList(tokens);
+    def.setChildren(shapes);
 
-    for (let attr of symbol.attrs) {
-      switch(attr.name) {
-        case 'name':
-          circle.setName(attr.value);
-          break;
-        case 'x':
-          circle.setX(attr.value);
-          break;
-        case 'y':
-          circle.setY(attr.value);
-          break;
-        case 'radius':
-          circle.setRadius(attr.value);
-          break;
-      }
-    }
-
-    return circle;
+    return def
   }
 
-  _parseRectangle(tokens) {
-    const symbol = this._parseSymbol(tokens);
 
-    const rect = new RectangleModel();
-
-    for (let attr of symbol.attrs) {
-      switch(attr.name) {
-        case 'name':
-          rect.setName(attr.value);
-          break;
-        case 'x':
-          rect.setX(attr.value);
-          break;
-        case 'y':
-          rect.setY(attr.value);
-          break;
-        case 'width':
-          rect.setWidth(attr.value);
-          break;
-        case 'height':
-          rect.setHeight(attr.value);
-          break;
-      }
-    }
-
-    return rect;
-  }
   _tokenize(text) {
     const tokens = [];
     let currentToken = ''

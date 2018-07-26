@@ -10,12 +10,35 @@ class ANMLModel {
     this._shapes.push(shape);
   }
 
+  getSymbolDefs() {
+    return this._symbolDefs;
+  }
+  setSymbolDefs(value) {
+    this._symbolDefs = value;
+  }
+
   getShapes() {
     return this._shapes;
   }
-
   setShapes(value) {
     this._shapes = value;
+  }
+}
+
+
+class SymbolDefinitionModel {
+  getName() {
+    return this._name;
+  }
+  setName(value) {
+    this._name = value;
+  }
+
+  getChildren() {
+    return this._children;
+  }
+  setChildren(value) {
+    this._children = value;
   }
 }
 
@@ -27,6 +50,9 @@ class ShapeModel {
     this._y = 0;
   }
 
+  getName() {
+    return this._name;
+  }
   setName(value) {
     this._name = value;
   }
@@ -43,6 +69,29 @@ class ShapeModel {
   }
   setY(value) {
     this._y = value;
+  }
+}
+
+
+class SymbolModel extends ShapeModel {
+
+  getChildren() {
+    return this._children;
+  }
+  setChildren(value) {
+    this._children = value;
+  }
+
+  intersects(point) {
+    for (let child of this.getChildren()) {
+
+      const thisPos = new Vector2({ x: this.getX(), y: this.getY() });
+      const offsetPoint = point.subtract(thisPos);
+      if (child.intersects(offsetPoint)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -102,6 +151,8 @@ class RectangleModel extends ShapeModel {
 
 module.exports = {
   ANMLModel,
+  SymbolDefinitionModel,
+  SymbolModel,
   ShapeModel,
   CircleModel,
   RectangleModel,
