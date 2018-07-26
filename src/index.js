@@ -1,3 +1,4 @@
+const { Vector2 } = require('./math');
 const { ANMLParser } = require('./parser');
 const { ANMLRenderer } = require('./renderer');
 const { ANMLGenerator } = require('./generator');
@@ -19,14 +20,15 @@ function main(anmlFileText) {
   const generator = new ANMLGenerator();
   const editor = new ANMLEditor({ domParentId: 'editor' });
 
-  // TODO: clicking on the edge of the object then dragging causes the center
-  // point of the object to jump to where the mouse is.
   let dragObj = null;
+  let dragOffset;
   renderer.onMouseDown((point) => {
     for (let shape of model.getShapes()) {
       const intersects = shape.intersects(point);
 
       if (intersects) {
+        const objPos = new Vector2({ x: shape.getX(), y: shape.getY() });
+        dragOffset = point.subtract(objPos);
         dragObj = shape;
         break;
       }
@@ -39,8 +41,8 @@ function main(anmlFileText) {
 
   renderer.onMouseMove((point) => {
     if (dragObj !== null) {
-      dragObj.setX(point.x);
-      dragObj.setY(point.y);
+      dragObj.setX(point.x - dragOffset.x);
+      dragObj.setY(point.y - dragOffset.y);
     }
   });
 

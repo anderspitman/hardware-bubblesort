@@ -1,5 +1,5 @@
 const { Vector2 } = require('./math');
-const { CircleModel } = require('./model');
+const { CircleModel, RectangleModel } = require('./model');
 
 
 class ANMLRenderer {
@@ -56,6 +56,9 @@ class ANMLRenderer {
       if (shape instanceof CircleModel) {
         this.drawCircle(shape);
       }
+      else if (shape instanceof RectangleModel) {
+        this.drawRectangle(shape);
+      }
     }
   }
 
@@ -74,6 +77,13 @@ class ANMLRenderer {
   drawCircle(c) {
     this.ctx.beginPath();
     this.ctx.arc(c.getX(), c.getY(), c.getRadius(), 0, 2*Math.PI); 
+    this.ctx.fill();
+    this.ctx.stroke();
+  }
+
+  drawRectangle(r) {
+    this.ctx.beginPath();
+    this.ctx.rect(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     this.ctx.fill();
     this.ctx.stroke();
   }

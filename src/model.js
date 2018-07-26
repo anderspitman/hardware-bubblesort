@@ -67,8 +67,42 @@ class CircleModel extends ShapeModel {
   }
 }
 
+
+class RectangleModel extends ShapeModel {
+  constructor() {
+    super();
+
+    this._width = 10;
+    this._height = 10;
+  }
+
+  getWidth() {
+    return this._width;
+  }
+  setWidth(value) {
+    this._width = value;
+  }
+
+  getHeight() {
+    return this._height;
+  }
+  setHeight(value) {
+    this._height = value;
+  }
+
+  intersects(point) {
+    const withinX = point.x >= this.getX() &&
+      point.x <= (this.getX() + this.getWidth());
+    const withinY = point.y >= this.getY() &&
+      point.y <= (this.getY() + this.getHeight());
+    return withinX && withinY;
+  }
+}
+
+
 module.exports = {
   ANMLModel,
   ShapeModel,
   CircleModel,
+  RectangleModel,
 };

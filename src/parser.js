@@ -1,4 +1,4 @@
-const { ANMLModel, CircleModel } = require('./model');
+const { ANMLModel, CircleModel, RectangleModel } = require('./model');
 
 
 class ANMLParser {
@@ -15,40 +15,44 @@ class ANMLParser {
     const tokens = this._tokenize(text)
     //console.log(tokens)
 
-    let shapes;
-    if (tokens[0] === '(') {
-      shapes = this._parse(tokens)
-    }
-    else {
-      throw "Text must begin with an S-Expression ('(')"
+    const shapes = [];
+    model.setShapes(shapes);
+
+    while (true) {
+      const shape = this._parse(tokens)
+
+      if (shape === null) {
+        break;
+      }
+
+      shapes.push(shape);
     }
 
-    model.setShapes(shapes);
     return model;
   }
 
   _parse(expr) {
 
-    const root = [];
-
     if (expr.shift() !== '(') {
-      throw "Must begin with (";
+      return null;
     }
 
-    const type = expr.shift();
+    const type = expr[0];
 
+    let shape;
     switch(type) {
       case 'Circle':
-        expr.unshift('Circle');
-        const circle = this._parseCircle(expr);
-        root.push(circle);
+        shape = this._parseCircle(expr);
+        break;
+      case 'Rectangle':
+        shape = this._parseRectangle(expr);
         break;
       default:
         throw "Invalid expression type";
         break;
     }
 
-    return root
+    return shape;
   }
 
   _parseSymbol(tokens) {
@@ -168,6 +172,33 @@ class ANMLParser {
     return circle;
   }
 
+  _parseRectangle(tokens) {
+    const symbol = this._parseSymbol(tokens);
+
+    const rect = new RectangleModel();
+
+    for (let attr of symbol.attrs) {
+      switch(attr.name) {
+        case 'name':
+          rect.setName(attr.value);
+          break;
+        case 'x':
+          rect.setX(attr.value);
+          break;
+        case 'y':
+          rect.setY(attr.value);
+          break;
+        case 'width':
+          rect.setWidth(attr.value);
+          break;
+        case 'height':
+          rect.setHeight(attr.value);
+          break;
+      }
+    }
+
+    return rect;
+  }
   _tokenize(text) {
     const tokens = [];
     let currentToken = ''
