@@ -5,28 +5,23 @@ const {
   SymbolModel,
   ShapeModel,
   CircleModel,
-  RectangleModel
+  RectangleModel,
+  TriangleModel,
 } = require('./model');
 
 
 class ANMLParser {
 
-  constructor() {
-    this._symbolDefs = {};
-  }
-
   parse(text) {
+
+    this._symbolDefs = {};
 
     const commentsRemoved = text.split('\n')
       .filter(line => !line.startsWith('#')).join('')
 
-    console.log(commentsRemoved);
-
     const model = new ANMLModel();
 
-    //text = text.replace(/\s/g, '')
     const tokens = this._tokenize(commentsRemoved)
-    //console.log(tokens)
 
     const shapes = [];
     model.setShapes(shapes);
@@ -71,6 +66,7 @@ class ANMLParser {
         break;
       case 'Circle':
       case 'Rectangle':
+      case 'Triangle':
         tokens.unshift(type);
         return this._parseShape(tokens);
       default:
@@ -82,7 +78,6 @@ class ANMLParser {
           symbol.setChildren(symbolDef.getChildren());
 
           this._setAttrs(symbol, tokens);
-          console.log(symbol);
           return symbol;
         }
         else {
@@ -118,6 +113,9 @@ class ANMLParser {
         break;
       case 'Rectangle':
         Con = RectangleModel;
+        break;
+      case 'Triangle':
+        Con = TriangleModel;
         break;
       default:
         throw "Invalid shape expression";

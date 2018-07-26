@@ -1,9 +1,12 @@
 const DEGREES_TO_RADIANS = Math.PI / 180;
 
 class Vector2 {
-  constructor({ x, y }) {
-    this.x = x;
-    this.y = y;
+  constructor(options) {
+
+    if (options !== undefined) {
+      this.x = options.x;
+      this.y = options.y;
+    }
   }
 
   add(other) {

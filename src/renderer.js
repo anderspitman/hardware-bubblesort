@@ -2,6 +2,7 @@ const { Vector2 } = require('./math');
 const {
   CircleModel,
   RectangleModel,
+  TriangleModel,
   SymbolModel,
 } = require('./model');
 
@@ -68,6 +69,9 @@ class ANMLRenderer {
     else if (shape instanceof RectangleModel) {
       this.drawRectangle(shape, offsetVec);
     }
+    else if (shape instanceof TriangleModel) {
+      this.drawTriangle(shape, offsetVec);
+    }
     else if (shape instanceof SymbolModel) {
       this.drawSymbol(shape, offsetVec);
     }
@@ -112,6 +116,25 @@ class ANMLRenderer {
 
     this.ctx.beginPath();
     this.ctx.rect(x, y, r.getWidth(), r.getHeight());
+    this.ctx.fill();
+    this.ctx.stroke();
+  }
+
+  drawTriangle(t, offsetVec) {
+    let x = t.getX();
+    let y = t.getY();
+
+    if (offsetVec !== undefined) {
+      x += offsetVec.x;
+      y += offsetVec.y;
+    }
+
+    const vertices = t.getVertices();
+
+    this.ctx.beginPath();
+    this.ctx.moveTo(x + vertices[0].x, y + vertices[0].y);
+    this.ctx.lineTo(x + vertices[1].x, y + vertices[1].y);
+    this.ctx.lineTo(x + vertices[2].x, y + vertices[2].y);
     this.ctx.fill();
     this.ctx.stroke();
   }

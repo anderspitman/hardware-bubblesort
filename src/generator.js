@@ -1,5 +1,9 @@
 const { capitalize } = require('./utils');
-const { CircleModel, RectangleModel } = require('./model');
+const {
+  CircleModel,
+  RectangleModel,
+  TriangleModel,
+} = require('./model');
 
 
 class ANMLGenerator {
@@ -30,6 +34,9 @@ class ANMLGenerator {
     }
     else if (item instanceof RectangleModel) {
       str += this.generateRectangle(item, indent);
+    }
+    else if (item instanceof TriangleModel) {
+      str += this.generateTriangle(item, indent);
     }
     else {
       str += this.generateSymbol(item, indent);
@@ -66,6 +73,19 @@ class ANMLGenerator {
     return str;
   }
 
+  generateTriangle(r, indent) {
+    let str = indent + '(Triangle\n';
+
+    const attrs = [
+      [ 'x', r, 0 ],
+      [ 'y', r, 0 ],
+    ];
+
+    str += this.generateAttrs(attrs, indent);
+    str += indent + ')\n';
+    return str;
+  }
+
   generateSymbol(s, indent) {
     let str = '(' + s.getName() + '\n';
 
@@ -91,7 +111,7 @@ class ANMLGenerator {
     //];
 
     //str += this.generateAttrs(attrs);
-    str += ')\n';
+    str += ')\n\n';
     return str;
   }
 

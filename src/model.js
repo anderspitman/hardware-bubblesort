@@ -149,6 +149,52 @@ class RectangleModel extends ShapeModel {
 }
 
 
+class TriangleModel extends ShapeModel {
+  constructor() {
+    super();
+
+    this._vertices = [
+      new Vector2({ x: 0, y: -10 }),
+      new Vector2({ x: 10, y: 5 }),
+      new Vector2({ x: -10, y: 5 }),
+    ];
+
+    this.updateRadius();
+  }
+
+  getVertices() {
+    return this._vertices;
+  }
+  setVertices(value) {
+    this._vertices = value;
+    this.updateRadius();
+  }
+
+  updateRadius() {
+
+    const thisCenter = new Vector2({ x: this.getX(), y: this.getY() });
+
+    let max = 0;
+    for (let vertex of this._vertices) {
+      const distance = vertex.subtract(thisCenter).getLength();
+      
+      if (distance > max) {
+        max = distance;
+      }
+    }
+
+    this._radius = max;
+  }
+
+  // TODO: implement a proper triangle intersection test
+  intersects(point) {
+    const thisCenter = new Vector2({ x: this.getX(), y: this.getY() });
+    const distance = point.subtract(thisCenter).getLength();
+    return distance <= this._radius;
+  }
+}
+
+
 module.exports = {
   ANMLModel,
   SymbolDefinitionModel,
@@ -156,4 +202,5 @@ module.exports = {
   ShapeModel,
   CircleModel,
   RectangleModel,
+  TriangleModel,
 };
