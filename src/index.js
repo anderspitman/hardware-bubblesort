@@ -226,6 +226,11 @@ class ANMLGenerator {
 class ANMLParser {
   parse(text) {
 
+    const commentsRemoved = text.split('\n')
+      .filter(line => !line.startsWith('#')).join('')
+
+    console.log(commentsRemoved);
+
     const model = new ANMLModel();
 
     //text = text.replace(/\s/g, '')

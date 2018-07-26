@@ -2,5 +2,57 @@
   (name "Hi there fuzzy")
   (x 100)
   (y 100)
-  (radius 10)
+  (radius 15)
 )
+
+#(def Ship
+#  (Triangle
+#    (name "body")
+#    (vertices
+#      (0 10)
+#      (5 -10)
+#      (-5 -10)
+#    )
+#  )
+#  (list
+#    (Triangle
+#      (name "thruster")
+#      (vertices
+#        ((x 0) (y 0))
+#        ((x 5) (y (sin(-10 * $thrust))))
+#        ((x -5) (y (-10 * $thrust)))
+#      )
+#    )
+#  )
+#)
+#
+#(def Ship
+#  (Triangle
+#    (name "Body")
+#    (vertices
+#      (0 10)
+#      (5 -10)
+#      (-5 -10)
+#    )
+#  )
+#  (Triangle
+#    (name "Left thruster")
+#    (vertices
+#      (0 10)
+#      (5 -10)
+#      (-5 -10)
+#    )
+#  )
+#  (Triangle
+#    (name "Right thruster")
+#    (vertices
+#      (0 10)
+#      (5 -10)
+#      (-5 -10)
+#    )
+#  )
+#)
+#
+#(Ship
+#  (data data.ship)
+#)
