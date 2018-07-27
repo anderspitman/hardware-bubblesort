@@ -153,15 +153,18 @@ class TriangleModel extends ShapeModel {
   constructor() {
     super();
 
-    this._vertices = [
-      new Vector2({ x: 0, y: -10 }),
-      new Vector2({ x: 10, y: 5 }),
-      new Vector2({ x: -10, y: 5 }),
-    ];
+    this._vertices = this.defaultVertices();
 
     this.updateRadius();
   }
 
+  defaultVertices() {
+    return [
+      new Vector2({ x: 0, y: -10 }),
+      new Vector2({ x: 10, y: 5 }),
+      new Vector2({ x: -10, y: 5 }),
+    ];
+  }
   getVertices() {
     return this._vertices;
   }

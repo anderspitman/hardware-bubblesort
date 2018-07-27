@@ -1,12 +1,26 @@
 (def AndGate
   (Rectangle
-    (width 40)
+    (width 30)
     (height 40)
   )
   (Circle
-    (x 40)
+    (x 30)
     (y 20)
     (radius 20)
+  )
+)
+
+(def NotGate
+  (Triangle
+    (vertices
+      ((x -20) (y -20))
+      ((x 20) (y 0))
+      ((x -20) (y 20))
+    )
+  )
+  (Circle
+    (x 22)
+    (radius 3)
   )
 )
 
@@ -14,10 +28,17 @@
   (y 100)
 )
 
-(Triangle
-  (x 50)
-  (y 50)
+(NotGate
+  (x 100)
+  (y 100)
 )
+
+#(list
+#  (Circle
+#    (x (index * 10))
+#    (y 100)
+#  )
+#)
 
 #(def Ship
 #  (Triangle
@@ -33,7 +54,7 @@
 #      (name "thruster")
 #      (vertices
 #        ((x 0) (y 0))
-#        ((x 5) (y (sin(-10 * $thrust))))
+#        ((x 5) (y sin(-10 * $thrust)))
 #        ((x -5) (y (-10 * $thrust)))
 #      )
 #    )
