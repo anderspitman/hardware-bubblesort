@@ -5,7 +5,7 @@ class ANMLEditor {
   constructor({ domParentId }) {
     this.parent = document.getElementById(domParentId);
     this.textArea = document.createElement('textarea');
-    this.textArea.rows = 20;
+    this.textArea.rows = 40;
     this.textArea.cols = 50;
     this.parent.appendChild(this.textArea);
 

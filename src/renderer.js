@@ -3,6 +3,7 @@ const {
   CircleModel,
   RectangleModel,
   TriangleModel,
+  LineModel,
   SymbolModel,
 } = require('./model');
 
@@ -72,6 +73,9 @@ class ANMLRenderer {
     else if (shape instanceof TriangleModel) {
       this.drawTriangle(shape, offsetVec);
     }
+    else if (shape instanceof LineModel) {
+      this.drawLine(shape, offsetVec);
+    }
     else if (shape instanceof SymbolModel) {
       this.drawSymbol(shape, offsetVec);
     }
@@ -135,6 +139,26 @@ class ANMLRenderer {
     this.ctx.lineTo(x + t.getX3(), y + t.getY3());
     this.ctx.fill();
     this.ctx.stroke();
+  }
+
+  drawLine(l, offsetVec) {
+
+    let x = l.getX();
+    let y = l.getY();
+
+    if (offsetVec !== undefined) {
+      x += offsetVec.x;
+      y += offsetVec.y;
+    }
+
+    const savedLineWidth = this.ctx.lineWidth;
+    this.ctx.lineWidth = l.getStrokeWidth();
+    this.ctx.beginPath();
+    this.ctx.moveTo(x + l.getX1(), y + l.getY1());
+    this.ctx.lineTo(x + l.getX2(), y + l.getY2());
+    //this.ctx.fill();
+    this.ctx.stroke();
+    this.ctx.lineWidth = savedLineWidth;
   }
 
   drawSymbol(s, offsetVec) {

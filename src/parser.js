@@ -8,6 +8,7 @@ const {
   CircleModel,
   RectangleModel,
   TriangleModel,
+  LineModel,
 } = require('./model');
 
 
@@ -68,6 +69,7 @@ class ANMLParser {
       case 'Circle':
       case 'Rectangle':
       case 'Triangle':
+      case 'Line':
         tokens.unshift(type);
         return this._parseShape(tokens);
       default:
@@ -124,6 +126,9 @@ class ANMLParser {
         break;
       case 'Triangle':
         Con = TriangleModel;
+        break;
+      case 'Line':
+        Con = LineModel;
         break;
       default:
         tokens.unshift(type);

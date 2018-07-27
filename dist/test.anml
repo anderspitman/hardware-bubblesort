@@ -30,21 +30,28 @@
     (x 15)
     (y 32)
   )
-)
-(GreaterThan1
-  (x 150)
-  (y 150)
+  (Line
+    (strokeWidth 3)
+    (x1 0) (y1 8)
+    (x2 60) (y2 8)
+  )
+  (Line
+    (strokeWidth 3)
+    (x1 35) (y1 32)
+    (x2 60) (y2 32)
+  )
 )
 
-(Triangle
-  (x1 -15) (y1 -15)
-  (x2 15) (y2 0)
-  (x3 -15) (y3 15)
+(GreaterThan1
+  (x 50)
+  (y 50)
 )
-#(Line
-#  (x1 0) (y1 0)
-#  (x2 10) (y2 10)
+
+#(Circle circle1
+#  (x gt1.wire1.x1)
+#  (y @gt1.wire1.y1)
 #)
+
 #
 #(Triangle
 #  (x1 0) (y1 0)

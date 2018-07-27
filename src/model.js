@@ -48,6 +48,7 @@ class ShapeModel {
   constructor() {
     this._x = 0;
     this._y = 0;
+    this._strokeWidth = this.defaultStrokeWidth();
   }
 
   getName() {
@@ -69,6 +70,16 @@ class ShapeModel {
   }
   setY(value) {
     this._y = value;
+  }
+
+  defaultStrokeWidth() {
+    return 1;
+  }
+  getStrokeWidth() {
+    return this._strokeWidth;
+  }
+  setStrokeWidth(value) {
+    this._strokeWidth = value;
   }
 }
 
@@ -154,11 +165,11 @@ class TriangleModel extends ShapeModel {
     super();
 
     this._x1 = this.defaultX1();
-    this._y1 = this.defaultX1();
+    this._y1 = this.defaultY1();
     this._x2 = this.defaultX2();
-    this._y2 = this.defaultX2();
+    this._y2 = this.defaultY2();
     this._x3 = this.defaultX3();
-    this._y3 = this.defaultX3();
+    this._y3 = this.defaultY3();
 
     this.updateRadius();
   }
@@ -171,6 +182,7 @@ class TriangleModel extends ShapeModel {
   }
   setX1(value) {
     this._x1 = value;
+    this.updateRadius();
   }
 
   defaultY1() {
@@ -181,6 +193,7 @@ class TriangleModel extends ShapeModel {
   }
   setY1(value) {
     this._y1 = value;
+    this.updateRadius();
   }
 
   defaultX2() {
@@ -191,6 +204,7 @@ class TriangleModel extends ShapeModel {
   }
   setX2(value) {
     this._x2 = value;
+    this.updateRadius();
   }
 
   defaultY2() {
@@ -201,6 +215,7 @@ class TriangleModel extends ShapeModel {
   }
   setY2(value) {
     this._y2 = value;
+    this.updateRadius();
   }
   
   defaultX3() {
@@ -211,6 +226,7 @@ class TriangleModel extends ShapeModel {
   }
   setX3(value) {
     this._x3 = value;
+    this.updateRadius();
   }
 
   defaultY3() {
@@ -221,6 +237,7 @@ class TriangleModel extends ShapeModel {
   }
   setY3(value) {
     this._y3 = value;
+    this.updateRadius();
   }
 
   //defaultVertices() {
@@ -250,10 +267,10 @@ class TriangleModel extends ShapeModel {
 
     let max = 0;
     for (let vertex of vertices) {
-      const distance = vertex.subtract(thisCenter).getLength();
+      const len = vertex.getLength();
       
-      if (distance > max) {
-        max = distance;
+      if (len > max) {
+        max = len;
       }
     }
 
@@ -269,6 +286,64 @@ class TriangleModel extends ShapeModel {
 }
 
 
+class LineModel extends ShapeModel {
+  constructor() {
+    super();
+
+    this._x1 = this.defaultX1();
+    this._y1 = this.defaultX1();
+    this._x2 = this.defaultX2();
+    this._y2 = this.defaultX2();
+
+  }
+
+  defaultX1() {
+    return -10;
+  }
+  getX1() {
+    return this._x1;
+  }
+  setX1(value) {
+    this._x1 = value;
+  }
+
+  defaultY1() {
+    return -10;
+  }
+  getY1() {
+    return this._y1;
+  }
+  setY1(value) {
+    this._y1 = value;
+  }
+
+  defaultX2() {
+    return 10;
+  }
+  getX2() {
+    return this._x2;
+  }
+  setX2(value) {
+    this._x2 = value;
+  }
+
+  defaultY2() {
+    return 10;
+  }
+  getY2() {
+    return this._y2;
+  }
+  setY2(value) {
+    this._y2 = value;
+  }
+
+  // TODO: implement a proper line intersection test
+  intersects(point) {
+    return false;
+  }
+}
+
+
 module.exports = {
   ANMLModel,
   SymbolDefinitionModel,
@@ -277,4 +352,5 @@ module.exports = {
   CircleModel,
   RectangleModel,
   TriangleModel,
+  LineModel,
 };

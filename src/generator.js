@@ -3,6 +3,7 @@ const {
   CircleModel,
   RectangleModel,
   TriangleModel,
+  LineModel,
 } = require('./model');
 
 
@@ -37,6 +38,9 @@ class ANMLGenerator {
     }
     else if (item instanceof TriangleModel) {
       str += this.generateTriangle(item, indent);
+    }
+    else if (item instanceof LineModel) {
+      str += this.generateLine(item, indent);
     }
     else {
       str += this.generateSymbol(item, indent);
@@ -89,6 +93,21 @@ class ANMLGenerator {
     return str;
   }
 
+  generateLine(r, indent) {
+    let str = indent + '(Line\n';
+
+    const attrs = [
+      [ 'x', r, 0 ],
+      [ 'y', r, 0 ],
+      [ 'strokeWidth', r, r.defaultStrokeWidth() ],
+    ];
+
+    str += this.generateAttrs(attrs, indent);
+    str += indent + `  (x1 ${r.getX1()}) (y1 ${r.getY1()})\n`;
+    str += indent + `  (x2 ${r.getX2()}) (y2 ${r.getY2()})\n`;
+    str += indent + ')\n';
+    return str;
+  }
   generateSymbol(s, indent) {
     let str = indent + '(' + s.getName() + '\n';
 
@@ -134,12 +153,13 @@ class ANMLGenerator {
   }
 
   generateAttr(key, value, defaultValue, indent) {
-    if (value !== defaultValue) {
-      return indent + '(' + key + ' ' + value + ')';
-    }
-    else {
-      return '';
-    }
+    return indent + '(' + key + ' ' + value + ')';
+    //if (value !== defaultValue) {
+    //  return indent + '(' + key + ' ' + value + ')';
+    //}
+    //else {
+    //  return '';
+    //}
   }
 }
 
