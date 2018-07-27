@@ -129,12 +129,10 @@ class ANMLRenderer {
       y += offsetVec.y;
     }
 
-    const vertices = t.getVertices();
-
     this.ctx.beginPath();
-    this.ctx.moveTo(x + vertices[0].x, y + vertices[0].y);
-    this.ctx.lineTo(x + vertices[1].x, y + vertices[1].y);
-    this.ctx.lineTo(x + vertices[2].x, y + vertices[2].y);
+    this.ctx.moveTo(x + t.getX1(), y + t.getY1());
+    this.ctx.lineTo(x + t.getX2(), y + t.getY2());
+    this.ctx.lineTo(x + t.getX3(), y + t.getY3());
     this.ctx.fill();
     this.ctx.stroke();
   }

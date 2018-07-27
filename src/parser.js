@@ -178,15 +178,7 @@ class ANMLParser {
 
     const name = tokens.shift();
 
-    let value;
-    // TODO: handling vertices as a special case. Make the parsing more
-    // general
-    if (name === 'vertices') {
-      value = this._parseVertices(tokens);
-    }
-    else {
-      value = this._parseAttrValue(tokens);
-    }
+    const value = this._parseAttrValue(tokens);
 
     const closeParen = tokens.shift();
 
@@ -194,42 +186,6 @@ class ANMLParser {
       name,
       value,
     };
-  }
-
-  _parseVertices(tokens) {
-    return [
-      this._parseVertex(tokens),
-      this._parseVertex(tokens),
-      this._parseVertex(tokens),
-    ];
-
-    const closeParen = tokens.shift();
-  }
-
-  _parseVertex(tokens) {
-    // open paren
-    tokens.shift();
-    // x
-    // open paren
-    tokens.shift();
-    // name
-    tokens.shift();
-    const xVal = Number(tokens.shift());
-    // close paren
-    tokens.shift();
-    // y
-    // open paren
-    tokens.shift();
-    // name
-    tokens.shift();
-    const yVal = Number(tokens.shift());
-    // close paren
-    tokens.shift();
-    // close paren
-    tokens.shift();
-
-    const vertex = new Vector2({ x: xVal, y: yVal });
-    return vertex;
   }
 
   _parseAttrValue(tokens) {

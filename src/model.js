@@ -153,32 +153,103 @@ class TriangleModel extends ShapeModel {
   constructor() {
     super();
 
-    this._vertices = this.defaultVertices();
+    this._x1 = this.defaultX1();
+    this._y1 = this.defaultX1();
+    this._x2 = this.defaultX2();
+    this._y2 = this.defaultX2();
+    this._x3 = this.defaultX3();
+    this._y3 = this.defaultX3();
 
     this.updateRadius();
   }
 
-  defaultVertices() {
-    return [
-      new Vector2({ x: 0, y: -10 }),
-      new Vector2({ x: 10, y: 5 }),
-      new Vector2({ x: -10, y: 5 }),
-    ];
+  defaultX1() {
+    return 0;
   }
-  getVertices() {
-    return this._vertices;
+  getX1() {
+    return this._x1;
   }
-  setVertices(value) {
-    this._vertices = value;
-    this.updateRadius();
+  setX1(value) {
+    this._x1 = value;
   }
+
+  defaultY1() {
+    return -10;
+  }
+  getY1() {
+    return this._y1;
+  }
+  setY1(value) {
+    this._y1 = value;
+  }
+
+  defaultX2() {
+    return 10;
+  }
+  getX2() {
+    return this._x2;
+  }
+  setX2(value) {
+    this._x2 = value;
+  }
+
+  defaultY2() {
+    return 5;
+  }
+  getY2() {
+    return this._y2;
+  }
+  setY2(value) {
+    this._y2 = value;
+  }
+  
+  defaultX3() {
+    return -10;
+  }
+  getX3() {
+    return this._x3;
+  }
+  setX3(value) {
+    this._x3 = value;
+  }
+
+  defaultY3() {
+    return 5;
+  }
+  getY3() {
+    return this._y3;
+  }
+  setY3(value) {
+    this._y3 = value;
+  }
+
+  //defaultVertices() {
+  //  return [
+  //    new Vector2({ x: 0, y: -10 }),
+  //    new Vector2({ x: 10, y: 5 }),
+  //    new Vector2({ x: -10, y: 5 }),
+  //  ];
+  //}
+  //getVertices() {
+  //  return this._vertices;
+  //}
+  //setVertices(value) {
+  //  this._vertices = value;
+  //  this.updateRadius();
+  //}
 
   updateRadius() {
 
     const thisCenter = new Vector2({ x: this.getX(), y: this.getY() });
 
+    const vertices = [
+      new Vector2({ x: this.getX1(), y: this.getY1() }),
+      new Vector2({ x: this.getX2(), y: this.getY2() }),
+      new Vector2({ x: this.getX3(), y: this.getY3() }),
+    ];
+
     let max = 0;
-    for (let vertex of this._vertices) {
+    for (let vertex of vertices) {
       const distance = vertex.subtract(thisCenter).getLength();
       
       if (distance > max) {

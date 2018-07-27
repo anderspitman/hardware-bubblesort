@@ -81,13 +81,10 @@ class ANMLGenerator {
       [ 'y', r, 0 ],
     ];
 
-    const v = r.getVertices();
     str += this.generateAttrs(attrs, indent);
-    str += indent + '  (vertices\n';
-    str += indent + `    ((x ${v[0].x}) (y ${v[0].y}))\n`;
-    str += indent + `    ((x ${v[1].x}) (y ${v[1].y}))\n`;
-    str += indent + `    ((x ${v[2].x}) (y ${v[2].y}))\n`;
-    str += indent + '  )\n';
+    str += indent + `  (x1 ${r.getX1()}) (y1 ${r.getY1()})\n`;
+    str += indent + `  (x2 ${r.getX2()}) (y2 ${r.getY2()})\n`;
+    str += indent + `  (x3 ${r.getX3()}) (y3 ${r.getY3()})\n`;
     str += indent + ')\n';
     return str;
   }

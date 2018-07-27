@@ -12,11 +12,9 @@
 
 (def NotGate
   (Triangle
-    (vertices
-      ((x -15) (y -15))
-      ((x 15) (y 0))
-      ((x -15) (y 15))
-    )
+    (x1 -15) (y1 -15)
+    (x2 15) (y2 0)
+    (x3 -15) (y3 15)
   )
   (Circle
     (x 18)
@@ -24,7 +22,7 @@
   )
 )
 
-(def GreaterThan
+(def GreaterThan1
   (AndGate
     (x 60)
   )
@@ -33,10 +31,26 @@
     (y 32)
   )
 )
-(GreaterThan
-  (x 50)
-  (y 50)
+(GreaterThan1
+  (x 150)
+  (y 150)
 )
+
+(Triangle
+  (x1 -15) (y1 -15)
+  (x2 15) (y2 0)
+  (x3 -15) (y3 15)
+)
+#(Line
+#  (x1 0) (y1 0)
+#  (x2 10) (y2 10)
+#)
+#
+#(Triangle
+#  (x1 0) (y1 0)
+#  (x2 10) (y2 10)
+#  (x3 10) (y3 10)
+#)
 
 #(list
 #  (Circle
