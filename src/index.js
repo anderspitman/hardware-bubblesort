@@ -24,6 +24,7 @@ function main(anmlFileText) {
   let dragOffset;
   renderer.onMouseDown((point) => {
     for (let shape of model.getShapes()) {
+      console.log(shape);
       const intersects = shape.intersects(point);
 
       if (intersects) {

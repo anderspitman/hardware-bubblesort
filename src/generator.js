@@ -93,7 +93,7 @@ class ANMLGenerator {
   }
 
   generateSymbol(s, indent) {
-    let str = '(' + s.getName() + '\n';
+    let str = indent + '(' + s.getName() + '\n';
 
     const attrs = [
       [ 'x', s, 0 ],
@@ -101,7 +101,7 @@ class ANMLGenerator {
     ];
 
     str += this.generateAttrs(attrs, indent);
-    str += ')\n';
+    str += indent + ')\n';
     return str;
   }
 

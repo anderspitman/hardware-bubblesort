@@ -139,10 +139,15 @@ class ANMLRenderer {
     this.ctx.stroke();
   }
 
-  drawSymbol(s) {
-    const offsetVec = new Vector2({ x: s.getX(), y: s.getY() });
+  drawSymbol(s, offsetVec) {
+    const thisPos = new Vector2({ x: s.getX(), y: s.getY() });
+    let cumulativeOffset = thisPos;
+    if (offsetVec !== undefined) {
+      cumulativeOffset = thisPos.add(offsetVec);
+    }
+
     for (let child of s.getChildren()) {
-      this.renderShape(child, offsetVec);    
+      this.renderShape(child, cumulativeOffset);    
     }
   }
 }

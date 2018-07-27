@@ -24,8 +24,6 @@ class ANMLParser {
 
     const tokens = this._tokenize(commentsRemoved)
 
-    console.log(tokens);
-
     const shapes = [];
     model.setShapes(shapes);
 
@@ -74,19 +72,26 @@ class ANMLParser {
         return this._parseShape(tokens);
       default:
 
-        const symbolDef = this._symbolDefs[type];
-        if (symbolDef !== undefined) {
-          const symbol = new SymbolModel();
-          symbol.setName(symbolDef.getName());
-          symbol.setChildren(symbolDef.getChildren());
-
-          this._setAttrs(symbol, tokens);
-          return symbol;
-        }
-        else {
-          throw "Invalid expression type " + type;
-        }
+        tokens.unshift(type);
+        return this._parseSymbol(tokens);
+        
         break;
+    }
+  }
+
+  _parseSymbol(tokens) {
+    const type = tokens.shift();
+    const symbolDef = this._symbolDefs[type];
+    if (symbolDef !== undefined) {
+      const symbol = new SymbolModel();
+      symbol.setName(symbolDef.getName());
+      symbol.setChildren(symbolDef.getChildren());
+
+      this._setAttrs(symbol, tokens);
+      return symbol;
+    }
+    else {
+      throw "Invalid expression type " + type;
     }
   }
 
@@ -121,7 +126,8 @@ class ANMLParser {
         Con = TriangleModel;
         break;
       default:
-        throw "Invalid shape expression";
+        tokens.unshift(type);
+        return this._parseSymbol(tokens);
         break;
     }
 
@@ -279,6 +285,8 @@ class ANMLParser {
 
     const shapes = this._parseShapeList(tokens);
     def.setChildren(shapes);
+
+    console.log(def);
 
     return def
   }
