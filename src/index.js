@@ -21,13 +21,17 @@ function main(anmlFileText) {
 
   let dragObj = null;
   let dragOffset;
-  renderer.onMouseDown((point) => {
+  renderer.onMouseDown((canvasPoint) => {
+
+    const worldOrigin = renderer.getViewportCenter();
+    const worldPoint = canvasPoint.subtract(worldOrigin);
+    worldPoint.y = -worldPoint.y;
     for (let shape of model.getShapes()) {
-      const intersects = shape.intersects(point);
+      const intersects = shape.intersects(worldPoint);
 
       if (intersects) {
         const objPos = new Vector2({ x: shape.getX(), y: shape.getY() });
-        dragOffset = point.subtract(objPos);
+        dragOffset = worldPoint.subtract(objPos);
         dragObj = shape;
         break;
       }
@@ -38,10 +42,14 @@ function main(anmlFileText) {
     dragObj = null;
   });
 
-  renderer.onMouseMove((point) => {
+  renderer.onMouseMove((canvasPoint) => {
+    const worldOrigin = renderer.getViewportCenter();
+    const worldPoint = canvasPoint.subtract(worldOrigin);
+    worldPoint.y = -worldPoint.y;
+
     if (dragObj !== null) {
-      dragObj.setX(point.x - dragOffset.x);
-      dragObj.setY(point.y - dragOffset.y);
+      dragObj.setX(worldPoint.x - dragOffset.x);
+      dragObj.setY(worldPoint.y - dragOffset.y);
     }
   });
 

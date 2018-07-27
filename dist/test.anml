@@ -5,16 +5,16 @@
   )
   (Circle
     (x 30)
-    (y 20)
+    (y -20)
     (radius 20)
   )
 )
 
 (def NotGate
   (Triangle
-    (x1 -15) (y1 -15)
+    (x1 -15) (y1 15)
     (x2 15) (y2 0)
-    (x3 -15) (y3 15)
+    (x3 -15) (y3 -15)
   )
   (Circle
     (x 18)
@@ -25,26 +25,34 @@
 (def GreaterThan1
   (AndGate
     (x 60)
+    (y 20)
   )
   (NotGate
     (x 15)
-    (y 32)
+    (y -10)
   )
   (Line
+    (x 0)
+    (y 0)
     (strokeWidth 3)
-    (x1 0) (y1 8)
-    (x2 60) (y2 8)
+    (x1 0) (y1 10)
+    (x2 60) (y2 10)
   )
   (Line
+    (x 0)
+    (y 0)
     (strokeWidth 3)
-    (x1 35) (y1 32)
-    (x2 60) (y2 32)
+    (x1 35) (y1 -10)
+    (x2 60) (y2 -10)
   )
 )
 
+(Circle
+  (x 130)
+  (y 30)
+)
+
 (GreaterThan1
-  (x 50)
-  (y 50)
 )
 
 #(Circle circle1

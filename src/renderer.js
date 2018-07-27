@@ -53,12 +53,34 @@ class ANMLRenderer {
         this.onMouseMoveCallback(point);
       }
     });
+
+
+    this.setViewportCenter({ x: 0, y: 0 });
+  }
+
+  getViewportCenter() {
+    return new Vector2({
+      x: this._viewPortCenterX,
+      y: this._viewPortCenterY,
+    });
+  }
+  setViewportCenter({ x, y }) {
+    this._viewPortCenterX = x + (this.canvas.width / 2);
+    this._viewPortCenterY = y + (this.canvas.height / 2 );
   }
 
   render(model) {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+    this.drawGrid();
+
+    //const viewPortOffset = new Vector2({
+    //  x: this._viewPortCenterX,
+    //  y: this._viewPortCenterY
+    //});
+
     for (let shape of model.getShapes()) {
+      //this.renderShape(shape, viewPortOffset);  
       this.renderShape(shape);  
     }
   }
@@ -93,6 +115,18 @@ class ANMLRenderer {
     this.onMouseMoveCallback = callback;
   }
 
+  drawGrid() {
+    const savedLineWidth = this.ctx.lineWidth;
+    this.ctx.lineWidth = 1;
+    this.ctx.beginPath();
+    this.ctx.moveTo(this._viewPortCenterX, 0);
+    this.ctx.lineTo(this._viewPortCenterX, this.canvas.height);
+    this.ctx.moveTo(0, this._viewPortCenterY);
+    this.ctx.lineTo(this.canvas.width, this._viewPortCenterY);
+    this.ctx.stroke();
+    this.ctx.lineWidth = savedLineWidth;
+  }
+
   drawCircle(c, offsetVec) {
 
     let x = c.getX();
@@ -104,7 +138,7 @@ class ANMLRenderer {
     }
 
     this.ctx.beginPath();
-    this.ctx.arc(x, y, c.getRadius(), 0, 2*Math.PI); 
+    this.ctx.arc(this._x(x), this._y(y), c.getRadius(), 0, 2*Math.PI); 
     this.ctx.fill();
     this.ctx.stroke();
   }
@@ -119,7 +153,7 @@ class ANMLRenderer {
     }
 
     this.ctx.beginPath();
-    this.ctx.rect(x, y, r.getWidth(), r.getHeight());
+    this.ctx.rect(this._x(x), this._y(y), r.getWidth(), r.getHeight());
     this.ctx.fill();
     this.ctx.stroke();
   }
@@ -134,9 +168,9 @@ class ANMLRenderer {
     }
 
     this.ctx.beginPath();
-    this.ctx.moveTo(x + t.getX1(), y + t.getY1());
-    this.ctx.lineTo(x + t.getX2(), y + t.getY2());
-    this.ctx.lineTo(x + t.getX3(), y + t.getY3());
+    this.ctx.moveTo(this._x(x + t.getX1()), this._y(y + t.getY1()));
+    this.ctx.lineTo(this._x(x + t.getX2()), this._y(y + t.getY2()));
+    this.ctx.lineTo(this._x(x + t.getX3()), this._y(y + t.getY3()));
     this.ctx.fill();
     this.ctx.stroke();
   }
@@ -154,8 +188,8 @@ class ANMLRenderer {
     const savedLineWidth = this.ctx.lineWidth;
     this.ctx.lineWidth = l.getStrokeWidth();
     this.ctx.beginPath();
-    this.ctx.moveTo(x + l.getX1(), y + l.getY1());
-    this.ctx.lineTo(x + l.getX2(), y + l.getY2());
+    this.ctx.moveTo(this._x(x + l.getX1()), this._y(y + l.getY1()));
+    this.ctx.lineTo(this._x(x + l.getX2()), this._y(y + l.getY2()));
     //this.ctx.fill();
     this.ctx.stroke();
     this.ctx.lineWidth = savedLineWidth;
@@ -171,6 +205,14 @@ class ANMLRenderer {
     for (let child of s.getChildren()) {
       this.renderShape(child, cumulativeOffset);    
     }
+  }
+
+  _x(x) {
+    return this._viewPortCenterX + x;
+  }
+
+  _y(y) {
+    return this._viewPortCenterY - y;
   }
 }
 
