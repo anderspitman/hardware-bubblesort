@@ -286,8 +286,6 @@ class ANMLParser {
     const shapes = this._parseShapeList(tokens);
     def.setChildren(shapes);
 
-    console.log(def);
-
     return def
   }
 

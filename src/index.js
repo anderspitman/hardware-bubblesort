@@ -13,7 +13,6 @@ fetch('/test.anml').then(response => {
 })
 
 function main(anmlFileText) {
-  console.log(anmlFileText);
   const parser = new ANMLParser();
   let model = parser.parse(anmlFileText);
   const renderer = new ANMLRenderer({ domParentId: 'renderer' });
@@ -24,7 +23,6 @@ function main(anmlFileText) {
   let dragOffset;
   renderer.onMouseDown((point) => {
     for (let shape of model.getShapes()) {
-      console.log(shape);
       const intersects = shape.intersects(point);
 
       if (intersects) {
