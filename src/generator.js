@@ -52,13 +52,11 @@ class ANMLGenerator {
   generateCircle(c, indent) {
     let str = indent + '(Circle\n';
 
-    const attrs = [
-      [ 'x', c, 0 ],
-      [ 'y', c, 0 ],
-      [ 'radius', c, 10 ],
-    ];
+    str += this.generateShapeAttrs(c, indent);
 
-    str += this.generateAttrs(attrs, indent);
+    const attrs = [ 'radius' ];
+
+    str += this.generateAttrs(c, attrs, indent);
     str += indent + ')\n';
     return str;
   }
@@ -66,58 +64,52 @@ class ANMLGenerator {
   generateRectangle(r, indent) {
     let str = indent + '(Rectangle\n';
 
-    const attrs = [
-      [ 'x', r, 0 ],
-      [ 'y', r, 0 ],
-      [ 'width', r, 10 ],
-      [ 'height', r, 10 ],
-    ];
+    str += this.generateShapeAttrs(r, indent);
 
-    str += this.generateAttrs(attrs, indent);
+    const attrs = [ 'width', 'height' ];
+
+    str += this.generateAttrs(r, attrs, indent);
     str += indent + ')\n';
     return str;
   }
 
-  generateTriangle(r, indent) {
+  generateTriangle(t, indent) {
     let str = indent + '(Triangle\n';
 
-    const attrs = [
-      [ 'x', r, 0 ],
-      [ 'y', r, 0 ],
-    ];
+    str += this.generateShapeAttrs(t, indent);
 
-    str += this.generateAttrs(attrs, indent);
-    str += indent + `  (x1 ${r.getX1()}) (y1 ${r.getY1()})\n`;
-    str += indent + `  (x2 ${r.getX2()}) (y2 ${r.getY2()})\n`;
-    str += indent + `  (x3 ${r.getX3()}) (y3 ${r.getY3()})\n`;
+    const attrs = [];
+
+    str += this.generateAttrs(t, attrs, indent);
+    str += indent + `  (x1 ${t.getX1()}) (y1 ${t.getY1()})\n`;
+    str += indent + `  (x2 ${t.getX2()}) (y2 ${t.getY2()})\n`;
+    str += indent + `  (x3 ${t.getX3()}) (y3 ${t.getY3()})\n`;
     str += indent + ')\n';
     return str;
   }
 
-  generateLine(r, indent) {
+  generateLine(l, indent) {
     let str = indent + '(Line\n';
 
-    const attrs = [
-      [ 'x', r, 0 ],
-      [ 'y', r, 0 ],
-      [ 'strokeWidth', r, r.defaultStrokeWidth() ],
-    ];
+    str += this.generateShapeAttrs(l, indent);
 
-    str += this.generateAttrs(attrs, indent);
-    str += indent + `  (x1 ${r.getX1()}) (y1 ${r.getY1()})\n`;
-    str += indent + `  (x2 ${r.getX2()}) (y2 ${r.getY2()})\n`;
+    const attrs = [ 'strokeWidth' ];
+
+    str += this.generateAttrs(l, attrs, indent);
+    str += indent + `  (x1 ${l.getX1()}) (y1 ${l.getY1()})\n`;
+    str += indent + `  (x2 ${l.getX2()}) (y2 ${l.getY2()})\n`;
     str += indent + ')\n';
     return str;
   }
+
   generateSymbol(s, indent) {
     let str = indent + '(' + s.getName() + '\n';
 
-    const attrs = [
-      [ 'x', s, 0 ],
-      [ 'y', s, 0 ],
-    ];
+    str += this.generateShapeAttrs(s, indent);
 
-    str += this.generateAttrs(attrs, indent);
+    const attrs = [];
+
+    str += this.generateAttrs(s, attrs, indent);
     str += indent + ')\n';
     return str;
   }
@@ -128,23 +120,29 @@ class ANMLGenerator {
     for (let child of s.getChildren()) {
       str += this.generateItem(child, indent + '  ');
     }
-    //const attrs = [
-    //  [ 'x', s, 0 ],
-    //  [ 'y', s, 0 ],
-    //];
 
-    //str += this.generateAttrs(attrs);
     str += ')\n\n';
     return str;
   }
 
-  generateAttrs(attrs, indent) {
+  generateShapeAttrs(s, indent) {
+
+    let str = '';
+    const attrs = [
+      'x', 'y', 'strokeWidth', 'strokeColor', 'fillColor',
+    ];
+
+    str += this.generateAttrs(s, attrs, indent);
+    return str;
+  }
+
+  generateAttrs(s, attrs, indent) {
     let str = '';
 
     for (let attr of attrs) {
-      const methodName = 'get' + capitalize(attr[0]);
+      const methodName = 'get' + capitalize(attr);
       const ret = this.generateAttr(
-        attr[0], attr[1][methodName](), attr[2], indent + '  ');
+        attr, s[methodName](), indent + '  ');
       if (ret !== '') {
         str += ret + '\n'; 
       }
@@ -153,7 +151,7 @@ class ANMLGenerator {
     return str;
   }
 
-  generateAttr(key, value, defaultValue, indent) {
+  generateAttr(key, value, indent) {
     return indent + '(' + key + ' ' + value + ')';
     //if (value !== defaultValue) {
     //  return indent + '(' + key + ' ' + value + ')';

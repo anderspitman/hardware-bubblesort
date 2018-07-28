@@ -86,6 +86,16 @@ class ANMLRenderer {
   }
 
   renderShape(shape, offsetVec) {
+
+    const saveStroke = this.ctx.strokeStyle;
+    this.ctx.strokeStyle = shape.getStrokeColor();
+
+    const saveFill = this.ctx.fillStyle;
+    this.ctx.fillStyle = shape.getFillColor();
+
+    const savedLineWidth = this.ctx.lineWidth;
+    this.ctx.lineWidth = shape.getStrokeWidth();
+
     if (shape instanceof CircleModel) {
       this.drawCircle(shape, offsetVec);
     }
@@ -101,6 +111,10 @@ class ANMLRenderer {
     else if (shape instanceof SymbolModel) {
       this.drawSymbol(shape, offsetVec);
     }
+
+    this.ctx.strokeStyle = saveStroke;
+    this.ctx.fillStyle = saveFill;
+    this.ctx.lineWidth = savedLineWidth;
   }
 
   onMouseDown(callback) {
@@ -189,14 +203,11 @@ class ANMLRenderer {
       y += offsetVec.y;
     }
 
-    const savedLineWidth = this.ctx.lineWidth;
-    this.ctx.lineWidth = l.getStrokeWidth();
     this.ctx.beginPath();
     this.ctx.moveTo(this._x(x + l.getX1()), this._y(y + l.getY1()));
     this.ctx.lineTo(this._x(x + l.getX2()), this._y(y + l.getY2()));
     //this.ctx.fill();
     this.ctx.stroke();
-    this.ctx.lineWidth = savedLineWidth;
   }
 
   drawSymbol(s, offsetVec) {

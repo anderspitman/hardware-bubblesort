@@ -46,9 +46,11 @@ class SymbolDefinitionModel {
 class ShapeModel {
 
   constructor() {
-    this._x = 0;
-    this._y = 0;
+    this._x = this.defaultX();
+    this._y = this.defaultY();
     this._strokeWidth = this.defaultStrokeWidth();
+    this._strokeColor = this.defaultStrokeColor();
+    this._fillColor = this.defaultFillColor();
   }
 
   getName() {
@@ -58,6 +60,9 @@ class ShapeModel {
     this._name = value;
   }
 
+  defaultX() {
+    return 0;
+  }
   getX() {
     return this._x;
   }
@@ -65,6 +70,9 @@ class ShapeModel {
     this._x = value;
   }
 
+  defaultY() {
+    return 0;
+  }
   getY() {
     return this._y;
   }
@@ -80,6 +88,26 @@ class ShapeModel {
   }
   setStrokeWidth(value) {
     this._strokeWidth = value;
+  }
+
+  defaultStrokeColor() {
+    return 'SteelBlue';
+  }
+  getStrokeColor() {
+    return this._strokeColor;
+  }
+  setStrokeColor(value) {
+    this._strokeColor = value;
+  }
+
+  defaultFillColor() {
+    return 'SteelBlue';
+  }
+  getFillColor() {
+    return this._fillColor;
+  }
+  setFillColor(value) {
+    this._fillColor = value;
   }
 }
 
