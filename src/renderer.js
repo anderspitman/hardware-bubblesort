@@ -1,11 +1,14 @@
 const { Vector2 } = require('./math');
 const {
+  DataValueModel,
+  DataTernaryModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
   LineModel,
   SymbolModel,
 } = require('./model');
+const { getDataByPath } = require('./utils');
 
 
 class ANMLRenderer {
@@ -100,13 +103,57 @@ class ANMLRenderer {
     }
   }
 
-  renderShape(shape, offsetVec) {
+  processAttr(shape, attr, data) {
+    if (attr instanceof DataValueModel) {
+      const path = [shape.getDataKey()].concat(attr.getPath());
+      return getDataByPath(data, attr.getPath());
+    }
+    else if (attr instanceof DataTernaryModel) {
+      const path = attr.getPath();
+      const val = getDataByPath(data, path);
+
+      switch(attr.getCondition()) {
+        case '==':
+          if (val === attr.getCheckValue()) {
+            return attr.getTrueValue();
+          }
+          else {
+            return attr.getFalseValue();
+          }
+          break;
+        default:
+          throw "Invalid condition: " + attr.getCondition();
+          break;
+      }
+    }
+    else {
+      return attr;
+    }
+  }
+
+  renderShape(shape, offsetVec, parentData) {
+
+    let data;
+    if (parentData === undefined) {
+      data = shape.getData();
+    }
+    else {
+      const dataKey = shape.getDataKey();
+      if (dataKey !== undefined) {
+        data = parentData[dataKey];
+      }
+      else {
+        data = parentData;
+      }
+    }
 
     const saveStroke = this.ctx.strokeStyle;
-    this.ctx.strokeStyle = shape.getStrokeColor();
+    const strokeColor = shape.getStrokeColor();
+    this.ctx.strokeStyle = this.processAttr(shape, strokeColor, data);
 
     const saveFill = this.ctx.fillStyle;
-    this.ctx.fillStyle = shape.getFillColor();
+    const fillColor = shape.getFillColor();
+    this.ctx.fillStyle = this.processAttr(shape, fillColor, data);;
 
     const savedLineWidth = this.ctx.lineWidth;
     this.ctx.lineWidth = shape.getStrokeWidth();
@@ -124,7 +171,7 @@ class ANMLRenderer {
       this.drawLine(shape, offsetVec);
     }
     else if (shape instanceof SymbolModel) {
-      this.drawSymbol(shape, offsetVec);
+      this.drawSymbol(shape, offsetVec, data);
     }
 
     this.ctx.strokeStyle = saveStroke;
@@ -225,7 +272,7 @@ class ANMLRenderer {
     this.ctx.stroke();
   }
 
-  drawSymbol(s, offsetVec) {
+  drawSymbol(s, offsetVec, data) {
     const thisPos = new Vector2({ x: s.getX(), y: s.getY() });
     let cumulativeOffset = thisPos;
     if (offsetVec !== undefined) {
@@ -233,7 +280,7 @@ class ANMLRenderer {
     }
 
     for (let child of s.getChildren()) {
-      this.renderShape(child, cumulativeOffset);    
+      this.renderShape(child, cumulativeOffset, data);
     }
   }
 

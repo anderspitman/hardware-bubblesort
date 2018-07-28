@@ -1,5 +1,7 @@
 const { capitalize } = require('./utils');
 const {
+  DataValueModel,
+  DataTernaryModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
@@ -130,6 +132,12 @@ class ANMLGenerator {
     let str = '';
     str += indent + `  (x ${s.getX()}) (y ${s.getY()})\n`;
 
+    const dataKey = s.getDataKey();
+
+    if (dataKey !== undefined) {
+      str += indent + `  (dataKey ${dataKey})\n`;
+    }
+
     const attrs = [
       'strokeWidth', 'strokeColor', 'fillColor',
     ];
@@ -143,8 +151,18 @@ class ANMLGenerator {
 
     for (let attr of attrs) {
       const methodName = 'get' + capitalize(attr);
-      const ret = this.generateAttr(
-        attr, s[methodName](), indent + '  ');
+      const value = s[methodName]();
+      let ret;
+      if (value instanceof DataValueModel) {
+        ret = this.generateDataAttr(attr, value, indent + '  ');
+      }
+      else if (value instanceof DataTernaryModel) {
+        ret = this.generateDataTernaryAttr(attr, value, indent + '  ');
+      }
+      else {
+        ret = this.generateAttr(attr, value, indent + '  ');
+      }
+
       if (ret !== '') {
         str += ret + '\n'; 
       }
@@ -161,6 +179,21 @@ class ANMLGenerator {
     //else {
     //  return '';
     //}
+  }
+
+  generateDataTernaryAttr(key, v, indent) {
+    let str = indent + '(' + key + ' ';
+    const path =
+      `data.${v.getPath().join('.')} ${v.getCondition()} ${v.getCheckValue()} ? ${v.getTrueValue()} : ${v.getFalseValue()}`;
+    str += path + ')';
+    return str;
+  }
+
+  generateDataAttr(key, value, indent) {
+    let str = indent + '(' + key + ' ';
+    const path = 'data.' + value.getPath().join('.');
+    str += path + ')';
+    return str;
   }
 }
 

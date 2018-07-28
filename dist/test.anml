@@ -1,15 +1,16 @@
 (def AndGate
   (Rectangle
-    (x 15)
-    (y -20)
+    (x -8)
+    (strokeColor data._out._state == 0 ? Black : Green)
+    (fillColor data._out._state == 0 ? Black : Green)
     (width 30)
     (height 40)
-    (fillColor Red)
   )
   (Circle
-    (x 30)
-    (y -20)
+    (x 10)
     (radius 20)
+    (strokeColor data._out._state == 0 ? Black : Green)
+    (fillColor data._out._state == 0 ? Black : Green)
   )
 )
 
@@ -18,19 +19,24 @@
     (x1 -15) (y1 15)
     (x2 15) (y2 0)
     (x3 -15) (y3 -15)
+    (strokeColor data._out._state == 0 ? Black : Green)
+    (fillColor data._out._state == 0 ? Black : Green)
   )
   (Circle
     (x 18)
     (radius 4)
+    (strokeColor data._out._state == 0 ? Black : Green)
+    (fillColor data._out._state == 0 ? Black : Green)
   )
 )
 
 (def GreaterThan1
   (AndGate
-    (x 10)
-    (y 20)
+    (dataKey _and)
+    (x 32) (y 0)
   )
   (NotGate
+    (dataKey _not)
     (x -35)
     (y -10)
   )
@@ -40,6 +46,7 @@
     (strokeWidth 3)
     (x1 -50) (y1 10)
     (x2 10) (y2 10)
+    (strokeColor data._and._inA._state == 0 ? Black : Green)
   )
   (Line
     (x 0)
@@ -47,6 +54,7 @@
     (strokeWidth 3)
     (x1 -15) (y1 -10)
     (x2 10) (y2 -10)
+    (strokeColor data._not._out._state == 0 ? Black : Green)
   )
 )
 
@@ -66,6 +74,12 @@
 )
 
 (GreaterThan1
+  (x 100)
+  (dataKey gt1)
+)
+
+(AndGate
+  (dataKey and1)
 )
 
 #(Circle circle1

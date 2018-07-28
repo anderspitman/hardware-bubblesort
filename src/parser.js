@@ -2,6 +2,8 @@ const { capitalize } = require('./utils');
 const { Vector2 } = require('./math');
 const {
   ANMLModel,
+  DataValueModel,
+  DataTernaryModel,
   SymbolDefinitionModel,
   SymbolModel,
   ShapeModel,
@@ -201,9 +203,52 @@ class ANMLParser {
       tokens.unshift(tok);
       return this._parseStringValue(tokens);
     }
+    else if (tok.startsWith('data')) {
+      tokens.unshift(tok);
+      return this._parseDataValue(tokens);
+    }
     else {
       return this._parseNumberValue(tok);
     }
+  }
+
+  _parseDataValue(tokens) {
+    const pathTok = tokens.shift();
+    const path = pathTok.split('.').slice(1);
+
+    const tok = tokens.shift();
+
+    if (tok === '==') {
+      tokens.unshift(tok);
+      const tern = this._parseTernaryExpression(tokens);
+      tern.setPath(path);
+      return tern;
+    }
+    else {
+      const model = new DataValueModel();
+      model.setPath(path);
+      return model;
+    }
+  }
+
+  _parseTernaryExpression(tokens) {
+
+    const conditionTok = tokens.shift();
+    // TODO: handle other data types
+    const checkValue = Number(tokens.shift());
+    const questionMark = tokens.shift();
+    const trueVal = tokens.shift();
+    const colon = tokens.shift();
+    const falseVal = tokens.shift();
+    //const closeParen = tokens.shift();
+
+    const tern = new DataTernaryModel();
+    tern.setCondition(conditionTok);
+    tern.setCheckValue(checkValue);
+    tern.setTrueValue(trueVal);
+    tern.setFalseValue(falseVal);
+
+    return tern;
   }
 
   _parseStringValue(tokens) {

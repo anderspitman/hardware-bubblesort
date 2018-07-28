@@ -23,6 +23,64 @@ class ANMLModel {
   setShapes(value) {
     this._shapes = value;
   }
+
+  update(data) {
+    for (let shape of this.getShapes()) {
+      const dataKey = shape.getDataKey();
+
+      if (dataKey !== undefined) {
+        shape.setData(data[dataKey]);
+      }
+    }
+  }
+}
+
+
+class DataValueModel {
+  getPath() {
+    return this._path;
+  }
+  setPath(value) {
+    this._path = value;
+  }
+}
+
+
+class DataTernaryModel {
+  getPath() {
+    return this._path;
+  }
+  setPath(value) {
+    this._path = value;
+  }
+
+  getCondition() {
+    return this._condition;
+  }
+  setCondition(value) {
+    this._condition = value;
+  }
+
+  getCheckValue() {
+    return this._checkValue;
+  }
+  setCheckValue(value) {
+    this._checkValue = value;
+  }
+
+  getTrueValue() {
+    return this._trueValue;
+  }
+  setTrueValue(value) {
+    this._trueValue = value;
+  }
+
+  getFalseValue() {
+    return this._falseValue;
+  }
+  setFalseValue(value) {
+    this._falseValue = value;
+  }
 }
 
 
@@ -46,6 +104,7 @@ class SymbolDefinitionModel {
 class ShapeModel {
 
   constructor() {
+    this._data = this.defaultData();
     this._x = this.defaultX();
     this._y = this.defaultY();
     this._strokeWidth = this.defaultStrokeWidth();
@@ -58,6 +117,23 @@ class ShapeModel {
   }
   setName(value) {
     this._name = value;
+  }
+
+  getDataKey() {
+    return this._dataKey;
+  }
+  setDataKey(value) {
+    this._dataKey = value;
+  }
+
+  defaultData() {
+    return {};
+  }
+  getData() {
+    return this._data;
+  }
+  setData(value) {
+    this._data = value;
   }
 
   defaultX() {
@@ -377,6 +453,8 @@ class LineModel extends ShapeModel {
 
 module.exports = {
   ANMLModel,
+  DataValueModel,
+  DataTernaryModel,
   SymbolDefinitionModel,
   SymbolModel,
   ShapeModel,
