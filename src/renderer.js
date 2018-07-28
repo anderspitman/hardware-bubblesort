@@ -153,11 +153,11 @@ class ANMLRenderer {
     }
 
     this.ctx.beginPath();
-    const centerX = r.getWidth() / 2;
-    const centerY = r.getHeight() / 2;
+    const halfWidth = r.getWidth() / 2;
+    const halfHeight = r.getHeight() / 2;
     this.ctx.rect(
-      this._x(x - centerX),
-      this._y(y - centerY), r.getWidth(), -r.getHeight());
+      this._x(x - halfWidth),
+      this._y(y - halfHeight), r.getWidth(), -r.getHeight());
     this.ctx.fill();
     this.ctx.stroke();
   }

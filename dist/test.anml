@@ -1,5 +1,7 @@
 (def AndGate
   (Rectangle
+    (x 15)
+    (y -20)
     (width 30)
     (height 40)
   )
@@ -24,43 +26,44 @@
 
 (def GreaterThan1
   (AndGate
-    (x 60)
+    (x 10)
     (y 20)
   )
   (NotGate
-    (x 15)
+    (x -35)
     (y -10)
   )
   (Line
     (x 0)
     (y 0)
     (strokeWidth 3)
-    (x1 0) (y1 10)
-    (x2 60) (y2 10)
+    (x1 -50) (y1 10)
+    (x2 10) (y2 10)
   )
   (Line
     (x 0)
     (y 0)
     (strokeWidth 3)
-    (x1 35) (y1 -10)
-    (x2 60) (y2 -10)
+    (x1 -15) (y1 -10)
+    (x2 10) (y2 -10)
   )
 )
 
 (Circle
-  (x 130)
-  (y 30)
+  (x 100)
+  (y 100)
+  (radius 20)
 )
 
 (Rectangle
-  (x 0)
-  (y 0)
-  (width 20)
-  (height 20)
+  (x -100)
+  (y -100)
+  (width 40)
+  (height 40)
 )
 
-#(GreaterThan1
-#)
+(GreaterThan1
+)
 
 #(Circle circle1
 #  (x gt1.wire1.x1)

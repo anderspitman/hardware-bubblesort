@@ -14,15 +14,15 @@ class ANMLGenerator {
 
     let str = '';
 
-    for (let shape of model.getShapes()) {
-      str += this.generateItem(shape, '');    
-      str += '\n';
-    }
-
     const symbolDefs = model.getSymbolDefs();
     for (let key in symbolDefs) {
       const def = symbolDefs[key];
       str += this.generateSymbolDef(def, '');
+    }
+
+    for (let shape of model.getShapes()) {
+      str += this.generateItem(shape, '');    
+      str += '\n';
     }
 
     return str;
