@@ -4,12 +4,22 @@ body {
 
 #root {
     height: 20vh; 
+    display: flex;
+    flex-direction: row;
 }
 
 #renderer {
-    height: 100%;
+    width: 49vw;
+    height: 95vh;
+}
+
+#editor {
+    width: 49vw;
+    height: 95vh;
 }
 
 #editor textarea {
+    width: 50vw;
+    height: 95vh;
     resize: none;
 }
