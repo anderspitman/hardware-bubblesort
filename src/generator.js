@@ -1,5 +1,6 @@
 const { capitalize } = require('./utils');
 const {
+  ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
   CircleModel,
@@ -12,9 +13,18 @@ const {
 class ANMLGenerator {
   generate(model) {
 
+    this._symbolTable = model.getSymbolTable();
+
     this._indentStep = 2;
 
     let str = '';
+
+    const symbolTable = model.getSymbolTable();
+    for (let key in symbolTable) {
+      const def = symbolTable[key];
+      str += this.generateConstantDef(def, '');
+    }
+    str += '\n';
 
     const symbolDefs = model.getSymbolDefs();
     for (let key in symbolDefs) {
@@ -116,6 +126,11 @@ class ANMLGenerator {
     return str;
   }
 
+  generateConstantDef(c, indent) {
+    let str = `(def ${c.getIdentifier()} ${c.getValue()})\n`;
+    return str;
+  }
+
   generateSymbolDef(s, indent) {
     let str = '(def ' + s.getName() + '\n';
 
@@ -160,7 +175,8 @@ class ANMLGenerator {
         ret = this.generateDataTernaryAttr(attr, value, indent + '  ');
       }
       else {
-        ret = this.generateAttr(attr, value, indent + '  ');
+        const finalValue = this._symbolOrValue(value);
+        ret = this.generateAttr(attr, finalValue, indent + '  ');
       }
 
       if (ret !== '') {
@@ -169,6 +185,15 @@ class ANMLGenerator {
     }
 
     return str;
+  }
+
+  _symbolOrValue(ident) {
+    if (ident instanceof ConstantDefinitionModel) {
+      return ident.getIdentifier();
+    }
+    else {
+      return ident;
+    }
   }
 
   generateAttr(key, value, indent) {
@@ -183,8 +208,10 @@ class ANMLGenerator {
 
   generateDataTernaryAttr(key, v, indent) {
     let str = indent + '(' + key + ' ';
+    const trueVal = this._symbolOrValue(v.getTrueValue());
+    const falseVal = this._symbolOrValue(v.getFalseValue());
     const path =
-      `data.${v.getPath().join('.')} ${v.getCondition()} ${v.getCheckValue()} ? ${v.getTrueValue()} : ${v.getFalseValue()}`;
+      `data.${v.getPath().join('.')} ${v.getCondition()} ${v.getCheckValue()} ? ${trueVal} : ${falseVal}`;
     str += path + ')';
     return str;
   }

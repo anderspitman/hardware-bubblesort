@@ -10,6 +10,13 @@ class ANMLModel {
     this._shapes.push(shape);
   }
 
+  getSymbolTable() {
+    return this._symbolTable;
+  }
+  setSymbolTable(value) {
+    this._symbolTable = value;
+  }
+
   getSymbolDefs() {
     return this._symbolDefs;
   }
@@ -32,6 +39,23 @@ class ANMLModel {
         shape.setData(data[dataKey]);
       }
     }
+  }
+}
+
+
+class ConstantDefinitionModel {
+  getIdentifier() {
+    return this._ident;
+  }
+  setIdentifier(value) {
+    this._ident = value;
+  }
+
+  getValue() {
+    return this._value;
+  }
+  setValue(value) {
+    this._value = value;
   }
 }
 
@@ -453,6 +477,7 @@ class LineModel extends ShapeModel {
 
 module.exports = {
   ANMLModel,
+  ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
   SymbolDefinitionModel,

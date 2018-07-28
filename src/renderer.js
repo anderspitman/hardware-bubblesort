@@ -1,5 +1,6 @@
 const { Vector2 } = require('./math');
 const {
+  ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
   CircleModel,
@@ -104,7 +105,10 @@ class ANMLRenderer {
   }
 
   processAttr(shape, attr, data) {
-    if (attr instanceof DataValueModel) {
+    if (attr instanceof ConstantDefinitionModel) {
+      return attr.getValue();
+    }
+    else if (attr instanceof DataValueModel) {
       const path = [shape.getDataKey()].concat(attr.getPath());
       return getDataByPath(data, attr.getPath());
     }
@@ -115,10 +119,10 @@ class ANMLRenderer {
       switch(attr.getCondition()) {
         case '==':
           if (val === attr.getCheckValue()) {
-            return attr.getTrueValue();
+            return this._symbolOrValue(attr.getTrueValue());
           }
           else {
-            return attr.getFalseValue();
+            return this._symbolOrValue(attr.getFalseValue());
           }
           break;
         default:
@@ -128,6 +132,15 @@ class ANMLRenderer {
     }
     else {
       return attr;
+    }
+  }
+
+  _symbolOrValue(ident) {
+    if (ident instanceof ConstantDefinitionModel) {
+      return ident.getValue();
+    }
+    else {
+      return ident;
     }
   }
 
@@ -252,6 +265,7 @@ class ANMLRenderer {
     this.ctx.lineTo(this._x(x + t.getX2()), this._y(y + t.getY2()));
     this.ctx.lineTo(this._x(x + t.getX3()), this._y(y + t.getY3()));
     this.ctx.fill();
+    // FIXME: isn't closing stroke
     this.ctx.stroke();
   }
 

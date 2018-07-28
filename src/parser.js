@@ -2,6 +2,7 @@ const { capitalize } = require('./utils');
 const { Vector2 } = require('./math');
 const {
   ANMLModel,
+  ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
   SymbolDefinitionModel,
@@ -18,6 +19,7 @@ class ANMLParser {
 
   parse(text) {
 
+    this._symbolTable = {};
     this._symbolDefs = {};
 
     const commentsRemoved = text.split('\n')
@@ -52,6 +54,7 @@ class ANMLParser {
     }
 
     model.setSymbolDefs(this._symbolDefs);
+    model.setSymbolTable(this._symbolTable);
 
     return model;
   }
@@ -66,7 +69,7 @@ class ANMLParser {
 
     switch(type) {
       case 'def':
-        return this._parseSymbolDefinition(tokens);
+        return this._parseDefinition(tokens);
         break;
       case 'Circle':
       case 'Rectangle':
@@ -199,16 +202,18 @@ class ANMLParser {
 
     let tok = tokens.shift();
 
-    if (tok[0] === '"' || tok[0] === "'") {
-      tokens.unshift(tok);
-      return this._parseStringValue(tokens);
-    }
-    else if (tok.startsWith('data')) {
+    if (tok.startsWith('data')) {
       tokens.unshift(tok);
       return this._parseDataValue(tokens);
     }
     else {
-      return this._parseNumberValue(tok);
+      if (!isNaN(tok)) {
+        return this._parseNumberValue(tok);
+      }
+      else {
+        tokens.unshift(tok);
+        return this._symbolOrValue(tokens);
+      }
     }
   }
 
@@ -237,9 +242,9 @@ class ANMLParser {
     // TODO: handle other data types
     const checkValue = Number(tokens.shift());
     const questionMark = tokens.shift();
-    const trueVal = tokens.shift();
+    const trueVal = this._symbolOrValue(tokens);
     const colon = tokens.shift();
-    const falseVal = tokens.shift();
+    const falseVal = this._symbolOrValue(tokens);
     //const closeParen = tokens.shift();
 
     const tern = new DataTernaryModel();
@@ -249,6 +254,19 @@ class ANMLParser {
     tern.setFalseValue(falseVal);
 
     return tern;
+  }
+
+  _symbolOrValue(tokens) {
+    const ident = tokens.shift();
+
+    // check if identifier is a key into the symbol table, and use the value
+    // from the table if so.
+    if (this._symbolTable[ident] === undefined) {
+      return ident;
+    }
+    else {
+      return this._symbolTable[ident];
+    }
   }
 
   _parseStringValue(tokens) {
@@ -277,16 +295,28 @@ class ANMLParser {
   }
 
   _parseNumberValue(tok) {
-    if (!isNaN(tok)) {
-      tok = Number(tok);
-    }
-
-    return tok;
+    return Number(tok);
   }
 
-  _parseSymbolDefinition(tokens) {
+  _parseDefinition(tokens) {
+
+    const ident = tokens.shift();
+
+    const tok = tokens.shift();
+
+    if (tok === '(') {
+      tokens.unshift(tok);
+      return this._parseSymbolDefinition(ident, tokens);
+    }
+    else {
+      tokens.unshift(tok);
+      return this._parseConstantDefinition(ident, tokens);
+    }
+  }
+
+  _parseSymbolDefinition(ident, tokens) {
     const def = new SymbolDefinitionModel();
-    const symbolName = tokens.shift();
+    const symbolName = ident;
     def.setName(symbolName);
 
     const shapes = this._parseShapeList(tokens);
@@ -295,6 +325,25 @@ class ANMLParser {
     return def
   }
 
+  _parseConstantDefinition(ident, tokens) {
+    const value = tokens.shift();
+
+    const constDef = new ConstantDefinitionModel();
+    constDef.setIdentifier(ident);
+    constDef.setValue(value);
+
+    if (this._symbolTable[ident] === undefined) {
+      this._symbolTable[ident] = constDef;
+    }
+    else {
+      throw `Constant ${ident} already defined`;
+    }
+
+    const closeParen = tokens.shift();
+    // TODO: this is a hack to avoid returning null, but it doesn't do
+    // anything
+    return constDef;
+  }
 
   _tokenize(text) {
     const tokens = [];
