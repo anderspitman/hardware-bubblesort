@@ -151,10 +151,13 @@ class RectangleModel extends ShapeModel {
   }
 
   intersects(point) {
-    const withinX = point.x >= this.getX() &&
-      point.x <= (this.getX() + this.getWidth());
-    const withinY = point.y >= this.getY() &&
-      point.y <= (this.getY() + this.getHeight());
+    const halfWidth = this.getWidth() / 2;
+    const halfHeight = this.getHeight() / 2;
+
+    const withinX = point.x >= this.getX() - halfWidth &&
+      point.x <= (this.getX() + halfWidth);
+    const withinY = point.y >= this.getY() - halfHeight &&
+      point.y <= (this.getY() + halfHeight);
     return withinX && withinY;
   }
 }
