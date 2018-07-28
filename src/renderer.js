@@ -22,35 +22,50 @@ class ANMLRenderer {
     this.ctx = this.canvas.getContext('2d');
 
     this.canvas.addEventListener('mousedown', (e) => {
-      const clickPoint = new Vector2({
-        x: e.clientX,
-        y: e.clientY,
-      });
 
       if (this.onMouseDownCallback !== undefined) {
-        this.onMouseDownCallback(clickPoint);
+        const clickPoint = new Vector2({
+          x: e.clientX,
+          y: e.clientY,
+        });
+
+        const worldOrigin = this.getViewportCenter();
+        const worldPoint = clickPoint.subtract(worldOrigin);
+        worldPoint.y = -worldPoint.y;
+
+        this.onMouseDownCallback(worldPoint);
       }
     });
 
     this.canvas.addEventListener('mouseup', (e) => {
-      const point = new Vector2({
-        x: e.clientX,
-        y: e.clientY,
-      });
 
       if (this.onMouseUpCallback !== undefined) {
-        this.onMouseUpCallback(point);
+
+        const clickPoint = new Vector2({
+          x: e.clientX,
+          y: e.clientY,
+        });
+
+        const worldOrigin = this.getViewportCenter();
+        const worldPoint = clickPoint.subtract(worldOrigin);
+        worldPoint.y = -worldPoint.y;
+        this.onMouseUpCallback(worldPoint);
       }
     });
 
     this.canvas.addEventListener('mousemove', (e) => {
-      const point = new Vector2({
-        x: e.clientX,
-        y: e.clientY,
-      });
 
       if (this.onMouseMoveCallback !== undefined) {
-        this.onMouseMoveCallback(point);
+
+        const clickPoint = new Vector2({
+          x: e.clientX,
+          y: e.clientY,
+        });
+
+        const worldOrigin = this.getViewportCenter();
+        const worldPoint = clickPoint.subtract(worldOrigin);
+        worldPoint.y = -worldPoint.y;
+        this.onMouseMoveCallback(worldPoint);
       }
     });
 
