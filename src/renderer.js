@@ -133,10 +133,10 @@ class ANMLRenderer {
     const savedLineWidth = this.ctx.lineWidth;
     this.ctx.lineWidth = 1;
     this.ctx.beginPath();
-    this.ctx.moveTo(this._viewPortCenterX, 0);
-    this.ctx.lineTo(this._viewPortCenterX, this.canvas.height);
-    this.ctx.moveTo(0, this._viewPortCenterY);
-    this.ctx.lineTo(this.canvas.width, this._viewPortCenterY);
+    this.ctx.moveTo(this._viewPortCenterX + 0.5, 0.5);
+    this.ctx.lineTo(this._viewPortCenterX + 0.5, this.canvas.height + 0.5);
+    this.ctx.moveTo(0.5, this._viewPortCenterY + 0.5);
+    this.ctx.lineTo(this.canvas.width + 0.5, this._viewPortCenterY + 0.5);
     this.ctx.stroke();
     this.ctx.lineWidth = savedLineWidth;
   }
