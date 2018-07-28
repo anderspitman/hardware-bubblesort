@@ -128,8 +128,10 @@ class ANMLGenerator {
   generateShapeAttrs(s, indent) {
 
     let str = '';
+    str += indent + `  (x ${s.getX()}) (y ${s.getY()})\n`;
+
     const attrs = [
-      'x', 'y', 'strokeWidth', 'strokeColor', 'fillColor',
+      'strokeWidth', 'strokeColor', 'fillColor',
     ];
 
     str += this.generateAttrs(s, attrs, indent);
