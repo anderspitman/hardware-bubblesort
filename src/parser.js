@@ -44,11 +44,11 @@ class ANMLParser {
       }
       else if (model instanceof SymbolDefinitionModel) {
 
-        if (this._symbolDefs[model.getName()] === undefined) {
-          this._symbolDefs[model.getName()] = model;
+        if (this._symbolDefs[model.getType()] === undefined) {
+          this._symbolDefs[model.getType()] = model;
         }
         else {
-          throw "Symbol " + model.getName() + " already defined";
+          throw "Symbol " + model.getType() + " already defined";
         }
       }
     }
@@ -91,7 +91,7 @@ class ANMLParser {
     const symbolDef = this._symbolDefs[type];
     if (symbolDef !== undefined) {
       const symbol = new SymbolModel();
-      symbol.setName(symbolDef.getName());
+      symbol.setType(symbolDef.getType());
       symbol.setChildren(symbolDef.getChildren());
 
       this._setAttrs(symbol, tokens);
@@ -317,7 +317,7 @@ class ANMLParser {
   _parseSymbolDefinition(ident, tokens) {
     const def = new SymbolDefinitionModel();
     const symbolName = ident;
-    def.setName(symbolName);
+    def.setType(symbolName);
 
     const shapes = this._parseShapeList(tokens);
     def.setChildren(shapes);

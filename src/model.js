@@ -109,11 +109,11 @@ class DataTernaryModel {
 
 
 class SymbolDefinitionModel {
-  getName() {
-    return this._name;
+  getType() {
+    return this._type;
   }
-  setName(value) {
-    this._name = value;
+  setType(value) {
+    this._type = value;
   }
 
   getChildren() {
@@ -213,6 +213,13 @@ class ShapeModel {
 
 
 class SymbolModel extends ShapeModel {
+
+  getType() {
+    return this._type;
+  }
+  setType(value) {
+    this._type = value;
+  }
 
   getChildren() {
     return this._children;

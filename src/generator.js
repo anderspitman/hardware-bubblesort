@@ -115,7 +115,7 @@ class ANMLGenerator {
   }
 
   generateSymbol(s, indent) {
-    let str = indent + '(' + s.getName() + '\n';
+    let str = indent + '(' + s.getType() + '\n';
 
     str += this.generateShapeAttrs(s, indent);
 
@@ -132,7 +132,7 @@ class ANMLGenerator {
   }
 
   generateSymbolDef(s, indent) {
-    let str = '(def ' + s.getName() + '\n';
+    let str = '(def ' + s.getType() + '\n';
 
     for (let child of s.getChildren()) {
       str += this.generateItem(child, indent + '  ');

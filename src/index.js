@@ -25,6 +25,11 @@ function main(anmlFileText) {
   const generator = new ANMLGenerator();
   const editor = new ANMLEditor({ domParentId: 'editor' });
 
+  const sw1 = createSwitch();
+  const sw2 = createSwitch();
+  const sw3 = createSwitch();
+  const sw4 = createSwitch();
+
   let dragObj = null;
   let dragOffset;
   renderer.onMouseDown((point) => {
@@ -33,7 +38,21 @@ function main(anmlFileText) {
       const intersects = shape.intersects(point);
 
       if (intersects) {
-        console.log(shape.getData());
+
+        switch (shape.getName()) {
+          case 'sw1':
+            flipSwitch(sw1);
+            break;
+          case 'sw2':
+            flipSwitch(sw2);
+            break;
+          case 'sw3':
+            flipSwitch(sw3);
+            break;
+          case 'sw4':
+            flipSwitch(sw4);
+            break;
+        }
         const objPos = new Vector2({ x: shape.getX(), y: shape.getY() });
         dragOffset = point.subtract(objPos);
         dragObj = shape;
@@ -64,10 +83,6 @@ function main(anmlFileText) {
   });
 
   const data = {};
-  const sw1 = createSwitch();
-  const sw2 = createSwitch();
-  const sw3 = createSwitch();
-  const sw4 = createSwitch();
 
   const and1 = createAndGate();
   const and2 = createAndGate();
@@ -80,28 +95,23 @@ function main(anmlFileText) {
   connectPorts(sw4.out(), and2.inB());
 
   connectPorts(sw1.out(), gt1.inA());
+  // FIXME: if the switches aren't manually triggered below, the not gate
+  // doesn't appear to get initialized properly
   connectPorts(sw2.out(), gt1.inB());
 
   data.and1 = and1;
   data.and2 = and2;
   data.gt1 = gt1;
+  data.sw1 = sw1;
+  data.sw2 = sw2;
+  data.sw3 = sw3;
+  data.sw4 = sw4;
   //data.and = 'Red';
 
+  sw1.setSwitchState(0);
   sw2.setSwitchState(0);
-  sw4.setSwitchState(1);
-
-  setInterval(() => {
-    if (sw1.out().getState() === 0) {
-      sw1.setSwitchState(1);
-      sw2.setSwitchState(1);
-      sw3.setSwitchState(0);
-    }
-    else {
-      sw1.setSwitchState(0);
-      sw2.setSwitchState(0);
-      sw3.setSwitchState(1);
-    }
-  }, 1000);
+  sw3.setSwitchState(0);
+  sw4.setSwitchState(0);
 
   function update() {
     //const obj = model.getShapes()[0];
@@ -113,6 +123,15 @@ function main(anmlFileText) {
     requestAnimationFrame(update);
   }
   requestAnimationFrame(update);
+}
+
+function flipSwitch(sw) {
+  if (sw.out().getState() === 0) {
+    sw.setSwitchState(1);
+  }
+  else {
+    sw.setSwitchState(0);
+  }
 }
 
 function printObj(obj) {
