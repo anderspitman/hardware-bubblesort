@@ -105,9 +105,6 @@ class ANMLGenerator {
 
     str += this.generateShapeAttrs(l, indent);
 
-    const attrs = [ 'strokeWidth' ];
-
-    str += this.generateAttrs(l, attrs, indent);
     str += indent + `  (x1 ${l.getX1()}) (y1 ${l.getY1()})\n`;
     str += indent + `  (x2 ${l.getX2()}) (y2 ${l.getY2()})\n`;
     str += indent + ')\n';
