@@ -163,6 +163,8 @@ class ANMLParser {
   _parseAttributes(tokens) {
     const attrs = [];
 
+    const attrTable = {};
+
     let done = false;
     while(!done) {
       const attr = this._parseAttribute(tokens);
@@ -171,6 +173,14 @@ class ANMLParser {
         done = true;
       }
       else {
+
+        if (attrTable[attr.name] === undefined) {
+          attrTable[attr.name] = attr;
+        }
+        else {
+          throw `Attribute ${attr.name} already defined`;
+        }
+
         attrs.push(attr);
       }
     }

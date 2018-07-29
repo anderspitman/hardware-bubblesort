@@ -166,10 +166,11 @@ class ANMLRenderer {
 
     const saveFill = this.ctx.fillStyle;
     const fillColor = shape.getFillColor();
-    this.ctx.fillStyle = this.processAttr(shape, fillColor, data);;
+    this.ctx.fillStyle = this.processAttr(shape, fillColor, data);
 
     const savedLineWidth = this.ctx.lineWidth;
-    this.ctx.lineWidth = shape.getStrokeWidth();
+    const strokeWidth = shape.getStrokeWidth();
+    this.ctx.lineWidth = this.processAttr(shape, strokeWidth, data);
 
     if (shape instanceof CircleModel) {
       this.drawCircle(shape, offsetVec);
