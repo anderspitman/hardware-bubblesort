@@ -280,9 +280,12 @@ class GroupModel extends ShapeModel {
 class CircleModel extends ShapeModel {
   constructor() {
     super();
-    this._radius = 10;
+    this._radius = this.defaultRadius();
   }
 
+  defaultRadius() {
+    return 10;
+  }
   getRadius() {
     return this._radius;
   }
@@ -302,10 +305,13 @@ class RectangleModel extends ShapeModel {
   constructor() {
     super();
 
-    this._width = 10;
-    this._height = 10;
+    this._width = this.defaultWidth();
+    this._height = this.defaultHeight();
   }
 
+  defaultWidth() {
+    return 10;
+  }
   getWidth() {
     return this._width;
   }
@@ -313,6 +319,9 @@ class RectangleModel extends ShapeModel {
     this._width = value;
   }
 
+  defaultHeight() {
+    return 10;
+  }
   getHeight() {
     return this._height;
   }

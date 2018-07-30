@@ -71,6 +71,7 @@
 )
 
 (Group
+  (x -300) (y 100)
   (children
     (Switch
       (name sw1)

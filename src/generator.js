@@ -161,7 +161,7 @@ class ANMLGenerator {
   generateShapeAttrs(s, indent) {
 
     let str = '';
-    str += indent + `  (x ${s.getX()}) (y ${s.getY()})\n`;
+    //str += indent + `  (x ${s.getX()}) (y ${s.getY()})\n`;
 
     const name = s.getName();
     if (name !== undefined) {
@@ -174,7 +174,7 @@ class ANMLGenerator {
     }
 
     const attrs = [
-      'strokeWidth', 'strokeColor', 'fillColor',
+      'x', 'y', 'strokeWidth', 'strokeColor', 'fillColor',
     ];
 
     str += this.generateAttrs(s, attrs, indent);
@@ -195,8 +195,10 @@ class ANMLGenerator {
         ret = this.generateDataTernaryAttr(attr, value, indent + '  ');
       }
       else {
+        const defaultMethod = 'default' + capitalize(attr);
+        const defaultValue = s[defaultMethod]();
         const finalValue = this._symbolOrValue(value);
-        ret = this.generateAttr(attr, finalValue, indent + '  ');
+        ret = this.generateAttr(attr, finalValue, defaultValue, indent + '  ');
       }
 
       if (ret !== '') {
@@ -216,14 +218,13 @@ class ANMLGenerator {
     }
   }
 
-  generateAttr(key, value, indent) {
-    return indent + '(' + key + ' ' + value + ')';
-    //if (value !== defaultValue) {
-    //  return indent + '(' + key + ' ' + value + ')';
-    //}
-    //else {
-    //  return '';
-    //}
+  generateAttr(key, value, defaultValue, indent) {
+    if (value !== defaultValue) {
+      return indent + '(' + key + ' ' + value + ')';
+    }
+    else {
+      return '';
+    }
   }
 
   generateDataTernaryAttr(key, v, indent) {
