@@ -9,6 +9,7 @@ const {
   createAndGate,
   GreaterThan1,
 } = require('../lib/wild_logic/src/index');
+const { GroupModel } = require('./model');
 
 
 fetch('/test.anml').then(response => {
@@ -39,23 +40,27 @@ function main(anmlFileText) {
 
       if (intersects) {
 
-        switch (shape.getName()) {
-          case 'sw1':
-            flipSwitch(sw1);
-            break;
-          case 'sw2':
-            flipSwitch(sw2);
-            break;
-          case 'sw3':
-            flipSwitch(sw3);
-            break;
-          case 'sw4':
-            flipSwitch(sw4);
-            break;
-        }
+        checkSwitches(shape);
+        
         const objPos = new Vector2({ x: shape.getX(), y: shape.getY() });
         dragOffset = point.subtract(objPos);
         dragObj = shape;
+
+        if (shape instanceof GroupModel) {
+
+          const groupPos = objPos;
+          const relativePoint = point.subtract(groupPos);
+
+          for (let child of shape.getChildren()) {
+            const childPos = new Vector2({ x: child.getX(), y: child.getY() });
+            if (child.intersects(relativePoint)) {
+              console.log(child);
+              checkSwitches(child);
+              break;
+            }
+          }
+        }
+
         break;
       }
     }
@@ -112,6 +117,23 @@ function main(anmlFileText) {
   sw2.setSwitchState(0);
   sw3.setSwitchState(0);
   sw4.setSwitchState(0);
+
+  function checkSwitches(clickedObj) {
+    switch (clickedObj.getName()) {
+      case 'sw1':
+        flipSwitch(sw1);
+        break;
+      case 'sw2':
+        flipSwitch(sw2);
+        break;
+      case 'sw3':
+        flipSwitch(sw3);
+        break;
+      case 'sw4':
+        flipSwitch(sw4);
+        break;
+    }
+  }
 
   function update() {
     //const obj = model.getShapes()[0];

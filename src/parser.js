@@ -8,6 +8,7 @@ const {
   SymbolDefinitionModel,
   SymbolModel,
   ShapeModel,
+  GroupModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
@@ -34,6 +35,8 @@ class ANMLParser {
 
     while (true) {
       const model = this._parseExpression(tokens)
+
+      //console.log(tokens);
 
       if (model === null) {
         break;
@@ -77,6 +80,9 @@ class ANMLParser {
       case 'Line':
         tokens.unshift(type);
         return this._parseShape(tokens);
+      case 'Group':
+        return this._parseGroup(tokens);
+        break;
       default:
 
         tokens.unshift(type);
@@ -95,6 +101,9 @@ class ANMLParser {
       symbol.setChildren(symbolDef.getChildren());
 
       this._setAttrs(symbol, tokens);
+
+      const closeParen = tokens.shift();
+
       return symbol;
     }
     else {
@@ -113,6 +122,8 @@ class ANMLParser {
       shapes.push(shape);
       tok = tokens.shift();
     }
+
+    tokens.unshift(')');
 
     return shapes;
   }
@@ -137,7 +148,8 @@ class ANMLParser {
         break;
       default:
         tokens.unshift(type);
-        return this._parseSymbol(tokens);
+        const sym = this._parseSymbol(tokens);
+        return sym;
         break;
     }
 
@@ -145,13 +157,16 @@ class ANMLParser {
 
     this._setAttrs(shape, tokens);
 
+    const closeParen = tokens.shift();
+
     return shape;
   }
 
   _setAttrs(shape, tokens) {
 
     const attrs = this._parseAttributes(tokens);
-    for (let attr of attrs) {
+    for (let key in attrs) {
+      const attr = attrs[key];
       const methodName = 'set' + capitalize(attr.name);
       if (shape[methodName] === undefined) {
         throw "Invalid attribute: " + attr.name;
@@ -161,7 +176,8 @@ class ANMLParser {
   }
 
   _parseAttributes(tokens) {
-    const attrs = [];
+
+    const attrs = {};
 
     const attrTable = {};
 
@@ -169,7 +185,8 @@ class ANMLParser {
     while(!done) {
       const attr = this._parseAttribute(tokens);
 
-      if (!attr) {
+      //if (attr === null || attr.name === 'children') {
+      if (attr === null) {
         done = true;
       }
       else {
@@ -181,7 +198,7 @@ class ANMLParser {
           throw `Attribute ${attr.name} already defined`;
         }
 
-        attrs.push(attr);
+        attrs[attr.name] = attr;
       }
     }
 
@@ -193,6 +210,7 @@ class ANMLParser {
     const openParen = tokens.shift();
 
     if (openParen === ')') {
+      tokens.unshift(')');
       return null;
     }
 
@@ -216,6 +234,11 @@ class ANMLParser {
       tokens.unshift(tok);
       return this._parseDataValue(tokens);
     }
+    else if (tok === '(') {
+      tokens.unshift(tok);
+      const childs = this._parseChildren(tokens);
+      return childs;
+    }
     else {
       if (!isNaN(tok)) {
         return this._parseNumberValue(tok);
@@ -225,6 +248,11 @@ class ANMLParser {
         return this._symbolOrValue(tokens);
       }
     }
+  }
+
+  _parseChildren(tokens) {
+    const children = this._parseShapeList(tokens);
+    return children;
   }
 
   _parseDataValue(tokens) {
@@ -330,9 +358,25 @@ class ANMLParser {
     def.setType(symbolName);
 
     const shapes = this._parseShapeList(tokens);
+
     def.setChildren(shapes);
 
+    const closeParen = tokens.shift();
+
     return def
+  }
+
+  _parseGroup(tokens) {
+    const g = new GroupModel();
+
+    const attrs = this._parseAttributes(tokens);
+
+    console.log(attrs);
+    g.setChildren(attrs.children.value);
+
+    const closeParen = tokens.shift();
+
+    return g;
   }
 
   _parseConstantDefinition(ident, tokens) {

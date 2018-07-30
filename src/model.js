@@ -33,10 +33,22 @@ class ANMLModel {
 
   update(data) {
     for (let shape of this.getShapes()) {
-      const dataKey = shape.getDataKey();
 
-      if (dataKey !== undefined) {
-        shape.setData(data[dataKey]);
+      if (shape instanceof GroupModel) {
+        for (let child of shape.getChildren()) {
+          const dataKey = child.getDataKey();
+
+          if (dataKey !== undefined) {
+            child.setData(data[dataKey]);
+          }
+        }
+      }
+      else {
+        const dataKey = shape.getDataKey();
+
+        if (dataKey !== undefined) {
+          shape.setData(data[dataKey]);
+        }
       }
     }
   }
@@ -220,6 +232,29 @@ class SymbolModel extends ShapeModel {
   setType(value) {
     this._type = value;
   }
+
+  getChildren() {
+    return this._children;
+  }
+  setChildren(value) {
+    this._children = value;
+  }
+
+  intersects(point) {
+    for (let child of this.getChildren()) {
+
+      const thisPos = new Vector2({ x: this.getX(), y: this.getY() });
+      const offsetPoint = point.subtract(thisPos);
+      if (child.intersects(offsetPoint)) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
+
+class GroupModel extends ShapeModel {
 
   getChildren() {
     return this._children;
@@ -490,6 +525,7 @@ module.exports = {
   SymbolDefinitionModel,
   SymbolModel,
   ShapeModel,
+  GroupModel,
   CircleModel,
   RectangleModel,
   TriangleModel,

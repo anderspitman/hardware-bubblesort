@@ -3,6 +3,7 @@ const {
   ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
+  GroupModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
@@ -183,6 +184,9 @@ class ANMLRenderer {
     }
     else if (shape instanceof LineModel) {
       this.drawLine(shape, offsetVec);
+    }
+    else if (shape instanceof GroupModel) {
+      this.drawSymbol(shape, offsetVec);
     }
     else if (shape instanceof SymbolModel) {
       this.drawSymbol(shape, offsetVec, data);

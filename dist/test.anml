@@ -2,6 +2,16 @@
 (def HIGH_COLOR #71ed55)
 (def WIRE_WIDTH 3)
 
+
+(def Switch
+  (Rectangle
+    (width 20)
+    (height 20)
+    (strokeColor LOW_COLOR)
+    (fillColor data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+  )
+)
+
 (def AndGate
   (Rectangle
     (x -8)
@@ -60,114 +70,34 @@
   )
 )
 
-(def Switch
-  (Rectangle
-    (width 20)
-    (height 20)
-    (strokeColor LOW_COLOR)
-    (fillColor data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+(Group
+  (children
+    (Switch
+      (name sw1)
+      (dataKey sw1)
+      (y 90)
+    )
+    
+    (Switch
+      (name sw2)
+      (dataKey sw2)
+      (y 60)
+    )
+    
+    (Switch
+      (name sw3)
+      (dataKey sw3)
+      (y 30)
+    )
+    
+    (Switch
+      (name sw4)
+      (dataKey sw4)
+      (y 0)
+    )
   )
 )
 
 (GreaterThan1
   (dataKey gt1)
 )
-
-(Switch
-  (name sw1)
-  (dataKey sw1)
-  (x -300)
-  (y 200)
-)
-
-(Switch
-  (name sw2)
-  (dataKey sw2)
-  (x -300)
-  (y 170)
-)
-
-(Switch
-  (name sw3)
-  (dataKey sw3)
-  (x -300)
-  (y 140)
-)
-
-(Switch
-  (name sw4)
-  (dataKey sw4)
-  (x -300)
-  (y 110)
-)
-
-#(Circle circle1
-#  (x gt1.wire1.x1)
-#  (y @gt1.wire1.y1)
-#)
-
-#
-#(Triangle
-#  (x1 0) (y1 0)
-#  (x2 10) (y2 10)
-#  (x3 10) (y3 10)
-#)
-
-#(list
-#  (Circle
-#    (x (index * 10))
-#    (y 100)
-#  )
-#)
-
-#(def Ship
-#  (Triangle
-#    (name "body")
-#    (vertices
-#      (0 10)
-#      (5 -10)
-#      (-5 -10)
-#    )
-#  )
-#  (list
-#    (Triangle
-#      (name "thruster")
-#      (vertices
-#        ((x 0) (y 0))
-#        ((x 5) (y sin(-10 * $thrust)))
-#        ((x -5) (y (-10 * $thrust)))
-#      )
-#    )
-#  )
-#)
-#
-#(def Ship
-#  (Triangle
-#    (name "Body")
-#    (vertices
-#      (0 10)
-#      (5 -10)
-#      (-5 -10)
-#    )
-#  )
-#  (Triangle
-#    (name "Left thruster")
-#    (vertices
-#      (0 10)
-#      (5 -10)
-#      (-5 -10)
-#    )
-#  )
-#  (Triangle
-#    (name "Right thruster")
-#    (vertices
-#      (0 10)
-#      (5 -10)
-#      (-5 -10)
-#    )
-#  )
-#)
-#
-#(Ship
-#  (data data.ship)
-#)

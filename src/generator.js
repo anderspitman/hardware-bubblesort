@@ -3,6 +3,7 @@ const {
   ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
+  GroupModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
@@ -54,6 +55,9 @@ class ANMLGenerator {
     }
     else if (item instanceof LineModel) {
       str += this.generateLine(item, indent);
+    }
+    else if (item instanceof GroupModel) {
+      str += this.generateGroup(item, indent);
     }
     else {
       str += this.generateSymbol(item, indent);
@@ -107,6 +111,21 @@ class ANMLGenerator {
 
     str += indent + `  (x1 ${l.getX1()}) (y1 ${l.getY1()})\n`;
     str += indent + `  (x2 ${l.getX2()}) (y2 ${l.getY2()})\n`;
+    str += indent + ')\n';
+    return str;
+  }
+
+  generateGroup(g, indent) {
+    let str = indent + '(Group\n';
+
+    str += this.generateShapeAttrs(g, indent);
+
+    str += indent + '  (children\n'
+    for (let child of g.getChildren()) {
+      str += this.generateItem(child, indent + '    ');
+    }
+    str += indent + '  )\n'
+
     str += indent + ')\n';
     return str;
   }
