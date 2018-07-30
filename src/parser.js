@@ -185,7 +185,6 @@ class ANMLParser {
     while(!done) {
       const attr = this._parseAttribute(tokens);
 
-      //if (attr === null || attr.name === 'children') {
       if (attr === null) {
         done = true;
       }

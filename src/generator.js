@@ -163,8 +163,12 @@ class ANMLGenerator {
     let str = '';
     str += indent + `  (x ${s.getX()}) (y ${s.getY()})\n`;
 
-    const dataKey = s.getDataKey();
+    const name = s.getName();
+    if (name !== undefined) {
+      str += indent + `  (name ${name})\n`;
+    }
 
+    const dataKey = s.getDataKey();
     if (dataKey !== undefined) {
       str += indent + `  (dataKey ${dataKey})\n`;
     }
