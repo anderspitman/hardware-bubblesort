@@ -369,10 +369,7 @@ class ANMLParser {
   _parseGroup(tokens) {
     const g = new GroupModel();
 
-    const attrs = this._parseAttributes(tokens);
-
-    console.log(attrs);
-    g.setChildren(attrs.children.value);
+    this._setAttrs(g, tokens);
 
     const closeParen = tokens.shift();
 
