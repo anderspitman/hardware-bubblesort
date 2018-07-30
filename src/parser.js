@@ -107,7 +107,7 @@ class ANMLParser {
       return symbol;
     }
     else {
-      throw "Invalid expression type " + type;
+      throw "Invalid symbol type " + type;
     }
   }
 

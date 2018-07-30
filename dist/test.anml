@@ -2,13 +2,12 @@
 (def HIGH_COLOR #71ed55)
 (def WIRE_WIDTH 3)
 
-
 (def Switch
   (Rectangle
-    (width 20)
-    (height 20)
     (strokeColor LOW_COLOR)
     (fillColor data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (width 20)
+    (height 20)
   )
 )
 
@@ -22,32 +21,78 @@
   )
   (Circle
     (x 10)
-    (radius 20)
     (strokeColor LOW_COLOR)
     (fillColor data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (radius 20)
+  )
+)
+
+(def OrGate
+  (Rectangle
+    (x -8)
+    (strokeColor LOW_COLOR)
+    (fillColor data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (width 30)
+    (height 40)
+  )
+  (Circle
+    (x 10)
+    (strokeColor LOW_COLOR)
+    (fillColor data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (radius 20)
   )
 )
 
 (def NotGate
   (Triangle
+    (strokeColor LOW_COLOR)
+    (fillColor data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (x1 -15) (y1 15)
     (x2 15) (y2 0)
     (x3 -15) (y3 -15)
-    (strokeColor LOW_COLOR)
-    (fillColor data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
   )
   (Circle
     (x 18)
-    (radius 4)
     (strokeColor LOW_COLOR)
     (fillColor data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (radius 4)
+  )
+)
+
+(def NandGate
+  (AndGate
+    (dataKey _not)
+  )
+  (Circle
+    (x 34)
+    (strokeColor LOW_COLOR)
+    (fillColor data._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (radius 4)
+  )
+)
+
+(def XnorGate
+  (OrGate
+    (dataKey _or)
+    (x -27)
+    (y 24)
+  )
+  (NandGate
+    (dataKey _nand1)
+    (x -27)
+    (y -25)
+  )
+  (NandGate
+    (dataKey _nand2)
+    (x 70)
+    (y -15)
   )
 )
 
 (def GreaterThan1
   (AndGate
     (dataKey _and)
-    (x 32) (y 0)
+    (x 32)
   )
   (NotGate
     (dataKey _not)
@@ -55,14 +100,12 @@
     (y -10)
   )
   (Line
-    (x 0) (y 0)
     (strokeWidth WIRE_WIDTH)
     (strokeColor data._and._inA._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (x1 -50) (y1 10)
     (x2 9) (y2 10)
   )
   (Line
-    (x 0) (y 0)
     (strokeWidth WIRE_WIDTH)
     (strokeColor data._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (x1 -13) (y1 -10)
@@ -70,35 +113,126 @@
   )
 )
 
+(def Comparator1
+  (XnorGate
+    (dataKey _xnor)
+    (y 30)
+  )
+  (GreaterThan1
+    (dataKey _gt)
+    (y -40)
+  )
+)
+
+(def Comparator2
+  (Comparator1
+    (dataKey _a1Compb1)
+    (x -115)
+    (y 73)
+  )
+  (Comparator1
+    (dataKey _a0Compb0)
+    (x -116)
+    (y -79)
+  )
+  (AndGate
+    (dataKey _andEq)
+    (x 57)
+    (y 73)
+  )
+  (AndGate
+    (dataKey _andGt)
+    (x 59)
+    (y -51)
+  )
+  (OrGate
+    (dataKey _or)
+    (x 142)
+  )
+)
+
+(def Comparator4
+  (Comparator2
+    (dataKey _comp1)
+    (x -111)
+    (y -158)
+  )
+  (Comparator2
+    (dataKey _comp2)
+    (x -110)
+    (y 155)
+  )
+  (AndGate
+    (dataKey _andEq)
+    (x 264)
+    (y -89)
+  )
+  (AndGate
+    (dataKey _andGt)
+    (x 146)
+    (y 59)
+  )
+  (OrGate
+    (dataKey _orGt)
+    (x 260)
+    (y 122)
+  )
+)
+
 (Group
-  (x -300) (y 100)
+  (x -496)
+  (y 189)
   (children
     (Switch
       (name sw1)
       (dataKey sw1)
       (y 90)
     )
-    
     (Switch
       (name sw2)
       (dataKey sw2)
       (y 60)
     )
-    
     (Switch
       (name sw3)
       (dataKey sw3)
       (y 30)
     )
-    
     (Switch
       (name sw4)
       (dataKey sw4)
-      (y 0)
+    )
+    (Switch
+      (name sw5)
+      (dataKey sw5)
+      (y -30)
+    )
+    (Switch
+      (name sw6)
+      (dataKey sw6)
+      (y -60)
+    )
+    (Switch
+      (name sw7)
+      (dataKey sw7)
+      (y -90)
+    )
+    (Switch
+      (name sw8)
+      (dataKey sw8)
+      (y -120)
     )
   )
 )
 
-(GreaterThan1
-  (dataKey gt1)
+(Rectangle
+  (name box)
+  (strokeColor red)
+  (fillColor none)
+  (width 400)
+  (height 400)
+)
+
+(Comparator4
+  (dataKey comp4)
 )

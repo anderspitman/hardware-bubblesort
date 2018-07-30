@@ -177,7 +177,7 @@ class ANMLRenderer {
       this.drawCircle(shape, offsetVec);
     }
     else if (shape instanceof RectangleModel) {
-      this.drawRectangle(shape, offsetVec);
+      this.drawRectangle(shape, offsetVec, fillColor);
     }
     else if (shape instanceof TriangleModel) {
       this.drawTriangle(shape, offsetVec);
@@ -237,7 +237,7 @@ class ANMLRenderer {
     this.ctx.stroke();
   }
 
-  drawRectangle(r, offsetVec) {
+  drawRectangle(r, offsetVec, fillColor) {
     let x = r.getX();
     let y = r.getY();
 
@@ -252,7 +252,10 @@ class ANMLRenderer {
     this.ctx.rect(
       this._x(x - halfWidth),
       this._y(y - halfHeight), r.getWidth(), -r.getHeight());
-    this.ctx.fill();
+
+    if (fillColor !== 'none') {
+      this.ctx.fill();
+    }
     this.ctx.stroke();
   }
 
