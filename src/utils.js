@@ -17,7 +17,14 @@ function getDataByPath(obj, path) {
   return data;
 }
 
+
+function timeNowSeconds() {
+  const time = performance.now() / 1000;
+  return time;
+}
+
 module.exports = {
   capitalize,
   getDataByPath,
+  timeNowSeconds,
 };

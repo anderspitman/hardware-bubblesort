@@ -1,3 +1,4 @@
+const { timeNowSeconds } = require('./utils');
 const { Vector2 } = require('./math');
 const { ANMLParser } = require('./parser');
 const { ANMLRenderer } = require('./renderer');
@@ -90,7 +91,10 @@ function main(anmlFileText) {
 
   editor.onChange((text) => {
     try {
+      const start = timeNowSeconds();
       const newModel = parser.parse(text);
+      const parseTime = timeNowSeconds() - start;
+      console.log(`Parse time: ${parseTime}`);
       model = newModel;
     }
     catch (e) {
@@ -208,8 +212,12 @@ function main(anmlFileText) {
   function update() {
     //const obj = model.getShapes()[0];
     //obj.setX(obj.getX() + (1));
+    const startTime = timeNowSeconds();
     model.update(data);
+    const updateTime = timeNowSeconds();
     renderer.render(model);
+    const renderTime = timeNowSeconds();
+    console.log(`Render duration: ${renderTime - startTime}`);
     generator.generate(model);
     editor.update(model);
     requestAnimationFrame(update);
