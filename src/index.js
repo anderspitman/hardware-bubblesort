@@ -14,6 +14,7 @@ const {
   Comparator1,
   Comparator2,
   Comparator4,
+  SwapIfGreater4,
 } = require('../lib/wild_logic/src/index');
 const { GroupModel } = require('./model');
 
@@ -108,6 +109,7 @@ function main(anmlFileText) {
   const comp1 = new Comparator1();
   const comp2 = new Comparator2();
   const comp4 = new Comparator4();
+  const swap4 = new SwapIfGreater4();
 
   connectPorts(sw1.out(), comp1.inA());
   connectPorts(sw2.out(), comp1.inB());
@@ -132,6 +134,15 @@ function main(anmlFileText) {
   connectPorts(sw7.out(), comp4.inB1());
   connectPorts(sw8.out(), comp4.inB0());
 
+  connectPorts(sw1.out(), swap4.inA3());
+  connectPorts(sw2.out(), swap4.inA2());
+  connectPorts(sw3.out(), swap4.inA1());
+  connectPorts(sw4.out(), swap4.inA0());
+  connectPorts(sw5.out(), swap4.inB3());
+  connectPorts(sw6.out(), swap4.inB2());
+  connectPorts(sw7.out(), swap4.inB1());
+  connectPorts(sw8.out(), swap4.inB0());
+
   connectPorts(sw1.out(), gt1.inA());
   // FIXME: if the switches aren't manually triggered below, the not gate
   // doesn't appear to get initialized properly
@@ -154,6 +165,7 @@ function main(anmlFileText) {
   data.xnor1 = xnor1;
   data.comp2 = comp2;
   data.comp4 = comp4;
+  data.swap4 = swap4;
 
   sw1.setSwitchState(0);
   sw2.setSwitchState(0);

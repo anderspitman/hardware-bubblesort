@@ -179,6 +179,53 @@
   )
 )
 
+(def Mux1
+  (NotGate
+    (dataKey _not)
+    (x -75)
+    (y 12)
+  )
+  (AndGate
+    (dataKey _and1)
+    (x -8)
+    (y 25)
+  )
+  (AndGate
+    (dataKey _and2)
+    (x -8)
+    (y -25)
+  )
+  (OrGate
+    (dataKey _or)
+    (x 84)
+  )
+)
+
+(def Mux2
+  (Mux1
+    (dataKey _muxX)
+    (y 54)
+  )
+  
+  (Mux1
+    (dataKey _muxY)
+    (y -54)
+  )
+)
+
+(def Mux4
+  (Mux2
+    (dataKey _muxX)
+    (y 106)
+  )
+  
+  (Mux2
+    (dataKey _muxY)
+    (y -106)
+  )
+)
+
+
 (Group
   (x -496)
   (y 189)
@@ -229,10 +276,29 @@
   (name box)
   (strokeColor red)
   (fillColor none)
-  (width 400)
-  (height 400)
+  (width 1200)
+  (height 1200)
 )
 
-(Comparator4
-  (dataKey comp4)
+(def SwapIfGreater4
+  (Comparator4
+    (dataKey _comp4)
+    (x -315)
+  )
+  
+  (Mux4
+    (dataKey _muxX)
+    (x 475)
+    (y 215)
+  )
+  
+  (Mux4
+    (dataKey _muxY)
+    (x 475)
+    (y -215)
+  )
+)
+
+(SwapIfGreater4
+  (dataKey swap4)
 )
