@@ -28,7 +28,7 @@ class ANMLRenderer {
     this.canvas.style.height = dim.height;
     this.parent.appendChild(this.canvas);
     this.ctx = this.canvas.getContext('2d');
-    this._scale = 0.5;
+    this._scale = 1.0;
 
     const SCALE_MULTIPLIER = 1.10;
     const SCALE_MIN = 0.001;
@@ -58,7 +58,7 @@ class ANMLRenderer {
           y: e.clientY,
         });
 
-        const worldOrigin = this.getViewportCenter();
+        const worldOrigin = this.getActualCenter();
         const worldPoint = clickPoint.subtract(worldOrigin);
         worldPoint.y = -worldPoint.y;
 
@@ -78,7 +78,7 @@ class ANMLRenderer {
           y: e.clientY,
         });
 
-        const worldOrigin = this.getViewportCenter();
+        const worldOrigin = this.getActualCenter();
         const worldPoint = clickPoint.subtract(worldOrigin);
 
         worldPoint.y = -worldPoint.y;
@@ -98,7 +98,7 @@ class ANMLRenderer {
           y: e.clientY,
         });
 
-        const worldOrigin = this.getViewportCenter();
+        const worldOrigin = this.getActualCenter();
         const worldPoint = clickPoint.subtract(worldOrigin);
         worldPoint.y = -worldPoint.y;
         worldPoint.x /= this._scale;
@@ -106,7 +106,6 @@ class ANMLRenderer {
         this.onMouseMoveCallback(worldPoint);
       }
     });
-
 
     this.setViewportCenter({ x: 0, y: 0 });
   }
@@ -117,9 +116,22 @@ class ANMLRenderer {
       y: this._viewPortCenterY,
     });
   }
+
+  getActualCenter() {
+    return new Vector2({
+      x: this._actualCenterX,
+      y: this._actualCenterY,
+    });
+  }
+
   setViewportCenter({ x, y }) {
-    this._viewPortCenterX = x + (this.canvas.width / 2);
-    this._viewPortCenterY = y + (this.canvas.height / 2 );
+    this._viewPortCenterX = x;
+    this._viewPortCenterY = y;
+    // TODO: no idea why this needs to be negative
+    x = -x * this._scale;
+    y = y * this._scale;
+    this._actualCenterX = x + (this.canvas.width / 2);
+    this._actualCenterY = y + (this.canvas.height / 2 );
   }
 
   render(model) {
@@ -128,8 +140,8 @@ class ANMLRenderer {
     this.drawGrid();
 
     //const viewPortOffset = new Vector2({
-    //  x: this._viewPortCenterX,
-    //  y: this._viewPortCenterY
+    //  x: this._actualCenterX,
+    //  y: this._actualCenterY
     //});
 
     for (let shape of model.getShapes()) {
@@ -250,10 +262,10 @@ class ANMLRenderer {
     this.ctx.lineWidth = 1;
     this.ctx.beginPath();
     // NOTE: values offset by 0.5 to make sharper rendering on the HTML canvas
-    this.ctx.moveTo(this._viewPortCenterX + 0.5, 0.5);
-    this.ctx.lineTo(this._viewPortCenterX + 0.5, this.canvas.height + 0.5);
-    this.ctx.moveTo(0.5, this._viewPortCenterY + 0.5);
-    this.ctx.lineTo(this.canvas.width + 0.5, this._viewPortCenterY + 0.5);
+    this.ctx.moveTo(this._actualCenterX + 0.5, 0.5);
+    this.ctx.lineTo(this._actualCenterX + 0.5, this.canvas.height + 0.5);
+    this.ctx.moveTo(0.5, this._actualCenterY + 0.5);
+    this.ctx.lineTo(this.canvas.width + 0.5, this._actualCenterY + 0.5);
     this.ctx.stroke();
     this.ctx.lineWidth = savedLineWidth;
   }
@@ -372,11 +384,11 @@ class ANMLRenderer {
   }
 
   _x(x) {
-    return this._viewPortCenterX + x;
+    return this._actualCenterX + x;
   }
 
   _y(y) {
-    return this._viewPortCenterY - y;
+    return this._actualCenterY - y;
   }
 }
 

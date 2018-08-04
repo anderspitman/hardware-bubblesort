@@ -45,13 +45,17 @@ function main(anmlFileText) {
 
   let dragObj = null;
   let dragOffset;
+  let panPoint = null;
   renderer.onMouseDown((point) => {
     console.log(point);
+
+    let hitShape = false;
 
     for (let shape of model.getShapes()) {
       const intersects = shape.intersects(point);
 
       if (intersects && shape.getName() !== 'box') {
+        hitShape = true;
 
         checkSwitches(shape);
         
@@ -67,6 +71,7 @@ function main(anmlFileText) {
           for (let child of shape.getChildren()) {
             const childPos = new Vector2({ x: child.getX(), y: child.getY() });
             if (child.intersects(relativePoint)) {
+              hitShape = true;
               console.log(child);
               checkSwitches(child);
               break;
@@ -77,16 +82,30 @@ function main(anmlFileText) {
         break;
       }
     }
+
+    if (!hitShape) {
+      console.log("hit canvas");
+      panPoint = point;
+    }
   });
 
   renderer.onMouseUp((point) => {
     dragObj = null;
+    panPoint = null;
   });
 
   renderer.onMouseMove((point) => {
     if (dragObj !== null) {
       dragObj.setX(point.x - dragOffset.x);
       dragObj.setY(point.y - dragOffset.y);
+    }
+    else if (panPoint !== null) {
+      const movementVec = point.subtract(panPoint);
+
+      const negated = movementVec.scaledBy(-1.0);
+      const prevCenter = renderer.getViewportCenter();
+      const newCenter = prevCenter.add(negated);
+      renderer.setViewportCenter({ x: newCenter.x, y: newCenter.y });
     }
   });
 
