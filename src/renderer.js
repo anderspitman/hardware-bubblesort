@@ -14,6 +14,7 @@ const {
   SymbolModel,
 } = require('./model');
 const { getDataByPath } = require('./utils');
+const _ = require('lodash');
 
 
 class ANMLRenderer {
@@ -234,7 +235,7 @@ class ANMLRenderer {
       this.drawSymbol(shape, offsetVec);
     }
     else if (shape instanceof ListModel) {
-      this.drawSymbol(shape, offsetVec);
+      this.drawList(shape, offsetVec, data);
     }
     else if (shape instanceof SymbolModel) {
       this.drawSymbol(shape, offsetVec, data);
@@ -365,6 +366,27 @@ class ANMLRenderer {
     this.ctx.lineTo(this._x(x + x2), this._y(y + y2));
     //this.ctx.fill();
     this.ctx.stroke();
+  }
+
+  drawList(l, offsetVec, data) {
+
+    const ofTemplate = l.getOf();
+
+    let length = l.getLength();
+    if (length === undefined) {
+      length = data.length;
+    }
+
+    const children = [];
+    for (let i = 0; i < length; i++) {
+      const child = _.cloneDeep(ofTemplate);
+      child.setListIndex(i);
+      child._id = i;
+      children.push(child);
+    }
+
+    l.setChildren(children);
+    this.drawSymbol(l, offsetVec, data);
   }
 
   drawSymbol(s, offsetVec, data) {

@@ -338,7 +338,7 @@ class ListModel extends ShapeModel {
   }
 
   defaultLength() {
-    return 3;
+    return undefined;
   }
   getLength() {
     return this._length;

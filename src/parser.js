@@ -16,7 +16,7 @@ const {
   TriangleModel,
   LineModel,
 } = require('./model');
-const _ = require('lodash');
+//const _ = require('lodash');
 
 
 class ANMLParser {
@@ -417,18 +417,7 @@ class ANMLParser {
     }
 
     ofTemplate = ofTemplate[0];
-
     l.setOf(ofTemplate);
-
-    const children = [];
-    for (let i = 0; i < l.getLength(); i++) {
-      const child = _.cloneDeep(ofTemplate);
-      child.setListIndex(i);
-      child._id = i;
-      children.push(child);
-    }
-
-    l.setChildren(children);
 
     const closeParen = tokens.shift();
 

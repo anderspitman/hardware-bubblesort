@@ -308,7 +308,7 @@
 )
 
 (List
-  (length 3)
+  (dataKey list)
   (of
     (SwapIfGreater4
       (y $index * 900)

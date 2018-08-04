@@ -190,6 +190,7 @@ function main(anmlFileText) {
   data.comp2 = comp2;
   data.comp4 = comp4;
   data.swap4 = swap4;
+  data.list = [1,2,3,4,5,6];
 
   sw1.setSwitchState(0);
   sw2.setSwitchState(0);
