@@ -11,7 +11,7 @@ const {
   RectangleModel,
   TriangleModel,
   LineModel,
-  SymbolModel,
+  UserDefinedShapeModel,
 } = require('./model');
 const { getDataByPath } = require('./utils');
 const _ = require('lodash');
@@ -237,7 +237,7 @@ class ANMLRenderer {
     else if (shape instanceof ListModel) {
       this.drawList(shape, offsetVec, data);
     }
-    else if (shape instanceof SymbolModel) {
+    else if (shape instanceof UserDefinedShapeModel) {
       this.drawSymbol(shape, offsetVec, data);
     }
 

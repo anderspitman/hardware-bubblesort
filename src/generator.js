@@ -35,7 +35,7 @@ class ANMLGenerator {
     const symbolDefs = model.getSymbolDefs();
     for (let key in symbolDefs) {
       const def = symbolDefs[key];
-      str += this.generateSymbolDef(def, '');
+      str += this.generateUserDefinedShapeDef(def, '');
     }
 
     for (let shape of model.getShapes()) {
@@ -68,7 +68,7 @@ class ANMLGenerator {
       str += this.generateList(item, indent);
     }
     else {
-      str += this.generateSymbol(item, indent);
+      str += this.generateUserDefinedShape(item, indent);
     }
     return str;
   }
@@ -159,7 +159,7 @@ class ANMLGenerator {
     return str;
   }
 
-  generateSymbol(s, indent) {
+  generateUserDefinedShape(s, indent) {
     let str = indent + '(' + s.getType() + '\n';
 
     str += this.generateShapeAttrs(s, indent);
@@ -176,7 +176,7 @@ class ANMLGenerator {
     return str;
   }
 
-  generateSymbolDef(s, indent) {
+  generateUserDefinedShapeDef(s, indent) {
     let str = '(def ' + s.getType() + '\n';
 
     for (let child of s.getChildren()) {

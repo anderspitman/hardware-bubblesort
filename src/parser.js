@@ -6,8 +6,8 @@ const {
   DataValueModel,
   DataTernaryModel,
   IndexOperationModel,
-  SymbolDefinitionModel,
-  SymbolModel,
+  UserDefinedShapeDefinitionModel,
+  UserDefinedShapeModel,
   ShapeModel,
   GroupModel,
   ListModel,
@@ -46,7 +46,7 @@ class ANMLParser {
       if (model instanceof ShapeModel) {
         shapes.push(model);
       }
-      else if (model instanceof SymbolDefinitionModel) {
+      else if (model instanceof UserDefinedShapeDefinitionModel) {
 
         if (this._symbolDefs[model.getType()] === undefined) {
           this._symbolDefs[model.getType()] = model;
@@ -80,7 +80,7 @@ class ANMLParser {
       case 'Triangle':
       case 'Line':
         tokens.unshift(type);
-        return this._parseShape(tokens);
+        return this._parsePrimitiveShape(tokens);
       case 'Group':
         return this._parseGroup(tokens);
         break;
@@ -89,17 +89,17 @@ class ANMLParser {
       default:
 
         tokens.unshift(type);
-        return this._parseSymbol(tokens);
+        return this._parseUserDefinedShape(tokens);
         
         break;
     }
   }
 
-  _parseSymbol(tokens) {
+  _parseUserDefinedShape(tokens) {
     const type = tokens.shift();
     const symbolDef = this._symbolDefs[type];
     if (symbolDef !== undefined) {
-      const symbol = new SymbolModel();
+      const symbol = new UserDefinedShapeModel();
       symbol.setType(symbolDef.getType());
       symbol.setChildren(symbolDef.getChildren());
 
@@ -114,14 +114,14 @@ class ANMLParser {
     }
   }
 
-  _parseShapeList(tokens) {
+  _parsePrimitiveShapeList(tokens) {
 
     let tok = tokens.shift();
 
     const shapes = [];
 
     while (tok !== ')') {
-      const shape = this._parseShape(tokens);
+      const shape = this._parsePrimitiveShape(tokens);
       shapes.push(shape);
       tok = tokens.shift();
     }
@@ -131,7 +131,7 @@ class ANMLParser {
     return shapes;
   }
 
-  _parseShape(tokens) {
+  _parsePrimitiveShape(tokens) {
 
     const type = tokens.shift();
 
@@ -151,7 +151,7 @@ class ANMLParser {
         break;
       default:
         tokens.unshift(type);
-        const sym = this._parseSymbol(tokens);
+        const sym = this._parseUserDefinedShape(tokens);
         return sym;
         break;
     }
@@ -256,7 +256,7 @@ class ANMLParser {
   }
 
   _parseChildren(tokens) {
-    const children = this._parseShapeList(tokens);
+    const children = this._parsePrimitiveShapeList(tokens);
     return children;
   }
 
@@ -370,7 +370,7 @@ class ANMLParser {
 
     if (tok === '(') {
       tokens.unshift(tok);
-      return this._parseSymbolDefinition(ident, tokens);
+      return this._parseUserDefinedShapeDefinition(ident, tokens);
     }
     else {
       tokens.unshift(tok);
@@ -378,12 +378,12 @@ class ANMLParser {
     }
   }
 
-  _parseSymbolDefinition(ident, tokens) {
-    const def = new SymbolDefinitionModel();
+  _parseUserDefinedShapeDefinition(ident, tokens) {
+    const def = new UserDefinedShapeDefinitionModel();
     const symbolName = ident;
     def.setType(symbolName);
 
-    const shapes = this._parseShapeList(tokens);
+    const shapes = this._parsePrimitiveShapeList(tokens);
 
     def.setChildren(shapes);
 

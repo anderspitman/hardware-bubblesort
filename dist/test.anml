@@ -308,10 +308,18 @@
 )
 
 (List
-  (dataKey list)
+  (length 4)
   (of
-    (SwapIfGreater4
-      (y $index * 900)
+    (AndGate
+      (y $index * 50)
     )
+#    (List
+#      (length 2)
+#      (of
+#        (SwapIfGreater4
+#          (y $index * 900)
+#        )
+#      )
+#    )
   )
 )

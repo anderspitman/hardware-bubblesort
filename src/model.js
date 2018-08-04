@@ -153,7 +153,7 @@ class DataTernaryModel {
 }
 
 
-class SymbolDefinitionModel {
+class UserDefinedShapeDefinitionModel {
   getType() {
     return this._type;
   }
@@ -266,7 +266,7 @@ class ShapeModel {
 }
 
 
-class SymbolModel extends ShapeModel {
+class UserDefinedShapeModel extends ShapeModel {
 
   getType() {
     return this._type;
@@ -632,8 +632,8 @@ module.exports = {
   DataValueModel,
   DataTernaryModel,
   IndexOperationModel,
-  SymbolDefinitionModel,
-  SymbolModel,
+  UserDefinedShapeDefinitionModel,
+  UserDefinedShapeModel,
   ShapeModel,
   GroupModel,
   ListModel,
