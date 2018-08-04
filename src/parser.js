@@ -5,15 +5,18 @@ const {
   ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
+  IndexOperationModel,
   SymbolDefinitionModel,
   SymbolModel,
   ShapeModel,
   GroupModel,
+  ListModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
   LineModel,
 } = require('./model');
+const _ = require('lodash');
 
 
 class ANMLParser {
@@ -35,8 +38,6 @@ class ANMLParser {
 
     while (true) {
       const model = this._parseExpression(tokens)
-
-      //console.log(tokens);
 
       if (model === null) {
         break;
@@ -83,6 +84,8 @@ class ANMLParser {
       case 'Group':
         return this._parseGroup(tokens);
         break;
+      case 'List':
+        return this._parseList(tokens);
       default:
 
         tokens.unshift(type);
@@ -233,6 +236,9 @@ class ANMLParser {
       tokens.unshift(tok);
       return this._parseDataValue(tokens);
     }
+    else if (tok === '$index') {
+      return this._parseIndexValue(tokens);
+    }
     else if (tok === '(') {
       tokens.unshift(tok);
       const childs = this._parseChildren(tokens);
@@ -271,6 +277,27 @@ class ANMLParser {
       model.setPath(path);
       return model;
     }
+  }
+
+  _parseIndexValue(tokens) {
+
+    const model = new IndexOperationModel();
+
+    const operator = tokens.shift();
+    model.setOperator(operator);
+
+    switch(operator) {
+      case '*':
+        break;
+      default:
+        throw `Invalid $index operator ${operator}`;
+        break;
+    }
+
+    const factor = this._parseNumberValue(tokens.shift());
+    model.setFactor(factor);
+
+    return model;
   }
 
   _parseTernaryExpression(tokens) {
@@ -373,6 +400,39 @@ class ANMLParser {
     const closeParen = tokens.shift();
 
     return g;
+  }
+
+  _parseList(tokens) {
+    const l = new ListModel();
+
+    // FIXME: this is a hack to make it work with the current children
+    // parsing code. It should probably be extracted into its own parsing
+    // since it's semantically different
+    this._setAttrs(l, tokens);
+
+    let ofTemplate = l.getOf();
+
+    if (ofTemplate.length > 1) {
+      throw "Multiple types defined for list";
+    }
+
+    ofTemplate = ofTemplate[0];
+
+    l.setOf(ofTemplate);
+
+    const children = [];
+    for (let i = 0; i < l.getLength(); i++) {
+      const child = _.cloneDeep(ofTemplate);
+      child.setListIndex(i);
+      child._id = i;
+      children.push(child);
+    }
+
+    l.setChildren(children);
+
+    const closeParen = tokens.shift();
+
+    return l;
   }
 
   _parseConstantDefinition(ident, tokens) {

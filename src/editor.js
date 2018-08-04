@@ -5,6 +5,7 @@ class ANMLEditor {
   constructor({ domParentId }) {
     this.parent = document.getElementById(domParentId);
     this.textArea = document.createElement('textarea');
+    this.textArea.spellcheck = false;
     this.parent.appendChild(this.textArea);
 
     this.generator = new ANMLGenerator();

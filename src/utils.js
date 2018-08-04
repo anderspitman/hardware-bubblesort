@@ -23,6 +23,8 @@ function timeNowSeconds() {
   return time;
 }
 
+
+
 module.exports = {
   capitalize,
   getDataByPath,

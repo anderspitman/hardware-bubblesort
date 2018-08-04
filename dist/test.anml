@@ -276,8 +276,8 @@
   (name box)
   (strokeColor red)
   (fillColor none)
-  (width 1200)
-  (height 1200)
+  (width 200)
+  (height 200)
 )
 
 (def SwapIfGreater4
@@ -299,6 +299,12 @@
   )
 )
 
-(SwapIfGreater4
-  (dataKey swap4)
+(List
+  (length 3)
+  (of
+    (AndGate
+      (x $index * 50)
+      (y $index * 50)
+    )
+  )
 )

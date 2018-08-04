@@ -217,7 +217,7 @@ function main(anmlFileText) {
     const updateTime = timeNowSeconds();
     renderer.render(model);
     const renderTime = timeNowSeconds();
-    console.log(`Render duration: ${renderTime - startTime}`);
+    //console.log(`Render duration: ${renderTime - startTime}`);
     generator.generate(model);
     editor.update(model);
     requestAnimationFrame(update);

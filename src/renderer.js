@@ -1,9 +1,12 @@
 const { Vector2 } = require('./math');
 const {
+  processIndexValue,
   ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
+  IndexOperationModel,
   GroupModel,
+  ListModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
@@ -188,6 +191,9 @@ class ANMLRenderer {
     else if (shape instanceof GroupModel) {
       this.drawSymbol(shape, offsetVec);
     }
+    else if (shape instanceof ListModel) {
+      this.drawSymbol(shape, offsetVec);
+    }
     else if (shape instanceof SymbolModel) {
       this.drawSymbol(shape, offsetVec, data);
     }
@@ -213,6 +219,7 @@ class ANMLRenderer {
     const savedLineWidth = this.ctx.lineWidth;
     this.ctx.lineWidth = 1;
     this.ctx.beginPath();
+    // NOTE: values offset by 0.5 to make sharper rendering on the HTML canvas
     this.ctx.moveTo(this._viewPortCenterX + 0.5, 0.5);
     this.ctx.lineTo(this._viewPortCenterX + 0.5, this.canvas.height + 0.5);
     this.ctx.moveTo(0.5, this._viewPortCenterY + 0.5);
@@ -223,8 +230,8 @@ class ANMLRenderer {
 
   drawCircle(c, offsetVec) {
 
-    let x = c.getX();
-    let y = c.getY();
+    let x = processIndexValue(c, c.getX());
+    let y = processIndexValue(c, c.getY());
 
     if (offsetVec !== undefined) {
       x += offsetVec.x;
@@ -238,8 +245,8 @@ class ANMLRenderer {
   }
 
   drawRectangle(r, offsetVec, fillColor) {
-    let x = r.getX();
-    let y = r.getY();
+    let x = processIndexValue(r, r.getX());
+    let y = processIndexValue(r, r.getY());
 
     if (offsetVec !== undefined) {
       x += offsetVec.x;
@@ -260,8 +267,8 @@ class ANMLRenderer {
   }
 
   drawTriangle(t, offsetVec) {
-    let x = t.getX();
-    let y = t.getY();
+    let x = processIndexValue(t, t.getX());
+    let y = processIndexValue(t, t.getY());
 
     if (offsetVec !== undefined) {
       x += offsetVec.x;
@@ -295,7 +302,11 @@ class ANMLRenderer {
   }
 
   drawSymbol(s, offsetVec, data) {
-    const thisPos = new Vector2({ x: s.getX(), y: s.getY() });
+
+    let x = processIndexValue(s, s.getX());
+    let y = processIndexValue(s, s.getY());
+
+    const thisPos = new Vector2({ x, y });
     let cumulativeOffset = thisPos;
     if (offsetVec !== undefined) {
       cumulativeOffset = thisPos.add(offsetVec);

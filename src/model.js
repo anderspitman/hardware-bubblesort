@@ -1,5 +1,21 @@
 const { Vector2 } = require('./math');
 
+function processIndexValue(shape, indexValue) {
+  if (indexValue instanceof IndexOperationModel) {
+    switch(indexValue.getOperator()) {
+      case '*':
+        const val = shape.getListIndex() * indexValue.getFactor();
+        return val;
+        break;
+      default:
+        throw "Invalid operator";
+        break;
+    }
+  }
+  else {
+    return indexValue;
+  }
+}
 
 class ANMLModel {
   constructor() {
@@ -78,6 +94,23 @@ class DataValueModel {
   }
   setPath(value) {
     this._path = value;
+  }
+}
+
+
+class IndexOperationModel {
+  getOperator() {
+    return this._operator;
+  }
+  setOperator(value) {
+    this._operator = value;
+  }
+
+  getFactor() {
+    return this._factor;
+  }
+  setFactor(value) {
+    this._factor = value;
   }
 }
 
@@ -221,6 +254,15 @@ class ShapeModel {
   setFillColor(value) {
     this._fillColor = value;
   }
+
+  // TODO: These are only used for objects that are part of a list. Seems like
+  // a hack to have this here.
+  getListIndex() {
+    return this._index;
+  }
+  setListIndex(value) {
+    this._index = value;
+  }
 }
 
 
@@ -243,7 +285,10 @@ class SymbolModel extends ShapeModel {
   intersects(point) {
     for (let child of this.getChildren()) {
 
-      const thisPos = new Vector2({ x: this.getX(), y: this.getY() });
+      const x = processIndexValue(this, this.getX());
+      const y = processIndexValue(this, this.getY());
+
+      const thisPos = new Vector2({ x, y });
       const offsetPoint = point.subtract(thisPos);
       if (child.intersects(offsetPoint)) {
         return true;
@@ -255,6 +300,52 @@ class SymbolModel extends ShapeModel {
 
 
 class GroupModel extends ShapeModel {
+
+  // TODO: there should maybe be a default value here
+  getChildren() {
+    return this._children;
+  }
+  setChildren(value) {
+    this._children = value;
+  }
+
+  intersects(point) {
+    for (let child of this.getChildren()) {
+
+      const thisPos = new Vector2({ x: this.getX(), y: this.getY() });
+      const offsetPoint = point.subtract(thisPos);
+      if (child.intersects(offsetPoint)) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
+
+class ListModel extends ShapeModel {
+
+  constructor() {
+    super();
+    this._length = this.defaultLength();
+  }
+
+  getOf() {
+    return this._itemType;
+  }
+  setOf(value) {
+    this._itemType = value;
+  }
+
+  defaultLength() {
+    return 3;
+  }
+  getLength() {
+    return this._length;
+  }
+  setLength(value) {
+    this._length = value;
+  }
 
   getChildren() {
     return this._children;
@@ -294,7 +385,9 @@ class CircleModel extends ShapeModel {
   }
 
   intersects(point) {
-    const thisCenter = new Vector2({ x: this.getX(), y: this.getY() });
+    const x = processIndexValue(this, this.getX());
+    const y = processIndexValue(this, this.getY());
+    const thisCenter = new Vector2({ x, y });
     const distance = point.subtract(thisCenter).getLength();
     return distance <= this._radius;
   }
@@ -310,7 +403,7 @@ class RectangleModel extends ShapeModel {
   }
 
   defaultWidth() {
-    return 10;
+    return 20;
   }
   getWidth() {
     return this._width;
@@ -320,7 +413,7 @@ class RectangleModel extends ShapeModel {
   }
 
   defaultHeight() {
-    return 10;
+    return 20;
   }
   getHeight() {
     return this._height;
@@ -330,13 +423,16 @@ class RectangleModel extends ShapeModel {
   }
 
   intersects(point) {
+    const x = processIndexValue(this, this.getX());
+    const y = processIndexValue(this, this.getY());
+
     const halfWidth = this.getWidth() / 2;
     const halfHeight = this.getHeight() / 2;
 
-    const withinX = point.x >= this.getX() - halfWidth &&
-      point.x <= (this.getX() + halfWidth);
-    const withinY = point.y >= this.getY() - halfHeight &&
-      point.y <= (this.getY() + halfHeight);
+    const withinX = point.x >= x - halfWidth &&
+      point.x <= (x + halfWidth);
+    const withinY = point.y >= y - halfHeight &&
+      point.y <= (y + halfHeight);
     return withinX && withinY;
   }
 }
@@ -461,7 +557,10 @@ class TriangleModel extends ShapeModel {
 
   // TODO: implement a proper triangle intersection test
   intersects(point) {
-    const thisCenter = new Vector2({ x: this.getX(), y: this.getY() });
+    const x = processIndexValue(this, this.getX());
+    const y = processIndexValue(this, this.getY());
+
+    const thisCenter = new Vector2({ x, y });
     const distance = point.subtract(thisCenter).getLength();
     return distance <= this._radius;
   }
@@ -527,14 +626,17 @@ class LineModel extends ShapeModel {
 
 
 module.exports = {
+  processIndexValue,
   ANMLModel,
   ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
+  IndexOperationModel,
   SymbolDefinitionModel,
   SymbolModel,
   ShapeModel,
   GroupModel,
+  ListModel,
   CircleModel,
   RectangleModel,
   TriangleModel,

@@ -1,15 +1,20 @@
 const { capitalize } = require('./utils');
 const {
+  processIndexValue,
   ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
+  IndexOperationModel,
   GroupModel,
+  ListModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
   LineModel,
 } = require('./model');
 
+
+let cnt = 0;
 
 class ANMLGenerator {
   generate(model) {
@@ -58,6 +63,9 @@ class ANMLGenerator {
     }
     else if (item instanceof GroupModel) {
       str += this.generateGroup(item, indent);
+    }
+    else if (item instanceof ListModel) {
+      str += this.generateList(item, indent);
     }
     else {
       str += this.generateSymbol(item, indent);
@@ -130,6 +138,27 @@ class ANMLGenerator {
     return str;
   }
 
+  generateList(l, indent) {
+    let str = indent + '(List\n';
+
+    str += this.generateShapeAttrs(l, indent);
+
+    const length = l.getLength();
+    if (length !== undefined) {
+      str += indent + `  (length ${length})\n`;
+    }
+
+    const ofType = l.getOf();
+    if (ofType !== undefined) {
+      str += indent + `  (of\n`;
+      str += this.generateItem(l.getOf(), indent + '    ');
+      str += indent + '  )\n';
+    }
+
+    str += indent + ')\n';
+    return str;
+  }
+
   generateSymbol(s, indent) {
     let str = indent + '(' + s.getType() + '\n';
 
@@ -194,6 +223,9 @@ class ANMLGenerator {
       else if (value instanceof DataTernaryModel) {
         ret = this.generateDataTernaryAttr(attr, value, indent + '  ');
       }
+      else if (value instanceof IndexOperationModel) {
+        ret = this.generateIndexOperationAttr(attr, value, indent + '  ');
+      }
       else {
         const defaultMethod = 'default' + capitalize(attr);
         const defaultValue = s[defaultMethod]();
@@ -234,6 +266,11 @@ class ANMLGenerator {
     const path =
       `data.${v.getPath().join('.')} ${v.getCondition()} ${v.getCheckValue()} ? ${trueVal} : ${falseVal}`;
     str += path + ')';
+    return str;
+  }
+
+  generateIndexOperationAttr(key, v, indent) {
+    let str = indent + '(' + key + ' $index ' + v.getOperator() + ' ' + v.getFactor() + ')';
     return str;
   }
 
