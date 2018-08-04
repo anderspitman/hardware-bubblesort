@@ -28,6 +28,27 @@ class ANMLRenderer {
     this.canvas.style.height = dim.height;
     this.parent.appendChild(this.canvas);
     this.ctx = this.canvas.getContext('2d');
+    this._scale = 0.5;
+
+    const SCALE_MULTIPLIER = 1.10;
+    const SCALE_MIN = 0.001;
+    const SCALE_MAX = 1000;
+
+    this.canvas.addEventListener('wheel', (e) => {
+      console.log(e.deltaX, e.deltaY);
+      if (e.deltaY > 0) {
+        this._scale /= SCALE_MULTIPLIER;
+        if (this._scale < SCALE_MIN) {
+          this._scale = SCALE_MIN;
+        }
+      }
+      else {
+        this._scale *= SCALE_MULTIPLIER;
+        if (this._scale > SCALE_MAX) {
+          this._scale = SCALE_MAX;
+        }
+      }
+    });
 
     this.canvas.addEventListener('mousedown', (e) => {
 
@@ -40,6 +61,9 @@ class ANMLRenderer {
         const worldOrigin = this.getViewportCenter();
         const worldPoint = clickPoint.subtract(worldOrigin);
         worldPoint.y = -worldPoint.y;
+
+        worldPoint.x /= this._scale;
+        worldPoint.y /= this._scale;
 
         this.onMouseDownCallback(worldPoint);
       }
@@ -56,7 +80,11 @@ class ANMLRenderer {
 
         const worldOrigin = this.getViewportCenter();
         const worldPoint = clickPoint.subtract(worldOrigin);
+
         worldPoint.y = -worldPoint.y;
+        worldPoint.x /= this._scale;
+        worldPoint.y /= this._scale;
+
         this.onMouseUpCallback(worldPoint);
       }
     });
@@ -73,6 +101,8 @@ class ANMLRenderer {
         const worldOrigin = this.getViewportCenter();
         const worldPoint = clickPoint.subtract(worldOrigin);
         worldPoint.y = -worldPoint.y;
+        worldPoint.x /= this._scale;
+        worldPoint.y /= this._scale;
         this.onMouseMoveCallback(worldPoint);
       }
     });
@@ -238,8 +268,12 @@ class ANMLRenderer {
       y += offsetVec.y;
     }
 
+    x *= this._scale;
+    y *= this._scale;
+    const radius = c.getRadius() * this._scale;
+
     this.ctx.beginPath();
-    this.ctx.arc(this._x(x), this._y(y), c.getRadius(), 0, 2*Math.PI); 
+    this.ctx.arc(this._x(x), this._y(y), radius, 0, 2*Math.PI); 
     this.ctx.fill();
     this.ctx.stroke();
   }
@@ -253,12 +287,17 @@ class ANMLRenderer {
       y += offsetVec.y;
     }
 
+    x *= this._scale;
+    y *= this._scale;
+    const width = r.getWidth() * this._scale;
+    const height = r.getHeight() * this._scale;
+
     this.ctx.beginPath();
-    const halfWidth = r.getWidth() / 2;
-    const halfHeight = r.getHeight() / 2;
+    const halfWidth = width / 2;
+    const halfHeight = height / 2;
     this.ctx.rect(
       this._x(x - halfWidth),
-      this._y(y - halfHeight), r.getWidth(), -r.getHeight());
+      this._y(y - halfHeight), width, -height);
 
     if (fillColor !== 'none') {
       this.ctx.fill();
@@ -274,11 +313,19 @@ class ANMLRenderer {
       x += offsetVec.x;
       y += offsetVec.y;
     }
+    x *= this._scale;
+    y *= this._scale;
+    const x1 = t.getX1() * this._scale;
+    const y1 = t.getY1() * this._scale;
+    const x2 = t.getX2() * this._scale;
+    const y2 = t.getY2() * this._scale;
+    const x3 = t.getX3() * this._scale;
+    const y3 = t.getY3() * this._scale;
 
     this.ctx.beginPath();
-    this.ctx.moveTo(this._x(x + t.getX1()), this._y(y + t.getY1()));
-    this.ctx.lineTo(this._x(x + t.getX2()), this._y(y + t.getY2()));
-    this.ctx.lineTo(this._x(x + t.getX3()), this._y(y + t.getY3()));
+    this.ctx.moveTo(this._x(x + x1), this._y(y + y1));
+    this.ctx.lineTo(this._x(x + x2), this._y(y + y2));
+    this.ctx.lineTo(this._x(x + x3), this._y(y + y3));
     this.ctx.fill();
     // FIXME: isn't closing stroke
     this.ctx.stroke();
@@ -294,9 +341,16 @@ class ANMLRenderer {
       y += offsetVec.y;
     }
 
+    x *= this._scale;
+    y *= this._scale;
+    const x1 = l.getX1() * this._scale;
+    const y1 = l.getY1() * this._scale;
+    const x2 = l.getX2() * this._scale;
+    const y2 = l.getY2() * this._scale;
+
     this.ctx.beginPath();
-    this.ctx.moveTo(this._x(x + l.getX1()), this._y(y + l.getY1()));
-    this.ctx.lineTo(this._x(x + l.getX2()), this._y(y + l.getY2()));
+    this.ctx.moveTo(this._x(x + x1), this._y(y + y1));
+    this.ctx.lineTo(this._x(x + x2), this._y(y + y2));
     //this.ctx.fill();
     this.ctx.stroke();
   }

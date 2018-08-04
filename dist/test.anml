@@ -280,6 +280,14 @@
   (height 200)
 )
 
+(Rectangle
+  (name box)
+  (strokeColor blue)
+  (fillColor none)
+  (width 400)
+  (height 400)
+)
+
 (def SwapIfGreater4
   (Comparator4
     (dataKey _comp4)
@@ -302,9 +310,8 @@
 (List
   (length 3)
   (of
-    (AndGate
-      (x $index * 50)
-      (y $index * 50)
+    (SwapIfGreater4
+      (y $index * 900)
     )
   )
 )
