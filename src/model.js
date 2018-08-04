@@ -355,9 +355,12 @@ class ListModel extends ShapeModel {
   }
 
   intersects(point) {
+    const x = processIndexValue(this, this.getX());
+    const y = processIndexValue(this, this.getY());
+    const thisPos = new Vector2({ x, y });
+
     for (let child of this.getChildren()) {
 
-      const thisPos = new Vector2({ x: this.getX(), y: this.getY() });
       const offsetPoint = point.subtract(thisPos);
       if (child.intersects(offsetPoint)) {
         return true;

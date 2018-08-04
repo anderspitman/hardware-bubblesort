@@ -310,16 +310,14 @@
 (List
   (length 4)
   (of
-    (AndGate
-      (y $index * 50)
+    (List
+      (x $index * 100)
+      (length 4)
+      (of
+        (Circle
+          (y $index * 30)
+        )
+      )
     )
-#    (List
-#      (length 2)
-#      (of
-#        (SwapIfGreater4
-#          (y $index * 900)
-#        )
-#      )
-#    )
   )
 )

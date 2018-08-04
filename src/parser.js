@@ -71,10 +71,20 @@ class ANMLParser {
 
     const type = tokens.shift();
 
+    if (type === 'def') {
+      return this._parseDefinition(tokens);
+    }
+    else {
+      tokens.unshift(type);
+      return this._parseShape(tokens);
+    }
+  }
+
+  _parseShape(tokens) {
+
+    const type = tokens.shift();
+
     switch(type) {
-      case 'def':
-        return this._parseDefinition(tokens);
-        break;
       case 'Circle':
       case 'Rectangle':
       case 'Triangle':
@@ -114,14 +124,14 @@ class ANMLParser {
     }
   }
 
-  _parsePrimitiveShapeList(tokens) {
+  _parseShapeList(tokens) {
 
     let tok = tokens.shift();
 
     const shapes = [];
 
     while (tok !== ')') {
-      const shape = this._parsePrimitiveShape(tokens);
+      const shape = this._parseShape(tokens);
       shapes.push(shape);
       tok = tokens.shift();
     }
@@ -256,7 +266,7 @@ class ANMLParser {
   }
 
   _parseChildren(tokens) {
-    const children = this._parsePrimitiveShapeList(tokens);
+    const children = this._parseShapeList(tokens);
     return children;
   }
 
@@ -383,7 +393,7 @@ class ANMLParser {
     const symbolName = ident;
     def.setType(symbolName);
 
-    const shapes = this._parsePrimitiveShapeList(tokens);
+    const shapes = this._parseShapeList(tokens);
 
     def.setChildren(shapes);
 
