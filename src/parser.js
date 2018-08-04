@@ -232,7 +232,7 @@ class ANMLParser {
 
     let tok = tokens.shift();
 
-    if (tok.startsWith('data')) {
+    if (tok.startsWith('$data')) {
       tokens.unshift(tok);
       return this._parseDataValue(tokens);
     }

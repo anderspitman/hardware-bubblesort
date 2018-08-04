@@ -264,7 +264,7 @@ class ANMLGenerator {
     const trueVal = this._symbolOrValue(v.getTrueValue());
     const falseVal = this._symbolOrValue(v.getFalseValue());
     const path =
-      `data.${v.getPath().join('.')} ${v.getCondition()} ${v.getCheckValue()} ? ${trueVal} : ${falseVal}`;
+      `$data.${v.getPath().join('.')} ${v.getCondition()} ${v.getCheckValue()} ? ${trueVal} : ${falseVal}`;
     str += path + ')';
     return str;
   }
