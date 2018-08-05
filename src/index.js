@@ -164,6 +164,15 @@ function main(anmlFileText) {
   sw7.setSwitchState(0);
   sw8.setSwitchState(0);
 
+  let val = 0;
+  setInterval(function() {
+    bsort.setInputValue(0, val);
+    val++;
+    if (val > 15) {
+      val = 0;
+    }
+  }, 500);
+
   function checkSwitches(clickedObj) {
     switch (clickedObj.getName()) {
       case 'sw1':
@@ -201,7 +210,7 @@ function main(anmlFileText) {
     const updateTime = timeNowSeconds();
     renderer.render(model);
     const renderTime = timeNowSeconds();
-    //console.log(`Render duration: ${renderTime - startTime}`);
+    //console.log(`Render time: ${renderTime - startTime}`);
     generator.generate(model);
     editor.update(model);
     requestAnimationFrame(update);

@@ -6,8 +6,8 @@
   (Rectangle
     (strokeColor LOW_COLOR)
     (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-    (width 20)
-    (height 20)
+    (width 100)
+    (height 100)
   )
 )
 
@@ -226,67 +226,67 @@
 )
 
 
-(Group
-  (x -496)
-  (y 189)
-  (children
-    (Switch
-      (name sw1)
-      (dataKey sw1)
-      (y 90)
-    )
-    (Switch
-      (name sw2)
-      (dataKey sw2)
-      (y 60)
-    )
-    (Switch
-      (name sw3)
-      (dataKey sw3)
-      (y 30)
-    )
-    (Switch
-      (name sw4)
-      (dataKey sw4)
-    )
-    (Switch
-      (name sw5)
-      (dataKey sw5)
-      (y -30)
-    )
-    (Switch
-      (name sw6)
-      (dataKey sw6)
-      (y -60)
-    )
-    (Switch
-      (name sw7)
-      (dataKey sw7)
-      (y -90)
-    )
-    (Switch
-      (name sw8)
-      (dataKey sw8)
-      (y -120)
-    )
-  )
-)
+#(Group
+#  (x -800)
+#  (y 800)
+#  (children
+#    (Switch
+#      (name sw1)
+#      (dataKey sw1)
+#      (y 300)
+#    )
+#    (Switch
+#      (name sw2)
+#      (dataKey sw2)
+#      (y 200)
+#    )
+#    (Switch
+#      (name sw3)
+#      (dataKey sw3)
+#      (y 100)
+#    )
+#    (Switch
+#      (name sw4)
+#      (dataKey sw4)
+#    )
+#    (Switch
+#      (name sw5)
+#      (dataKey sw5)
+#      (y -100)
+#    )
+#    (Switch
+#      (name sw6)
+#      (dataKey sw6)
+#      (y -200)
+#    )
+#    (Switch
+#      (name sw7)
+#      (dataKey sw7)
+#      (y -300)
+#    )
+#    (Switch
+#      (name sw8)
+#      (dataKey sw8)
+#      (y -400)
+#    )
+#  )
+#)
 
-(Rectangle
-  (name box)
-  (strokeColor red)
-  (fillColor none)
-  (width 200)
-  (height 200)
-)
-
-(Rectangle
-  (name box)
-  (strokeColor blue)
-  (fillColor none)
-  (width 400)
-  (height 400)
-)
+#(Rectangle
+#  (name box)
+#  (strokeColor red)
+#  (fillColor none)
+#  (width 200)
+#  (height 200)
+#)
+#
+#(Rectangle
+#  (name box)
+#  (strokeColor blue)
+#  (fillColor none)
+#  (width 400)
+#  (height 400)
+#)
 
 (def SwapIfGreater4
   (Comparator4
@@ -312,10 +312,38 @@
     (dataKey _swaps)
     (of
       (SwapIfGreater4
-        (y $index * 1200)
+        (y $index * -1200)
       )
     )
   )
+)
+
+(def Binary4Input
+  (List
+    (y 200)
+    (dataKey _switches)
+    (of
+      (Switch
+        (y $index * -120)
+      )
+    )
+  )
+#  (Circle
+#    (fillColor $data._switches.0._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+#    (radius 20)
+#  )
+#  (Circle
+#    (fillColor $data._switches.1._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+#    (radius 20)
+#  )
+#  (Circle
+#    (fillColor $data._switches.2._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+#    (radius 20)
+#  )
+#  (Circle
+#    (fillColor $data._switches.3._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+#    (radius 20)
+#  )
 )
 
 (def BubbleSort
@@ -323,7 +351,16 @@
     (dataKey _swapSets)
     (of
       (Swap4Set
-        (x $index * 1200)
+        (x $index * 1400)
+      )
+    )
+  )
+  (List
+    (dataKey _inputs)
+    (of
+      (Binary4Input
+        (x -800)
+        (y $index * -1200)
       )
     )
   )
@@ -332,7 +369,3 @@
 (BubbleSort
   (dataKey bubbleSort)
 )
-#
-#(Swap4Set
-#  (dataKey swap4Set)
-#)
