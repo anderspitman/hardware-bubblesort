@@ -134,7 +134,7 @@ function main(anmlFileText) {
   data.circs = [10, 15, 20, 25];
   data.circ = 5;
 
-  const bsort = new BubbleSort();
+  const bsort = new BubbleSort(8);
   data.bubbleSort = bsort;
 
   //connectPorts(sw1.out(), swap4.inA3());
@@ -171,7 +171,7 @@ function main(anmlFileText) {
     if (val > 15) {
       val = 0;
     }
-  }, 500);
+  }, 1000);
 
   function checkSwitches(clickedObj) {
     switch (clickedObj.getName()) {

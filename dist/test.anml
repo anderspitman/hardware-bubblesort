@@ -11,6 +11,14 @@
   )
 )
 
+(def Probe 
+  (Circle
+    (strokeColor LOW_COLOR)
+    (fillColor $data._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (radius 50)
+  )
+)
+
 (def AndGate
   (Rectangle
     (x -8)
@@ -328,22 +336,18 @@
       )
     )
   )
-#  (Circle
-#    (fillColor $data._switches.0._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-#    (radius 20)
-#  )
-#  (Circle
-#    (fillColor $data._switches.1._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-#    (radius 20)
-#  )
-#  (Circle
-#    (fillColor $data._switches.2._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-#    (radius 20)
-#  )
-#  (Circle
-#    (fillColor $data._switches.3._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-#    (radius 20)
-#  )
+)
+
+(def Binary4Output
+  (List
+    (y 200)
+    (dataKey _outputs)
+    (of
+      (Probe
+        (y $index * -120)
+      )
+    )
+  )
 )
 
 (def BubbleSort
@@ -360,7 +364,16 @@
     (of
       (Binary4Input
         (x -800)
-        (y $index * -1200)
+        (y $index * -1030)
+      )
+    )
+  )
+  (List
+    (dataKey _outputs)
+    (of
+      (Binary4Output
+        (x 9200)
+        (y $index * -1030)
       )
     )
   )
