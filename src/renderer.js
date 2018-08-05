@@ -218,7 +218,7 @@ class ANMLRenderer {
 
     const savedLineWidth = this.ctx.lineWidth;
     const strokeWidth = shape.getStrokeWidth();
-    this.ctx.lineWidth = this.processAttr(shape, strokeWidth, data);
+    this.ctx.lineWidth = this.processAttr(shape, strokeWidth, data) * this._scale;
 
     if (shape instanceof CircleModel) {
       this.drawCircle(shape, offsetVec);
@@ -261,7 +261,7 @@ class ANMLRenderer {
 
   drawGrid() {
     const savedLineWidth = this.ctx.lineWidth;
-    this.ctx.lineWidth = 1;
+    this.ctx.lineWidth = 1 * this._scale;
     this.ctx.beginPath();
     // NOTE: values offset by 0.5 to make sharper rendering on the HTML canvas
     this.ctx.moveTo(this._actualCenterX + 0.5, 0.5);
@@ -269,7 +269,7 @@ class ANMLRenderer {
     this.ctx.moveTo(0.5, this._actualCenterY + 0.5);
     this.ctx.lineTo(this.canvas.width + 0.5, this._actualCenterY + 0.5);
     this.ctx.stroke();
-    this.ctx.lineWidth = savedLineWidth;
+    this.ctx.lineWidth = savedLineWidth * this._scale;
   }
 
   drawCircle(c, offsetVec) {
