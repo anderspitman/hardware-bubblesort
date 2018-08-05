@@ -1,10 +1,11 @@
 const { Vector2 } = require('./math');
+const { getDataByPath } = require('./utils');
 
-function processIndexValue(shape, indexValue) {
-  if (indexValue instanceof IndexOperationModel) {
-    switch(indexValue.getOperator()) {
+function processMagicValue(shape, value) {
+  if (value instanceof IndexOperationModel) {
+    switch(value.getOperator()) {
       case '*':
-        const val = shape.getListIndex() * indexValue.getFactor();
+        const val = shape.getListIndex() * value.getFactor();
         return val;
         break;
       default:
@@ -12,8 +13,11 @@ function processIndexValue(shape, indexValue) {
         break;
     }
   }
+  else if (value instanceof DataValueModel) {
+    return getDataByPath(shape.getData(), value.getPath());
+  }
   else {
-    return indexValue;
+    return value;
   }
 }
 
@@ -285,8 +289,8 @@ class UserDefinedShapeModel extends ShapeModel {
   intersects(point) {
     for (let child of this.getChildren()) {
 
-      const x = processIndexValue(this, this.getX());
-      const y = processIndexValue(this, this.getY());
+      const x = processMagicValue(this, this.getX());
+      const y = processMagicValue(this, this.getY());
 
       const thisPos = new Vector2({ x, y });
       const offsetPoint = point.subtract(thisPos);
@@ -355,8 +359,8 @@ class ListModel extends ShapeModel {
   }
 
   intersects(point) {
-    const x = processIndexValue(this, this.getX());
-    const y = processIndexValue(this, this.getY());
+    const x = processMagicValue(this, this.getX());
+    const y = processMagicValue(this, this.getY());
     const thisPos = new Vector2({ x, y });
 
     for (let child of this.getChildren()) {
@@ -388,11 +392,12 @@ class CircleModel extends ShapeModel {
   }
 
   intersects(point) {
-    const x = processIndexValue(this, this.getX());
-    const y = processIndexValue(this, this.getY());
+    const x = processMagicValue(this, this.getX());
+    const y = processMagicValue(this, this.getY());
+    const radius = processMagicValue(this, this.getRadius());
     const thisCenter = new Vector2({ x, y });
     const distance = point.subtract(thisCenter).getLength();
-    return distance <= this._radius;
+    return distance <= radius;
   }
 }
 
@@ -426,8 +431,8 @@ class RectangleModel extends ShapeModel {
   }
 
   intersects(point) {
-    const x = processIndexValue(this, this.getX());
-    const y = processIndexValue(this, this.getY());
+    const x = processMagicValue(this, this.getX());
+    const y = processMagicValue(this, this.getY());
 
     const halfWidth = this.getWidth() / 2;
     const halfHeight = this.getHeight() / 2;
@@ -560,8 +565,8 @@ class TriangleModel extends ShapeModel {
 
   // TODO: implement a proper triangle intersection test
   intersects(point) {
-    const x = processIndexValue(this, this.getX());
-    const y = processIndexValue(this, this.getY());
+    const x = processMagicValue(this, this.getX());
+    const y = processMagicValue(this, this.getY());
 
     const thisCenter = new Vector2({ x, y });
     const distance = point.subtract(thisCenter).getLength();
@@ -629,7 +634,7 @@ class LineModel extends ShapeModel {
 
 
 module.exports = {
-  processIndexValue,
+  processMagicValue,
   ANMLModel,
   ConstantDefinitionModel,
   DataValueModel,

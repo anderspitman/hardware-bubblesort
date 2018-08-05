@@ -16,6 +16,8 @@ const {
   Comparator2,
   Comparator4,
   SwapIfGreater4,
+  Swap4Set,
+  BubbleSort,
 } = require('../lib/wild_logic/src/index');
 const { GroupModel } = require('./model');
 
@@ -123,54 +125,26 @@ function main(anmlFileText) {
   });
 
   const data = {};
+  const swap4Set = new Swap4Set();
+  swap4Set.addSwap();
+  swap4Set.addSwap();
+  swap4Set.addSwap();
+  swap4Set.addSwap();
+  data.swap4Set = swap4Set;
+  data.circs = [10, 15, 20, 25];
+  data.circ = 5;
 
-  const and1 = createAndGate();
-  const and2 = createAndGate();
-  const nand1 = createNandGate();
-  const xnor1 = createXnorGate();
+  const bsort = new BubbleSort();
+  data.bubbleSort = bsort;
 
-  const gt1 = new GreaterThan1();
-  const comp1 = new Comparator1();
-  const comp2 = new Comparator2();
-  const comp4 = new Comparator4();
-  const swap4 = new SwapIfGreater4();
-
-  connectPorts(sw1.out(), comp1.inA());
-  connectPorts(sw2.out(), comp1.inB());
-
-  connectPorts(sw1.out(), nand1.inA());
-  connectPorts(sw2.out(), nand1.inB());
-
-  connectPorts(sw1.out(), xnor1.inA());
-  connectPorts(sw2.out(), xnor1.inB());
-
-  connectPorts(sw1.out(), and1.inA());
-  connectPorts(sw2.out(), and1.inB());
-  connectPorts(sw3.out(), and2.inA());
-  connectPorts(sw4.out(), and2.inB());
-
-  connectPorts(sw1.out(), comp4.inA3());
-  connectPorts(sw2.out(), comp4.inA2());
-  connectPorts(sw3.out(), comp4.inA1());
-  connectPorts(sw4.out(), comp4.inA0());
-  connectPorts(sw5.out(), comp4.inB3());
-  connectPorts(sw6.out(), comp4.inB2());
-  connectPorts(sw7.out(), comp4.inB1());
-  connectPorts(sw8.out(), comp4.inB0());
-
-  connectPorts(sw1.out(), swap4.inA3());
-  connectPorts(sw2.out(), swap4.inA2());
-  connectPorts(sw3.out(), swap4.inA1());
-  connectPorts(sw4.out(), swap4.inA0());
-  connectPorts(sw5.out(), swap4.inB3());
-  connectPorts(sw6.out(), swap4.inB2());
-  connectPorts(sw7.out(), swap4.inB1());
-  connectPorts(sw8.out(), swap4.inB0());
-
-  connectPorts(sw1.out(), gt1.inA());
-  // FIXME: if the switches aren't manually triggered below, the not gate
-  // doesn't appear to get initialized properly
-  connectPorts(sw2.out(), gt1.inB());
+  //connectPorts(sw1.out(), swap4.inA3());
+  //connectPorts(sw2.out(), swap4.inA2());
+  //connectPorts(sw3.out(), swap4.inA1());
+  //connectPorts(sw4.out(), swap4.inA0());
+  //connectPorts(sw5.out(), swap4.inB3());
+  //connectPorts(sw6.out(), swap4.inB2());
+  //connectPorts(sw7.out(), swap4.inB1());
+  //connectPorts(sw8.out(), swap4.inB0());
 
   data.sw1 = sw1;
   data.sw2 = sw2;
@@ -180,17 +154,6 @@ function main(anmlFileText) {
   data.sw6 = sw6;
   data.sw7 = sw7;
   data.sw8 = sw8;
-
-  data.and1 = and1;
-  data.and2 = and2;
-  data.gt1 = gt1;
-  data.comp1 = comp1;
-  data.nand1 = nand1;
-  data.xnor1 = xnor1;
-  data.comp2 = comp2;
-  data.comp4 = comp4;
-  data.swap4 = swap4;
-  data.list = [1,2,3,4,5,6];
 
   sw1.setSwitchState(0);
   sw2.setSwitchState(0);

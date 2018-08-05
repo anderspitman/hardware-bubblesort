@@ -1,6 +1,6 @@
 const { Vector2 } = require('./math');
 const {
-  processIndexValue,
+  processMagicValue,
   ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
@@ -157,7 +157,8 @@ class ANMLRenderer {
     }
     else if (attr instanceof DataValueModel) {
       const path = [shape.getDataKey()].concat(attr.getPath());
-      return getDataByPath(data, attr.getPath());
+      const val = getDataByPath(data, attr.getPath());
+      return val;
     }
     else if (attr instanceof DataTernaryModel) {
       const path = attr.getPath();
@@ -273,8 +274,8 @@ class ANMLRenderer {
 
   drawCircle(c, offsetVec) {
 
-    let x = processIndexValue(c, c.getX());
-    let y = processIndexValue(c, c.getY());
+    let x = processMagicValue(c, c.getX());
+    let y = processMagicValue(c, c.getY());
 
     if (offsetVec !== undefined) {
       x += offsetVec.x;
@@ -283,7 +284,8 @@ class ANMLRenderer {
 
     x *= this._scale;
     y *= this._scale;
-    const radius = c.getRadius() * this._scale;
+    let radius = processMagicValue(c, c.getRadius());
+    radius *= this._scale;
 
     this.ctx.beginPath();
     this.ctx.arc(this._x(x), this._y(y), radius, 0, 2*Math.PI); 
@@ -292,8 +294,8 @@ class ANMLRenderer {
   }
 
   drawRectangle(r, offsetVec, fillColor) {
-    let x = processIndexValue(r, r.getX());
-    let y = processIndexValue(r, r.getY());
+    let x = processMagicValue(r, r.getX());
+    let y = processMagicValue(r, r.getY());
 
     if (offsetVec !== undefined) {
       x += offsetVec.x;
@@ -319,8 +321,8 @@ class ANMLRenderer {
   }
 
   drawTriangle(t, offsetVec) {
-    let x = processIndexValue(t, t.getX());
-    let y = processIndexValue(t, t.getY());
+    let x = processMagicValue(t, t.getX());
+    let y = processMagicValue(t, t.getY());
 
     if (offsetVec !== undefined) {
       x += offsetVec.x;
@@ -382,17 +384,20 @@ class ANMLRenderer {
       const child = _.cloneDeep(ofTemplate);
       child.setListIndex(i);
       child._id = i;
+      child.setData(data[i]);
       children.push(child);
     }
 
     l.setChildren(children);
-    this.drawSymbol(l, offsetVec, data);
+
+    //this.drawSymbol(l, offsetVec, data);
+    this.drawSymbol(l, offsetVec);
   }
 
   drawSymbol(s, offsetVec, data) {
 
-    let x = processIndexValue(s, s.getX());
-    let y = processIndexValue(s, s.getY());
+    let x = processMagicValue(s, s.getX());
+    let y = processMagicValue(s, s.getY());
 
     const thisPos = new Vector2({ x, y });
     let cumulativeOffset = thisPos;

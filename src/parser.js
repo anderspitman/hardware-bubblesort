@@ -271,6 +271,7 @@ class ANMLParser {
   }
 
   _parseDataValue(tokens) {
+    console.log(tokens);
     const pathTok = tokens.shift();
     const path = pathTok.split('.').slice(1);
 
@@ -283,8 +284,11 @@ class ANMLParser {
       return tern;
     }
     else {
+      tokens.unshift(tok);
       const model = new DataValueModel();
       model.setPath(path);
+      console.log(model);
+      console.log(tokens);
       return model;
     }
   }

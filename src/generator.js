@@ -1,6 +1,5 @@
 const { capitalize } = require('./utils');
 const {
-  processIndexValue,
   ConstantDefinitionModel,
   DataValueModel,
   DataTernaryModel,
@@ -276,7 +275,7 @@ class ANMLGenerator {
 
   generateDataAttr(key, value, indent) {
     let str = indent + '(' + key + ' ';
-    const path = 'data.' + value.getPath().join('.');
+    const path = ['$data'].concat(value.getPath()).join('.');
     str += path + ')';
     return str;
   }

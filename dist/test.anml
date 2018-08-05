@@ -307,17 +307,32 @@
   )
 )
 
-(List
-  (length 4)
-  (of
-    (List
-      (x $index * 100)
-      (length 4)
-      (of
-        (Circle
-          (y $index * 30)
-        )
+(def Swap4Set
+  (List
+    (dataKey _swaps)
+    (of
+      (SwapIfGreater4
+        (y $index * 1200)
       )
     )
   )
 )
+
+(def BubbleSort
+  (List
+    (dataKey _swapSets)
+    (of
+      (Swap4Set
+        (x $index * 1200)
+      )
+    )
+  )
+)
+
+(BubbleSort
+  (dataKey bubbleSort)
+)
+#
+#(Swap4Set
+#  (dataKey swap4Set)
+#)
