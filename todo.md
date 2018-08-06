@@ -5,3 +5,4 @@ even require it.
 * Add nested group support.
 * Consider adding signal definitions to objects to control what happens on
 events.
+* Separate input logic from renderer into it's own class

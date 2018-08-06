@@ -393,4 +393,6 @@
 
 (BubbleSort
   (dataKey bubbleSort)
+  (x -4000)
+  (y 3500)
 )

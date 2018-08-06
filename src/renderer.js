@@ -1,3 +1,4 @@
+const { timeNowSeconds } = require('./utils');
 const { Vector2 } = require('./math');
 const {
   processMagicValue,
@@ -25,30 +26,40 @@ class ANMLRenderer {
     this.canvas = document.createElement('canvas');
     this.canvas.width = dim.width;
     this.canvas.height = dim.height;
-    this.canvas.style.width = dim.width;
-    this.canvas.style.height = dim.height;
     this.parent.appendChild(this.canvas);
     this.ctx = this.canvas.getContext('2d');
     this._scale = 1.0;
+    this.setZoomingScale(1.0);
 
     const SCALE_MULTIPLIER = 1.10;
     const SCALE_MIN = 0.001;
     const SCALE_MAX = 1000;
 
+    this._zooming = false;
+    const renderZoom = () => {
+      this._zooming = false;
+      this._scale *= this.getZoomingScale();
+      this.setZoomingScale(1.0);
+      this.render(this._model);
+    }
+
+    let lastTimeout;
     this.canvas.addEventListener('wheel', (e) => {
-      console.log(e.deltaX, e.deltaY);
+      let newZoom;
       if (e.deltaY > 0) {
-        this._scale /= SCALE_MULTIPLIER;
-        if (this._scale < SCALE_MIN) {
-          this._scale = SCALE_MIN;
-        }
+        newZoom = this.getZoomingScale() / SCALE_MULTIPLIER;
       }
       else {
-        this._scale *= SCALE_MULTIPLIER;
-        if (this._scale > SCALE_MAX) {
-          this._scale = SCALE_MAX;
-        }
+        newZoom = this.getZoomingScale() * SCALE_MULTIPLIER;
       }
+
+      this.setZoomingScale(newZoom);
+
+      if (lastTimeout) {
+        clearTimeout(lastTimeout);
+      }
+      this._zooming = true;
+      lastTimeout = setTimeout(renderZoom, 100);
     });
 
     this.canvas.addEventListener('mousedown', (e) => {
@@ -111,6 +122,22 @@ class ANMLRenderer {
     this.setViewportCenter({ x: 0, y: 0 });
   }
 
+  getZoomingScale() {
+    return this._zoomScale;
+  }
+  setZoomingScale(scale) {
+    //this.canvas.style.transform = `scale(${scale});`;
+    this._zoomScale = scale;
+    this.canvas.style = `transform: scale(${scale});`;
+  }
+
+  setPanningTranslation(x, y) {
+  }
+
+  buildTransform() {
+    return `transform: scale(${scale}); translate(${x}, ${y});`;
+  }
+
   getViewportCenter() {
     return new Vector2({
       x: this._viewPortCenterX,
@@ -125,17 +152,32 @@ class ANMLRenderer {
     });
   }
 
+  getWorldCoordinates(x, y) {
+    return new Vector2({
+      x: x - (this.canvas.width / 2),
+      y: y - (this.canvas.height / 2),
+    });
+  }
+
   setViewportCenter({ x, y }) {
     this._viewPortCenterX = x;
     this._viewPortCenterY = y;
-    // TODO: no idea why this needs to be negative
     x = -x * this._scale;
     y = y * this._scale;
     this._actualCenterX = x + (this.canvas.width / 2);
     this._actualCenterY = y + (this.canvas.height / 2 );
   }
 
+  translateViewPortCenter(x, y) {
+    x /= this._scale;
+    y /= this._scale;
+    const center = this.getViewportCenter();
+    this.setViewportCenter({ x: center.x + x, y: center.y + y });
+  }
+
   render(model) {
+    this._model = model;
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.drawGrid();
@@ -146,8 +188,15 @@ class ANMLRenderer {
     //});
 
     for (let shape of model.getShapes()) {
-      //this.renderShape(shape, viewPortOffset);  
       this.renderShape(shape);  
+
+      //this.renderShape(shape, viewPortOffset);  
+      // if the user has started zooming since the render began, abort. This
+      // makes zooming smoother because the current render doesn't have to
+      // complete
+      if (this._zooming) {
+        break;
+      }
     }
   }
 
@@ -193,6 +242,10 @@ class ANMLRenderer {
   }
 
   renderShape(shape, offsetVec, parentData) {
+
+    if (this._zooming) {
+      return;
+    }
 
     let data;
     if (parentData === undefined) {

@@ -2,7 +2,6 @@ const { timeNowSeconds } = require('./utils');
 const { Vector2 } = require('./math');
 const { ANMLParser } = require('./parser');
 const { ANMLRenderer } = require('./renderer');
-const { ANMLGenerator } = require('./generator');
 const { ANMLEditor } = require('./editor');
 const {
   connectPorts,
@@ -22,6 +21,73 @@ const {
 const { GroupModel } = require('./model');
 
 
+class Panner {
+  constructor({ domParentId }) {
+    this.parent = document.getElementById(domParentId);
+
+    this.reset();
+
+    let panPoint;
+    let movementVec;
+
+    this.parent.addEventListener('mousedown', (e) => {
+      panPoint = new Vector2({
+        x: e.clientX,
+        y: e.clientY,
+      });
+    });
+
+    this.parent.addEventListener('mouseup', (e) => {
+      panPoint = null;
+
+      if (movementVec) {
+        this._centerX = movementVec.x;
+        this._centerY = movementVec.y;
+
+        if (this._onPanEnded) {
+          this._onPanEnded(-this._centerX, this._centerY);
+        }
+      }
+    });
+
+    this.parent.addEventListener('mousemove', (e) => {
+
+      if (panPoint) {
+        const movePoint = new Vector2({
+          x: e.clientX,
+          y: e.clientY,
+        });
+
+        movementVec = movePoint.subtract(panPoint);
+        movementVec.x += this._centerX;
+        movementVec.y += this._centerY;
+        this.parent.style = `transform: translate(${movementVec.x}px, ${movementVec.y}px);`;
+
+        if (this._onPanCallback) {
+          this._onPanCallback(-movementVec.x, movementVec.y);
+        }
+      }
+    });
+
+    this._onPanCallback;
+  }
+
+  reset() {
+    this._centerX = 0;
+    this._centerY = 0;
+    this.parent.style = `transform: translate(0px, 0px);`;
+  }
+
+  onPan(callback) {
+    this._onPanCallback = callback;
+  }
+
+  onPanEnded(callback) {
+    this._onPanEnded = callback;
+  }
+}
+
+
 fetch('/test.anml').then(response => {
   return response.text();
 })
@@ -33,7 +99,7 @@ function main(anmlFileText) {
   const parser = new ANMLParser();
   let model = parser.parse(anmlFileText);
   const renderer = new ANMLRenderer({ domParentId: 'renderer' });
-  const generator = new ANMLGenerator();
+  const panner = new Panner({ domParentId: 'renderer' });
   const editor = new ANMLEditor({ domParentId: 'editor' });
 
   const sw1 = createSwitch();
@@ -101,14 +167,25 @@ function main(anmlFileText) {
       dragObj.setX(point.x - dragOffset.x);
       dragObj.setY(point.y - dragOffset.y);
     }
-    else if (panPoint !== null) {
-      const movementVec = point.subtract(panPoint);
+    //else if (panPoint !== null) {
+    //  const movementVec = point.subtract(panPoint);
 
-      const negated = movementVec.scaledBy(-1.0);
-      const prevCenter = renderer.getViewportCenter();
-      const newCenter = prevCenter.add(negated);
-      renderer.setViewportCenter({ x: newCenter.x, y: newCenter.y });
-    }
+    //  const negated = movementVec.scaledBy(-1.0);
+    //  const prevCenter = renderer.getViewportCenter();
+    //  const newCenter = prevCenter.add(negated);
+    //  renderer.setViewportCenter({ x: newCenter.x, y: newCenter.y });
+    //}
+  });
+
+  panner.onPan((x, y) => {
+    console.log(x, y);
+  });
+
+  panner.onPanEnded((x, y) => {
+    console.log(x, y);
+    renderer.translateViewPortCenter(x, y);
+    panner.reset();
+    renderer.render(model);
   });
 
   editor.onChange((text) => {
@@ -138,15 +215,6 @@ function main(anmlFileText) {
   const bsort = new BubbleSort(numValues);
   data.bubbleSort = bsort;
 
-  //connectPorts(sw1.out(), swap4.inA3());
-  //connectPorts(sw2.out(), swap4.inA2());
-  //connectPorts(sw3.out(), swap4.inA1());
-  //connectPorts(sw4.out(), swap4.inA0());
-  //connectPorts(sw5.out(), swap4.inB3());
-  //connectPorts(sw6.out(), swap4.inB2());
-  //connectPorts(sw7.out(), swap4.inB1());
-  //connectPorts(sw8.out(), swap4.inB0());
-
   data.sw1 = sw1;
   data.sw2 = sw2;
   data.sw3 = sw3;
@@ -165,16 +233,19 @@ function main(anmlFileText) {
   sw7.setSwitchState(0);
   sw8.setSwitchState(0);
 
-  let val = 0;
-  setInterval(function() {
-    const start = timeNowSeconds();
-    bsort.setInputValue(0, val);
-    console.log(`Time: ${timeNowSeconds() - start}`);
-    val++;
-    if (val > numValues) {
-      val = 0;
-    }
-  }, 1000);
+  //let val = 0;
+  //setInterval(function() {
+  //  const start = timeNowSeconds();
+  //  bsort.setInputValue(0, val);
+  //  //console.log(`Time: ${timeNowSeconds() - start}`);
+  //  val++;
+  //  if (val > numValues) {
+  //    val = 0;
+  //  }
+
+  //  requestAnimationFrame(update);
+
+  //}, 1000);
 
   function checkSwitches(clickedObj) {
     switch (clickedObj.getName()) {
@@ -206,17 +277,17 @@ function main(anmlFileText) {
   }
 
   function update() {
-    //const obj = model.getShapes()[0];
-    //obj.setX(obj.getX() + (1));
     const startTime = timeNowSeconds();
     model.update(data);
     const updateTime = timeNowSeconds();
+    //console.log(`Update time: ${updateTime - startTime}`);
     renderer.render(model);
     const renderTime = timeNowSeconds();
-    console.log(`Render time: ${renderTime - startTime}`);
-    generator.generate(model);
+    console.log(`Render time: ${renderTime - updateTime}`);
     editor.update(model);
-    requestAnimationFrame(update);
+    const editTime = timeNowSeconds();
+    //console.log(`Edit time: ${editTime - renderTime}`);
+    //requestAnimationFrame(update);
   }
   requestAnimationFrame(update);
 }
