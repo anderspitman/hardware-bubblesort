@@ -7,7 +7,7 @@ const {
   IndexOperationModel,
   GroupModel,
   ListModel,
-  CircleModel,
+  ArcModel,
   RectangleModel,
   TriangleModel,
   LineModel,
@@ -220,8 +220,10 @@ class ANMLRenderer {
     const strokeWidth = shape.getStrokeWidth();
     this.ctx.lineWidth = this.processAttr(shape, strokeWidth, data) * this._scale;
 
-    if (shape instanceof CircleModel) {
-      this.drawCircle(shape, offsetVec);
+    // NOTE: this handles circles as well because CircleModel inherits from
+    // ArcModel
+    if (shape instanceof ArcModel) {
+      this.drawArc(shape, offsetVec, fillColor);
     }
     else if (shape instanceof RectangleModel) {
       this.drawRectangle(shape, offsetVec, fillColor);
@@ -272,10 +274,10 @@ class ANMLRenderer {
     this.ctx.lineWidth = savedLineWidth * this._scale;
   }
 
-  drawCircle(c, offsetVec) {
+  drawArc(a, offsetVec, fillColor) {
 
-    let x = processMagicValue(c, c.getX());
-    let y = processMagicValue(c, c.getY());
+    let x = processMagicValue(a, a.getX());
+    let y = processMagicValue(a, a.getY());
 
     if (offsetVec !== undefined) {
       x += offsetVec.x;
@@ -284,12 +286,19 @@ class ANMLRenderer {
 
     x *= this._scale;
     y *= this._scale;
-    let radius = processMagicValue(c, c.getRadius());
+    let radius = processMagicValue(a, a.getRadius());
     radius *= this._scale;
 
+    const startAngle = a.getStartAngle();
+    const endAngle = -a.getEndAngle();
+    const anticlockwise = true;
+
     this.ctx.beginPath();
-    this.ctx.arc(this._x(x), this._y(y), radius, 0, 2*Math.PI); 
-    this.ctx.fill();
+    this.ctx.arc(
+      this._x(x), this._y(y), radius, startAngle, endAngle, anticlockwise); 
+    if (fillColor !== 'none') {
+      this.ctx.fill();
+    }
     this.ctx.stroke();
   }
 

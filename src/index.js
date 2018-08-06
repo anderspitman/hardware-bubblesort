@@ -134,7 +134,8 @@ function main(anmlFileText) {
   data.circs = [10, 15, 20, 25];
   data.circ = 5;
 
-  const bsort = new BubbleSort(8);
+  const numValues = 8;
+  const bsort = new BubbleSort(numValues);
   data.bubbleSort = bsort;
 
   //connectPorts(sw1.out(), swap4.inA3());
@@ -166,9 +167,11 @@ function main(anmlFileText) {
 
   let val = 0;
   setInterval(function() {
+    const start = timeNowSeconds();
     bsort.setInputValue(0, val);
+    console.log(`Time: ${timeNowSeconds() - start}`);
     val++;
-    if (val > 15) {
+    if (val > numValues) {
       val = 0;
     }
   }, 1000);
@@ -210,7 +213,7 @@ function main(anmlFileText) {
     const updateTime = timeNowSeconds();
     renderer.render(model);
     const renderTime = timeNowSeconds();
-    //console.log(`Render time: ${renderTime - startTime}`);
+    console.log(`Render time: ${renderTime - startTime}`);
     generator.generate(model);
     editor.update(model);
     requestAnimationFrame(update);

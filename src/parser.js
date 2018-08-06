@@ -11,6 +11,7 @@ const {
   ShapeModel,
   GroupModel,
   ListModel,
+  ArcModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
@@ -85,6 +86,7 @@ class ANMLParser {
     const type = tokens.shift();
 
     switch(type) {
+      case 'Arc':
       case 'Circle':
       case 'Rectangle':
       case 'Triangle':
@@ -147,6 +149,9 @@ class ANMLParser {
 
     let Con;
     switch(type) {
+      case 'Arc':
+        Con = ArcModel;
+        break;
       case 'Circle':
         Con = CircleModel;
         break;

@@ -375,10 +375,12 @@ class ListModel extends ShapeModel {
 }
 
 
-class CircleModel extends ShapeModel {
+class ArcModel extends ShapeModel {
   constructor() {
     super();
-    this._radius = this.defaultRadius();
+    this.setRadius(this.defaultRadius());
+    this.setStartAngle(this.defaultStartAngle());
+    this.setEndAngle(this.defaultEndAngle());
   }
 
   defaultRadius() {
@@ -391,6 +393,27 @@ class CircleModel extends ShapeModel {
     this._radius = value;
   }
 
+  defaultStartAngle() {
+    return 0;
+  }
+  getStartAngle() {
+    return this._startAngle;
+  }
+  setStartAngle(value) {
+    this._startAngle = value;
+  }
+
+  defaultEndAngle() {
+    return Math.PI;
+  }
+  getEndAngle() {
+    return this._endAngle;
+  }
+  setEndAngle(value) {
+    this._endAngle = value;
+  }
+
+  // TODO handle actual arc intersection. This is just using a circle.
   intersects(point) {
     const x = processMagicValue(this, this.getX());
     const y = processMagicValue(this, this.getY());
@@ -398,6 +421,16 @@ class CircleModel extends ShapeModel {
     const thisCenter = new Vector2({ x, y });
     const distance = point.subtract(thisCenter).getLength();
     return distance <= radius;
+  }
+}
+
+
+class CircleModel extends ArcModel {
+  getStartAngle() {
+    return 0;
+  }
+  getEndAngle() {
+    return Math.PI * 2;
   }
 }
 
@@ -645,6 +678,7 @@ module.exports = {
   ShapeModel,
   GroupModel,
   ListModel,
+  ArcModel,
   CircleModel,
   RectangleModel,
   TriangleModel,

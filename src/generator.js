@@ -6,6 +6,7 @@ const {
   IndexOperationModel,
   GroupModel,
   ListModel,
+  ArcModel,
   CircleModel,
   RectangleModel,
   TriangleModel,
@@ -51,6 +52,11 @@ class ANMLGenerator {
     if (item instanceof CircleModel) {
       str += this.generateCircle(item, indent);
     }
+    // NOTE: this needs to come after CircleModel, because CircleModel
+    // inherits from ArcModel
+    else if (item instanceof ArcModel) {
+      str += this.generateArc(item, indent);
+    }
     else if (item instanceof RectangleModel) {
       str += this.generateRectangle(item, indent);
     }
@@ -69,6 +75,18 @@ class ANMLGenerator {
     else {
       str += this.generateUserDefinedShape(item, indent);
     }
+    return str;
+  }
+
+  generateArc(a, indent) {
+    let str = indent + '(Arc\n';
+
+    str += this.generateShapeAttrs(a, indent);
+
+    const attrs = [ 'radius' ];
+
+    str += this.generateAttrs(a, attrs, indent);
+    str += indent + ')\n';
     return str;
   }
 
