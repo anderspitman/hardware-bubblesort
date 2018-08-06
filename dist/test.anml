@@ -1,6 +1,7 @@
 (def LOW_COLOR #505050)
 (def HIGH_COLOR #71ed55)
 (def WIRE_WIDTH 3)
+(def BACKGROUND_COLOR #ffffff)
 
 (def Switch
   (Rectangle
@@ -21,39 +22,50 @@
 
 (def AndGate
   (Rectangle
-    (x -8)
-    (strokeColor LOW_COLOR)
+    (x -6)
+    (strokeColor none)
     (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-    (width 30)
+    (width 36)
     (height 40)
   )
-  (Circle
+  (Arc
     (x 10)
-    (strokeColor LOW_COLOR)
+    (strokeColor none)
     (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (radius 20)
+    (startAngle -1.57)
+    (endAngle 1.57)
   )
 )
 
 (def OrGate
   (Rectangle
-    (x -8)
-    (strokeColor LOW_COLOR)
+    (x -6)
+    (strokeColor none)
     (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-    (width 30)
+    (width 35)
     (height 40)
   )
-  (Circle
-    (x 10)
-    (strokeColor LOW_COLOR)
+  (Triangle
+    (strokeColor none)
     (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-    (radius 20)
+    (x1 10) (y1 20)
+    (x2 40) (y2 0)
+    (x3 10) (y3 -20)
+  )
+  (Arc
+    (x -40)
+    (strokeColor none)
+    (fillColor BACKGROUND_COLOR)
+    (radius 25)
+    (startAngle -1.2)
+    (endAngle 1.2)
   )
 )
 
 (def NotGate
   (Triangle
-    (strokeColor LOW_COLOR)
+    (strokeColor none)
     (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (x1 -15) (y1 15)
     (x2 15) (y2 0)
@@ -61,9 +73,9 @@
   )
   (Circle
     (x 18)
-    (strokeColor LOW_COLOR)
+    (strokeColor none)
     (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-    (radius 4)
+    (radius 5)
   )
 )
 
@@ -73,9 +85,9 @@
   )
   (Circle
     (x 34)
-    (strokeColor LOW_COLOR)
+    (strokeColor none)
     (fillColor $data._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-    (radius 4)
+    (radius 5)
   )
 )
 
@@ -379,13 +391,6 @@
   )
 )
 
-#(BubbleSort
-#  (dataKey bubbleSort)
-#)
-
-(Circle
-  (x 100)
-)
-
-(Arc
+(BubbleSort
+  (dataKey bubbleSort)
 )

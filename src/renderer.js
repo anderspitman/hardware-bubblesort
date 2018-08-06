@@ -223,13 +223,13 @@ class ANMLRenderer {
     // NOTE: this handles circles as well because CircleModel inherits from
     // ArcModel
     if (shape instanceof ArcModel) {
-      this.drawArc(shape, offsetVec, fillColor);
+      this.drawArc(shape, offsetVec, strokeColor, fillColor);
     }
     else if (shape instanceof RectangleModel) {
-      this.drawRectangle(shape, offsetVec, fillColor);
+      this.drawRectangle(shape, offsetVec, strokeColor, fillColor);
     }
     else if (shape instanceof TriangleModel) {
-      this.drawTriangle(shape, offsetVec);
+      this.drawTriangle(shape, offsetVec, strokeColor, fillColor);
     }
     else if (shape instanceof LineModel) {
       this.drawLine(shape, offsetVec);
@@ -274,7 +274,7 @@ class ANMLRenderer {
     this.ctx.lineWidth = savedLineWidth * this._scale;
   }
 
-  drawArc(a, offsetVec, fillColor) {
+  drawArc(a, offsetVec, strokeColor, fillColor) {
 
     let x = processMagicValue(a, a.getX());
     let y = processMagicValue(a, a.getY());
@@ -289,7 +289,7 @@ class ANMLRenderer {
     let radius = processMagicValue(a, a.getRadius());
     radius *= this._scale;
 
-    const startAngle = a.getStartAngle();
+    const startAngle = -a.getStartAngle();
     const endAngle = -a.getEndAngle();
     const anticlockwise = true;
 
@@ -299,10 +299,12 @@ class ANMLRenderer {
     if (fillColor !== 'none') {
       this.ctx.fill();
     }
-    this.ctx.stroke();
+    if (strokeColor !== 'none') {
+      this.ctx.stroke();
+    }
   }
 
-  drawRectangle(r, offsetVec, fillColor) {
+  drawRectangle(r, offsetVec, strokeColor, fillColor) {
     let x = processMagicValue(r, r.getX());
     let y = processMagicValue(r, r.getY());
 
@@ -326,10 +328,12 @@ class ANMLRenderer {
     if (fillColor !== 'none') {
       this.ctx.fill();
     }
-    this.ctx.stroke();
+    if (strokeColor !== 'none') {
+      this.ctx.stroke();
+    }
   }
 
-  drawTriangle(t, offsetVec) {
+  drawTriangle(t, offsetVec, strokeColor, fillColor) {
     let x = processMagicValue(t, t.getX());
     let y = processMagicValue(t, t.getY());
 
@@ -351,8 +355,13 @@ class ANMLRenderer {
     this.ctx.lineTo(this._x(x + x2), this._y(y + y2));
     this.ctx.lineTo(this._x(x + x3), this._y(y + y3));
     this.ctx.fill();
-    // FIXME: isn't closing stroke
-    this.ctx.stroke();
+    if (fillColor !== 'none') {
+      this.ctx.fill();
+    }
+
+    if (strokeColor !== 'none') {
+      this.ctx.stroke();
+    }
   }
 
   drawLine(l, offsetVec) {

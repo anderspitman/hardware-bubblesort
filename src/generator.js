@@ -83,7 +83,7 @@ class ANMLGenerator {
 
     str += this.generateShapeAttrs(a, indent);
 
-    const attrs = [ 'radius' ];
+    const attrs = [ 'radius', 'startAngle', 'endAngle' ];
 
     str += this.generateAttrs(a, attrs, indent);
     str += indent + ')\n';
