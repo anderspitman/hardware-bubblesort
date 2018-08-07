@@ -11,6 +11,7 @@ class PannerZoomer {
 
     this.setZoomingScale(1.0);
     this.resetPan();
+    this.enable();
 
     let panStartPoint;
 
@@ -19,66 +20,74 @@ class PannerZoomer {
     const SCALE_MAX = 1000;
 
     this.parent.addEventListener('mousedown', (e) => {
-      panStartPoint = new Vector2({
-        x: e.clientX,
-        y: e.clientY,
-      });
+      if (this._enabled) {
+        panStartPoint = new Vector2({
+          x: e.clientX,
+          y: e.clientY,
+        });
+      }
     });
 
     this.parent.addEventListener('mouseup', (e) => {
-      panStartPoint = null;
+      if (this._enabled) {
+        panStartPoint = null;
 
-      if (this._pan) {
+        if (this._pan) {
 
-        if (this._onPanEnded) {
-          this._onPanEnded(-this._pan.x, this._pan.y);
+          if (this._onPanEnded) {
+            this._onPanEnded(-this._pan.x, this._pan.y);
+          }
+
+          this._centerX = this._pan.x;
+          this._centerY = this._pan.y;
         }
-
-        this._centerX = this._pan.x;
-        this._centerY = this._pan.y;
       }
     });
 
     this.parent.addEventListener('mousemove', (e) => {
 
-      if (panStartPoint) {
-        const movePoint = new Vector2({
-          x: e.clientX,
-          y: e.clientY,
-        });
+      if (this._enabled) {
+        if (panStartPoint) {
+          const movePoint = new Vector2({
+            x: e.clientX,
+            y: e.clientY,
+          });
 
-        this._pan = movePoint.subtract(panStartPoint);
-        this._pan.x += this._centerX;
-        this._pan.y += this._centerY;
-        this.updateTransform();
+          this._pan = movePoint.subtract(panStartPoint);
+          this._pan.x += this._centerX;
+          this._pan.y += this._centerY;
+          this.updateTransform();
 
-        if (this._onPanCallback) {
-          this._onPanCallback(-this._pan.x, this._pan.y);
+          if (this._onPanCallback) {
+            this._onPanCallback(-this._pan.x, this._pan.y);
+          }
         }
       }
     });
 
     let lastTimeout;
     this.parent.addEventListener('wheel', (e) => {
-      let newZoom;
-      if (e.deltaY > 0) {
-        newZoom = this.getZoomingScale() / SCALE_MULTIPLIER;
-      }
-      else {
-        newZoom = this.getZoomingScale() * SCALE_MULTIPLIER;
-      }
+      if (this._enabled) {
+        let newZoom;
+        if (e.deltaY > 0) {
+          newZoom = this.getZoomingScale() / SCALE_MULTIPLIER;
+        }
+        else {
+          newZoom = this.getZoomingScale() * SCALE_MULTIPLIER;
+        }
 
-      this.setZoomingScale(newZoom);
+        this.setZoomingScale(newZoom);
 
-      if (lastTimeout) {
-        clearTimeout(lastTimeout);
-      }
-      this._zooming = true;
-      //lastTimeout = setTimeout(renderZoom, 100);
-      e.preventDefault();
+        if (lastTimeout) {
+          clearTimeout(lastTimeout);
+        }
+        this._zooming = true;
+        //lastTimeout = setTimeout(renderZoom, 100);
+        e.preventDefault();
 
-      if (this._onZoomCallback) {
-        this._onZoomCallback(this._zoomScale);
+        if (this._onZoomCallback) {
+          this._onZoomCallback(this._zoomScale);
+        }
       }
     });
   }
@@ -109,6 +118,14 @@ class PannerZoomer {
   resetZoom() {
     this._zoomScale = 1.0;
     this.updateTransform();
+  }
+
+  enable() {
+    this._enabled = true;
+  }
+
+  disable() {
+    this._enabled = false;
   }
 
   onZoom(callback) {

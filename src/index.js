@@ -45,7 +45,7 @@ function main(anmlFileText) {
   const sw7 = createSwitch();
   const sw8 = createSwitch();
 
-  renderer.setScale(0.05);
+  //renderer.setScale(0.05);
 
   let dragObj = null;
   let dragOffset;
@@ -65,6 +65,7 @@ function main(anmlFileText) {
         const objPos = new Vector2({ x: shape.getX(), y: shape.getY() });
         dragOffset = point.subtract(objPos);
         dragObj = shape;
+        panzoom.disable();
 
         if (shape instanceof GroupModel) {
 
@@ -93,12 +94,14 @@ function main(anmlFileText) {
 
   renderer.onMouseUp((point) => {
     dragObj = null;
+    panzoom.enable();
   });
 
   renderer.onMouseMove((point) => {
     if (dragObj !== null) {
       dragObj.setX(point.x - dragOffset.x);
       dragObj.setY(point.y - dragOffset.y);
+      renderer.render(model);
     }
   });
 
