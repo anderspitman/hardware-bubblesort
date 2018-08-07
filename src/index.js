@@ -45,6 +45,8 @@ function main(anmlFileText) {
   const sw7 = createSwitch();
   const sw8 = createSwitch();
 
+  renderer.setScale(0.05);
+
   let dragObj = null;
   let dragOffset;
   renderer.onMouseDown((point) => {

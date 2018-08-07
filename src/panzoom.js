@@ -87,6 +87,7 @@ class PannerZoomer {
     const transform =
       `translate(${this._pan.x}px, ${this._pan.y}px) scale(${this._zoomScale})`;
     this.parent.style.transform = transform;
+    //this.parent.style['transform-origin'] = '0 0';
   }
 
   getZoomingScale() {
