@@ -4,8 +4,8 @@ const { Vector2 } = require('./math');
 // figure out a way to set the transform scale and translate separately. How
 // stupid is that? The web is so stupid sometimes.
 class PannerZoomer {
-  constructor({ domParentId }) {
-    this.parent = document.getElementById(domParentId);
+  constructor({ domElementId }) {
+    this.parent = document.getElementById(domElementId);
 
     this._pan = new Vector2({ x: 0, y: 0 });
 

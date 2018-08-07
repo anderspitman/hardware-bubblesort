@@ -273,7 +273,6 @@ class ANMLRenderer {
   }
 
   drawGrid() {
-    console.log("draw");
     const savedLineWidth = this.ctx.lineWidth;
     this.ctx.lineWidth = 1 * this._scale;
     this.ctx.beginPath();

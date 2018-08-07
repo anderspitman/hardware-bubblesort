@@ -1,8 +1,8 @@
 const { timeNowSeconds } = require('./utils');
-const { Vector2 } = require('./math');
 const { ANMLParser } = require('./parser');
 const { ANMLRenderer } = require('./renderer');
-const { ANMLEditor } = require('./editor');
+const { CodeEditor } = require('./code_editor');
+const { VisualEditor } = require('./visual_editor');
 const {
   connectPorts,
   createSwitch,
@@ -10,7 +10,6 @@ const {
   createNandGate,
   createXnorGate,
   GreaterThan1,
-  GreaterThan2,
   Comparator1,
   Comparator2,
   Comparator4,
@@ -18,7 +17,6 @@ const {
   Swap4Set,
   BubbleSort,
 } = require('../lib/wild_logic/src/index');
-const { GroupModel } = require('./model');
 const { PannerZoomer } = require('./panzoom');
 
 
@@ -33,93 +31,33 @@ function main(anmlFileText) {
   const parser = new ANMLParser();
   let model = parser.parse(anmlFileText);
   const renderer = new ANMLRenderer({ domParentId: 'renderer' });
-  const panzoom = new PannerZoomer({ domParentId: 'renderer' });
-  const editor = new ANMLEditor({ domParentId: 'editor' });
-
-  const sw1 = createSwitch();
-  const sw2 = createSwitch();
-  const sw3 = createSwitch();
-  const sw4 = createSwitch();
-  const sw5 = createSwitch();
-  const sw6 = createSwitch();
-  const sw7 = createSwitch();
-  const sw8 = createSwitch();
+  const panzoom = new PannerZoomer({ domElementId: 'renderer' });
+  const codeEditor = new CodeEditor({ domParentId: 'code_editor' });
+  const visualEditor = new VisualEditor({
+    domElementId: 'visual_editor',
+    renderer,
+    panzoom,
+  });
 
   //renderer.setScale(0.05);
 
-  let dragObj = null;
-  let dragOffset;
-  renderer.onMouseDown((point) => {
-    console.log(point);
-
-    let hitShape = false;
-
-    for (let shape of model.getShapes()) {
-      const intersects = shape.intersects(point);
-
-      if (intersects && shape.getName() !== 'box') {
-        hitShape = true;
-
-        checkSwitches(shape);
-        
-        const objPos = new Vector2({ x: shape.getX(), y: shape.getY() });
-        dragOffset = point.subtract(objPos);
-        dragObj = shape;
-        panzoom.disable();
-
-        if (shape instanceof GroupModel) {
-
-          const groupPos = objPos;
-          const relativePoint = point.subtract(groupPos);
-
-          for (let child of shape.getChildren()) {
-            const childPos = new Vector2({ x: child.getX(), y: child.getY() });
-            if (child.intersects(relativePoint)) {
-              hitShape = true;
-              console.log(child);
-              checkSwitches(child);
-              break;
-            }
-          }
-        }
-
-        break;
-      }
-    }
-
-    if (!hitShape) {
-      console.log("hit canvas");
-    }
+  visualEditor.onChange(() => {
+    update();
   });
-
-  renderer.onMouseUp((point) => {
-    dragObj = null;
-    panzoom.enable();
-  });
-
-  renderer.onMouseMove((point) => {
-    if (dragObj !== null) {
-      dragObj.setX(point.x - dragOffset.x);
-      dragObj.setY(point.y - dragOffset.y);
-      renderer.render(model);
-    }
-  });
-
+  
   panzoom.onPan((x, y) => {
-    console.log(x, y);
   });
 
   panzoom.onPanEnded((x, y) => {
-    console.log(x, y);
     renderer.translateViewPortCenter(x, y);
     panzoom.resetPan();
-    renderer.render(model);
+    update();
   });
 
   const renderZoom = () => {
     renderer.setScale(zoom);
     panzoom.resetZoom();
-    renderer.render(model);
+    update();
   };
 
   let lastTimeout;
@@ -132,18 +70,28 @@ function main(anmlFileText) {
     lastTimeout = setTimeout(renderZoom, 500);
   });
 
-  editor.onChange((text) => {
+  codeEditor.onChange((text) => {
     try {
       const start = timeNowSeconds();
       const newModel = parser.parse(text);
       const parseTime = timeNowSeconds() - start;
       console.log(`Parse time: ${parseTime}`);
       model = newModel;
+      update();
     }
     catch (e) {
       console.log(e);
     }
   });
+
+  const sw1 = createSwitch();
+  const sw2 = createSwitch();
+  const sw3 = createSwitch();
+  const sw4 = createSwitch();
+  const sw5 = createSwitch();
+  const sw6 = createSwitch();
+  const sw7 = createSwitch();
+  const sw8 = createSwitch();
 
   const data = {};
   const swap4Set = new Swap4Set();
@@ -221,6 +169,10 @@ function main(anmlFileText) {
   }
 
   function update() {
+    requestAnimationFrame(render);
+  }
+
+  function render() {
     const startTime = timeNowSeconds();
     model.update(data);
     const updateTime = timeNowSeconds();
@@ -228,12 +180,14 @@ function main(anmlFileText) {
     renderer.render(model);
     const renderTime = timeNowSeconds();
     console.log(`Render time: ${renderTime - updateTime}`);
-    editor.update(model);
+    codeEditor.update(model);
     const editTime = timeNowSeconds();
+    visualEditor.update(model);
     //console.log(`Edit time: ${editTime - renderTime}`);
     //requestAnimationFrame(update);
   }
-  requestAnimationFrame(update);
+
+  update();
 }
 
 function flipSwitch(sw) {

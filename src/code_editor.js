@@ -1,7 +1,7 @@
 const { ANMLGenerator } = require('./generator');
 
 
-class ANMLEditor {
+class CodeEditor {
   constructor({ domParentId }) {
     this.parent = document.getElementById(domParentId);
     this.textArea = document.createElement('textarea');
@@ -33,5 +33,5 @@ class ANMLEditor {
 
 
 module.exports = {
-  ANMLEditor,
+  CodeEditor,
 };
