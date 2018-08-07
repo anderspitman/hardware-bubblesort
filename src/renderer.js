@@ -28,39 +28,8 @@ class ANMLRenderer {
     this.canvas.height = dim.height;
     this.parent.appendChild(this.canvas);
     this.ctx = this.canvas.getContext('2d');
+
     this._scale = 1.0;
-    this.setZoomingScale(1.0);
-
-    const SCALE_MULTIPLIER = 1.10;
-    const SCALE_MIN = 0.001;
-    const SCALE_MAX = 1000;
-
-    this._zooming = false;
-    const renderZoom = () => {
-      this._zooming = false;
-      this._scale *= this.getZoomingScale();
-      this.setZoomingScale(1.0);
-      this.render(this._model);
-    }
-
-    let lastTimeout;
-    this.canvas.addEventListener('wheel', (e) => {
-      let newZoom;
-      if (e.deltaY > 0) {
-        newZoom = this.getZoomingScale() / SCALE_MULTIPLIER;
-      }
-      else {
-        newZoom = this.getZoomingScale() * SCALE_MULTIPLIER;
-      }
-
-      this.setZoomingScale(newZoom);
-
-      if (lastTimeout) {
-        clearTimeout(lastTimeout);
-      }
-      this._zooming = true;
-      lastTimeout = setTimeout(renderZoom, 100);
-    });
 
     this.canvas.addEventListener('mousedown', (e) => {
 
@@ -122,20 +91,9 @@ class ANMLRenderer {
     this.setViewportCenter({ x: 0, y: 0 });
   }
 
-  getZoomingScale() {
-    return this._zoomScale;
-  }
-  setZoomingScale(scale) {
-    //this.canvas.style.transform = `scale(${scale});`;
-    this._zoomScale = scale;
-    this.canvas.style = `transform: scale(${scale});`;
-  }
-
-  setPanningTranslation(x, y) {
-  }
-
-  buildTransform() {
-    return `transform: scale(${scale}); translate(${x}, ${y});`;
+  setScale(scale) {
+    this._scale *= scale;
+    console.log(this._scale);
   }
 
   getViewportCenter() {
@@ -315,6 +273,7 @@ class ANMLRenderer {
   }
 
   drawGrid() {
+    console.log("draw");
     const savedLineWidth = this.ctx.lineWidth;
     this.ctx.lineWidth = 1 * this._scale;
     this.ctx.beginPath();

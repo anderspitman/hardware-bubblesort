@@ -19,73 +19,7 @@ const {
   BubbleSort,
 } = require('../lib/wild_logic/src/index');
 const { GroupModel } = require('./model');
-
-
-class Panner {
-  constructor({ domParentId }) {
-    this.parent = document.getElementById(domParentId);
-
-    this.reset();
-
-    let panPoint;
-    let movementVec;
-
-    this.parent.addEventListener('mousedown', (e) => {
-      panPoint = new Vector2({
-        x: e.clientX,
-        y: e.clientY,
-      });
-    });
-
-    this.parent.addEventListener('mouseup', (e) => {
-      panPoint = null;
-
-      if (movementVec) {
-        this._centerX = movementVec.x;
-        this._centerY = movementVec.y;
-
-        if (this._onPanEnded) {
-          this._onPanEnded(-this._centerX, this._centerY);
-        }
-      }
-    });
-
-    this.parent.addEventListener('mousemove', (e) => {
-
-      if (panPoint) {
-        const movePoint = new Vector2({
-          x: e.clientX,
-          y: e.clientY,
-        });
-
-        movementVec = movePoint.subtract(panPoint);
-        movementVec.x += this._centerX;
-        movementVec.y += this._centerY;
-        this.parent.style = `transform: translate(${movementVec.x}px, ${movementVec.y}px);`;
-
-        if (this._onPanCallback) {
-          this._onPanCallback(-movementVec.x, movementVec.y);
-        }
-      }
-    });
-
-    this._onPanCallback;
-  }
-
-  reset() {
-    this._centerX = 0;
-    this._centerY = 0;
-    this.parent.style = `transform: translate(0px, 0px);`;
-  }
-
-  onPan(callback) {
-    this._onPanCallback = callback;
-  }
-
-  onPanEnded(callback) {
-    this._onPanEnded = callback;
-  }
-}
+const { PannerZoomer } = require('./panzoom');
 
 
 fetch('/test.anml').then(response => {
@@ -99,7 +33,7 @@ function main(anmlFileText) {
   const parser = new ANMLParser();
   let model = parser.parse(anmlFileText);
   const renderer = new ANMLRenderer({ domParentId: 'renderer' });
-  const panner = new Panner({ domParentId: 'renderer' });
+  const panzoom = new PannerZoomer({ domParentId: 'renderer' });
   const editor = new ANMLEditor({ domParentId: 'editor' });
 
   const sw1 = createSwitch();
@@ -113,7 +47,6 @@ function main(anmlFileText) {
 
   let dragObj = null;
   let dragOffset;
-  let panPoint = null;
   renderer.onMouseDown((point) => {
     console.log(point);
 
@@ -153,13 +86,11 @@ function main(anmlFileText) {
 
     if (!hitShape) {
       console.log("hit canvas");
-      panPoint = point;
     }
   });
 
   renderer.onMouseUp((point) => {
     dragObj = null;
-    panPoint = null;
   });
 
   renderer.onMouseMove((point) => {
@@ -167,25 +98,33 @@ function main(anmlFileText) {
       dragObj.setX(point.x - dragOffset.x);
       dragObj.setY(point.y - dragOffset.y);
     }
-    //else if (panPoint !== null) {
-    //  const movementVec = point.subtract(panPoint);
-
-    //  const negated = movementVec.scaledBy(-1.0);
-    //  const prevCenter = renderer.getViewportCenter();
-    //  const newCenter = prevCenter.add(negated);
-    //  renderer.setViewportCenter({ x: newCenter.x, y: newCenter.y });
-    //}
   });
 
-  panner.onPan((x, y) => {
+  panzoom.onPan((x, y) => {
     console.log(x, y);
   });
 
-  panner.onPanEnded((x, y) => {
+  panzoom.onPanEnded((x, y) => {
     console.log(x, y);
     renderer.translateViewPortCenter(x, y);
-    panner.reset();
+    panzoom.resetPan();
     renderer.render(model);
+  });
+
+  const renderZoom = () => {
+    renderer.setScale(zoom);
+    panzoom.resetZoom();
+    renderer.render(model);
+  };
+
+  let lastTimeout;
+  let zoom;
+  panzoom.onZoom((zoomScale) => {
+    if (lastTimeout) {
+      clearTimeout(lastTimeout);
+    }
+    zoom = zoomScale;
+    lastTimeout = setTimeout(renderZoom, 500);
   });
 
   editor.onChange((text) => {
