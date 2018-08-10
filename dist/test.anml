@@ -397,5 +397,20 @@
 #  (y 3500)
 #)
 
-(Comparator1
+#(MultiLine
+#  (points
+#    (List
+#      (of
+#        (Point
+#        )
+#      )
+#    )
+#  )
+#)
+
+(AndGate
 )
+
+(Point
+)
+

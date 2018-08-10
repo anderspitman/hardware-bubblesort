@@ -6,6 +6,7 @@ const {
   DataValueModel,
   DataTernaryModel,
   IndexOperationModel,
+  ShapeModel,
   GroupModel,
   ListModel,
   ArcModel,
@@ -145,8 +146,10 @@ class ANMLRenderer {
     //  y: this._actualCenterY
     //});
 
-    for (let shape of model.getShapes()) {
-      this.renderShape(shape);  
+    for (let child of model.getObjects()) {
+      if (child instanceof ShapeModel) {
+        this.renderShape(child);  
+      }
 
       //this.renderShape(shape, viewPortOffset);  
       // if the user has started zooming since the render began, abort. This
@@ -435,7 +438,9 @@ class ANMLRenderer {
     }
 
     for (let child of s.getChildren()) {
-      this.renderShape(child, cumulativeOffset, data);
+      if (child instanceof ShapeModel) {
+        this.renderShape(child, cumulativeOffset, data);
+      }
     }
   }
 

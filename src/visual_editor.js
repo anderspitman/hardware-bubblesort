@@ -47,7 +47,7 @@ class VisualEditor {
       let hitShape = false;
 
       console.log("checking");
-      for (let shape of this._model.getShapes()) {
+      for (let shape of this._model.getObjects()) {
         const intersects = shape.intersects(point);
 
         if (intersects && shape.getName() !== 'box') {

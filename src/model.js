@@ -23,11 +23,11 @@ function processMagicValue(shape, value) {
 
 class ANMLModel {
   constructor() {
-    this._shapes = [];
+    this._objects = [];
   }
 
   add(shape) {
-    this._shapes.push(shape);
+    this._objects.push(shape);
   }
 
   getSymbolTable() {
@@ -44,15 +44,15 @@ class ANMLModel {
     this._symbolDefs = value;
   }
 
-  getShapes() {
-    return this._shapes;
+  getObjects() {
+    return this._objects;
   }
-  setShapes(value) {
-    this._shapes = value;
+  setObjects(value) {
+    this._objects = value;
   }
 
   update(data) {
-    for (let shape of this.getShapes()) {
+    for (let shape of this.getObjects()) {
 
       if (shape instanceof GroupModel) {
         for (let child of shape.getChildren()) {
@@ -174,22 +174,11 @@ class UserDefinedShapeDefinitionModel {
 }
 
 
-class ShapeModel {
-
+class ObjectModel {
   constructor() {
     this._data = this.defaultData();
     this._x = this.defaultX();
     this._y = this.defaultY();
-    this._strokeWidth = this.defaultStrokeWidth();
-    this._strokeColor = this.defaultStrokeColor();
-    this._fillColor = this.defaultFillColor();
-  }
-
-  getName() {
-    return this._name;
-  }
-  setName(value) {
-    this._name = value;
   }
 
   getDataKey() {
@@ -227,6 +216,28 @@ class ShapeModel {
   }
   setY(value) {
     this._y = value;
+  }
+}
+
+
+class PointModel extends ObjectModel {
+}
+
+
+class ShapeModel extends ObjectModel {
+
+  constructor() {
+    super();
+    this._strokeWidth = this.defaultStrokeWidth();
+    this._strokeColor = this.defaultStrokeColor();
+    this._fillColor = this.defaultFillColor();
+  }
+
+  getName() {
+    return this._name;
+  }
+  setName(value) {
+    this._name = value;
   }
 
   defaultStrokeWidth() {
@@ -675,6 +686,8 @@ module.exports = {
   IndexOperationModel,
   UserDefinedShapeDefinitionModel,
   UserDefinedShapeModel,
+  ObjectModel,
+  PointModel,
   ShapeModel,
   GroupModel,
   ListModel,

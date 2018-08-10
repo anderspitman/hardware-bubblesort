@@ -4,6 +4,7 @@ const {
   DataValueModel,
   DataTernaryModel,
   IndexOperationModel,
+  PointModel,
   GroupModel,
   ListModel,
   ArcModel,
@@ -38,7 +39,8 @@ class ANMLGenerator {
       str += this.generateUserDefinedShapeDef(def, '');
     }
 
-    for (let shape of model.getShapes()) {
+    console.log(model.getObjects());
+    for (let shape of model.getObjects()) {
       str += this.generateItem(shape, '');    
       str += '\n';
     }
@@ -71,6 +73,9 @@ class ANMLGenerator {
     }
     else if (item instanceof ListModel) {
       str += this.generateList(item, indent);
+    }
+    else if (item instanceof PointModel) {
+      str += this.generatePoint(item, indent);
     }
     else {
       str += this.generateUserDefinedShape(item, indent);
@@ -172,6 +177,12 @@ class ANMLGenerator {
       str += indent + '  )\n';
     }
 
+    str += indent + ')\n';
+    return str;
+  }
+
+  generatePoint(p, indent) {
+    let str = indent + '(Point\n';
     str += indent + ')\n';
     return str;
   }

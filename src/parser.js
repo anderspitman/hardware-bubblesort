@@ -8,7 +8,8 @@ const {
   IndexOperationModel,
   UserDefinedShapeDefinitionModel,
   UserDefinedShapeModel,
-  ShapeModel,
+  ObjectModel,
+  PointModel,
   GroupModel,
   ListModel,
   ArcModel,
@@ -35,7 +36,7 @@ class ANMLParser {
     const tokens = this._tokenize(commentsRemoved)
 
     const shapes = [];
-    model.setShapes(shapes);
+    model.setObjects(shapes);
 
     while (true) {
       const model = this._parseExpression(tokens)
@@ -44,7 +45,7 @@ class ANMLParser {
         break;
       }
 
-      if (model instanceof ShapeModel) {
+      if (model instanceof ObjectModel) {
         shapes.push(model);
       }
       else if (model instanceof UserDefinedShapeDefinitionModel) {
@@ -77,11 +78,11 @@ class ANMLParser {
     }
     else {
       tokens.unshift(type);
-      return this._parseShape(tokens);
+      return this._parseObject(tokens);
     }
   }
 
-  _parseShape(tokens) {
+  _parseObject(tokens) {
 
     const type = tokens.shift();
 
@@ -91,8 +92,9 @@ class ANMLParser {
       case 'Rectangle':
       case 'Triangle':
       case 'Line':
+      case 'Point':
         tokens.unshift(type);
-        return this._parsePrimitiveShape(tokens);
+        return this._parsePrimitiveObject(tokens);
       case 'Group':
         return this._parseGroup(tokens);
         break;
@@ -126,14 +128,14 @@ class ANMLParser {
     }
   }
 
-  _parseShapeList(tokens) {
+  _parseObjectList(tokens) {
 
     let tok = tokens.shift();
 
     const shapes = [];
 
     while (tok !== ')') {
-      const shape = this._parseShape(tokens);
+      const shape = this._parseObject(tokens);
       shapes.push(shape);
       tok = tokens.shift();
     }
@@ -143,7 +145,7 @@ class ANMLParser {
     return shapes;
   }
 
-  _parsePrimitiveShape(tokens) {
+  _parsePrimitiveObject(tokens) {
 
     const type = tokens.shift();
 
@@ -163,6 +165,9 @@ class ANMLParser {
         break;
       case 'Line':
         Con = LineModel;
+        break;
+      case 'Point':
+        Con = PointModel;
         break;
       default:
         tokens.unshift(type);
@@ -271,7 +276,7 @@ class ANMLParser {
   }
 
   _parseChildren(tokens) {
-    const children = this._parseShapeList(tokens);
+    const children = this._parseObjectList(tokens);
     return children;
   }
 
@@ -399,7 +404,7 @@ class ANMLParser {
     const symbolName = ident;
     def.setType(symbolName);
 
-    const shapes = this._parseShapeList(tokens);
+    const shapes = this._parseObjectList(tokens);
 
     def.setChildren(shapes);
 
