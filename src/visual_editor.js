@@ -1,5 +1,10 @@
 const { Vector2 } = require('./math');
-const { CircleModel, RectangleModel, GroupModel } = require('./model');
+const {
+  PointModel,
+  CircleModel,
+  RectangleModel,
+  GroupModel
+} = require('./model');
 
 
 class VisualEditor {
@@ -48,6 +53,10 @@ class VisualEditor {
 
       console.log("checking");
       for (let shape of this._model.getObjects()) {
+        if (shape instanceof PointModel) {
+          continue;
+        }
+
         const intersects = shape.intersects(point);
 
         if (intersects && shape.getName() !== 'box') {

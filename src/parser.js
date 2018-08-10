@@ -17,6 +17,7 @@ const {
   RectangleModel,
   TriangleModel,
   LineModel,
+  MultiLineModel,
 } = require('./model');
 //const _ = require('lodash');
 
@@ -92,6 +93,7 @@ class ANMLParser {
       case 'Rectangle':
       case 'Triangle':
       case 'Line':
+      case 'MultiLine':
       case 'Point':
         tokens.unshift(type);
         return this._parsePrimitiveObject(tokens);
@@ -165,6 +167,9 @@ class ANMLParser {
         break;
       case 'Line':
         Con = LineModel;
+        break;
+      case 'MultiLine':
+        Con = MultiLineModel;
         break;
       case 'Point':
         Con = PointModel;

@@ -13,6 +13,7 @@ const {
   RectangleModel,
   TriangleModel,
   LineModel,
+  MultiLineModel,
   UserDefinedShapeModel,
 } = require('./model');
 const { getDataByPath } = require('./utils');
@@ -248,6 +249,9 @@ class ANMLRenderer {
     else if (shape instanceof LineModel) {
       this.drawLine(shape, offsetVec);
     }
+    else if (shape instanceof MultiLineModel) {
+      this.drawMultiLine(shape, offsetVec);
+    }
     else if (shape instanceof GroupModel) {
       this.drawSymbol(shape, offsetVec);
     }
@@ -399,6 +403,31 @@ class ANMLRenderer {
     this.ctx.moveTo(this._x(x + x1), this._y(y + y1));
     this.ctx.lineTo(this._x(x + x2), this._y(y + y2));
     //this.ctx.fill();
+    this.ctx.stroke();
+  }
+
+  drawMultiLine(s, offsetVec, data) {
+
+    let x = processMagicValue(s, s.getX());
+    let y = processMagicValue(s, s.getY());
+
+    const thisPos = new Vector2({ x, y });
+    let cumulativeOffset = thisPos;
+    if (offsetVec !== undefined) {
+      cumulativeOffset = thisPos.add(offsetVec);
+    }
+
+    this.ctx.beginPath();
+
+    const points = s.getPoints();
+    const start = points[0];
+
+    this.ctx.moveTo(this._x(start.getX()), this._y(start.getY()));
+
+    for (let point of points.slice(1)) {
+      this.ctx.lineTo(this._x(point.getX()), this._y(point.getY()));
+    }
+
     this.ctx.stroke();
   }
 

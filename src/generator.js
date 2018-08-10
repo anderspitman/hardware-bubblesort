@@ -12,6 +12,7 @@ const {
   RectangleModel,
   TriangleModel,
   LineModel,
+  MultiLineModel,
 } = require('./model');
 
 
@@ -67,6 +68,9 @@ class ANMLGenerator {
     }
     else if (item instanceof LineModel) {
       str += this.generateLine(item, indent);
+    }
+    else if (item instanceof MultiLineModel) {
+      str += this.generateMultiLine(item, indent);
     }
     else if (item instanceof GroupModel) {
       str += this.generateGroup(item, indent);
@@ -145,6 +149,20 @@ class ANMLGenerator {
     return str;
   }
 
+  generateMultiLine(l, indent) {
+    let str = indent + '(MultiLine\n';
+    str += this.generateShapeAttrs(l, indent);
+
+    str += indent + '  (points\n'
+    for (let point of l.getPoints()) {
+      str += this.generateItem(point, indent + '    ');
+    }
+
+    str += indent + '  )\n'
+    str += indent + ')\n';
+    return str;
+  }
+
   generateGroup(g, indent) {
     let str = indent + '(Group\n';
 
@@ -183,6 +201,7 @@ class ANMLGenerator {
 
   generatePoint(p, indent) {
     let str = indent + '(Point\n';
+    str += this.generateObjectAttrs(p, indent);
     str += indent + ')\n';
     return str;
   }
@@ -215,7 +234,7 @@ class ANMLGenerator {
     return str;
   }
 
-  generateShapeAttrs(s, indent) {
+  generateObjectAttrs(s, indent) {
 
     let str = '';
     //str += indent + `  (x ${s.getX()}) (y ${s.getY()})\n`;
@@ -230,8 +249,21 @@ class ANMLGenerator {
       str += indent + `  (dataKey ${dataKey})\n`;
     }
 
+    const attrs = [ 'x', 'y' ];
+
+    str += this.generateAttrs(s, attrs, indent);
+    return str;
+  }
+
+  generateShapeAttrs(s, indent) {
+
+    let str = '';
+    //str += indent + `  (x ${s.getX()}) (y ${s.getY()})\n`;
+
+    str += this.generateObjectAttrs(s, indent);
+
     const attrs = [
-      'x', 'y', 'strokeWidth', 'strokeColor', 'fillColor',
+      'strokeWidth', 'strokeColor', 'fillColor',
     ];
 
     str += this.generateAttrs(s, attrs, indent);

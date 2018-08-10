@@ -397,20 +397,26 @@
 #  (y 3500)
 #)
 
+(MultiLine
+  (strokeWidth 5)
+  (strokeColor red)
+  (points
+    (Point
+      (x 0) (y 0)
+    )
+    (Point
+      (x 100) (y 100)
+    )
+    (Point
+      (x 200) (y 20)
+    )
+  )
+)
+
 #(MultiLine
 #  (points
-#    (List
-#      (of
-#        (Point
-#        )
-#      )
-#    )
+#    ((x 0) (y 0))
+#    ((x 0) (y 0))
+#    ((x 0) (y 0))
 #  )
 #)
-
-(AndGate
-)
-
-(Point
-)
-

@@ -181,6 +181,13 @@ class ObjectModel {
     this._y = this.defaultY();
   }
 
+  getName() {
+    return this._name;
+  }
+  setName(value) {
+    this._name = value;
+  }
+
   getDataKey() {
     return this._dataKey;
   }
@@ -231,13 +238,6 @@ class ShapeModel extends ObjectModel {
     this._strokeWidth = this.defaultStrokeWidth();
     this._strokeColor = this.defaultStrokeColor();
     this._fillColor = this.defaultFillColor();
-  }
-
-  getName() {
-    return this._name;
-  }
-  setName(value) {
-    this._name = value;
   }
 
   defaultStrokeWidth() {
@@ -677,6 +677,29 @@ class LineModel extends ShapeModel {
 }
 
 
+class MultiLineModel extends ShapeModel {
+  constructor() {
+    super();
+
+    this.setPoints(this.defaultPoints());
+  }
+
+  defaultPoints() {
+    return [];
+  }
+  getPoints() {
+    return this._points;
+  }
+  setPoints(value) {
+    this._points = value;
+  }
+
+  intersects(point) {
+    return false;
+  }
+}
+
+
 module.exports = {
   processMagicValue,
   ANMLModel,
@@ -696,4 +719,5 @@ module.exports = {
   RectangleModel,
   TriangleModel,
   LineModel,
+  MultiLineModel,
 };
