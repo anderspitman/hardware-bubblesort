@@ -90,6 +90,14 @@ class ANMLRenderer {
       }
     });
 
+    this.canvas.addEventListener('contextmenu', (e) => {
+      if (this.onContextMenuCallback !== undefined) {
+        this.onContextMenuCallback();
+      }
+
+      e.preventDefault();
+    });
+
     this.setViewportCenter({ x: 0, y: 0 });
   }
 
@@ -279,6 +287,10 @@ class ANMLRenderer {
     this.onMouseMoveCallback = callback;
   }
 
+  onContextMenu(callback) {
+    this.onContextMenuCallback = callback;
+  }
+
   drawGrid() {
     const savedLineWidth = this.ctx.lineWidth;
     this.ctx.lineWidth = 1 * this._scale;
@@ -422,7 +434,9 @@ class ANMLRenderer {
     const points = s.getPoints();
     const start = points[0];
 
-    this.ctx.moveTo(this._x(start.getX()), this._y(start.getY()));
+    if (start !== undefined) {
+      this.ctx.moveTo(this._x(start.getX()), this._y(start.getY()));
+    }
 
     for (let point of points.slice(1)) {
       this.ctx.lineTo(this._x(point.getX()), this._y(point.getY()));

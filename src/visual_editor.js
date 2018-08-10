@@ -3,7 +3,8 @@ const {
   PointModel,
   CircleModel,
   RectangleModel,
-  GroupModel
+  GroupModel,
+  MultiLineModel,
 } = require('./model');
 
 
@@ -32,10 +33,17 @@ class VisualEditor {
     });
     this.el.appendChild(rectButton);
 
+    const wireButton = document.createElement('button');
+    wireButton.innerHTML = "Wire";
+    wireButton.addEventListener('click', (e) => {
+      this.setMode('create-wire');
+    });
+    this.el.appendChild(wireButton);
+
     this.setMode('move');
 
-
-
+    this.handleClick = this.handleNormalClick.bind(this);
+    this.handleMouseMove = this.handleNormalMouseMove.bind(this);
 
 
     let dragObj = null;
@@ -101,6 +109,8 @@ class VisualEditor {
 
     renderer.onMouseMove((point) => {
 
+      this.handleMouseMove(point);
+
       if (this.getMode() !== 'move') {
         return;
       }
@@ -113,6 +123,10 @@ class VisualEditor {
         }
       }
     });
+
+    renderer.onContextMenu(() => {
+      this.setMode('move');
+    });
   }
 
   getMode() {
@@ -122,7 +136,7 @@ class VisualEditor {
     this._mode = value;
   }
 
-  handleClick(point, model) {
+  handleNormalClick(point, model) {
     switch(this.getMode()) {
       case 'create-circle':
         const c = new CircleModel();
@@ -136,11 +150,52 @@ class VisualEditor {
         r.setY(point.y);
         model.add(r);
         break;
+      case 'create-wire':
+        const w = new MultiLineModel();
+        w.setX(point.x);
+        w.setY(point.y);
+        model.add(w);
+        const startPoint = new PointModel();
+        startPoint.setX(point.x);
+        startPoint.setY(point.y);
+        w.appendPoint(startPoint);
+
+        const nextPoint = new PointModel();
+        nextPoint.setX(point.x);
+        nextPoint.setY(point.y);
+        w.appendPoint(nextPoint);
+        this.wire = w;
+        this.handleClick = this.handleWireClick.bind(this);
+        this.handleMouseMove = this.handleWireMouseMove.bind(this);
+        console.log(w);
+        break;
       case 'move':
         break;
       default:
         throw "Invalid mode";
         break;
+    }
+  }
+
+  handleNormalMouseMove(point) {
+  }
+
+  handleWireClick(point, model) {
+    const newPoint = new PointModel();
+    newPoint.setX(point.x);
+    newPoint.setY(point.y);
+    this.wire.appendPoint(newPoint);
+  }
+
+  handleWireMouseMove(point) {
+    console.log(point);
+    const points = this.wire.getPoints();
+    const lastPoint = points[points.length - 1];
+    lastPoint.setX(point.x);
+    lastPoint.setY(point.y);
+
+    if (this._onChangeCallback) {
+      this._onChangeCallback();
     }
   }
 

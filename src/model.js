@@ -694,6 +694,10 @@ class MultiLineModel extends ShapeModel {
     this._points = value;
   }
 
+  appendPoint(point) {
+    this._points.push(point);
+  }
+
   intersects(point) {
     return false;
   }
