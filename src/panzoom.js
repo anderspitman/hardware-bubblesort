@@ -63,6 +63,13 @@ class PannerZoomer {
           }
         }
       }
+      else {
+        // this was added because due to the order of event handlers,
+        // sometimes the pan point would get set right before the panzoom was
+        // disabled (ie when placing a shape), which caused it to start panning
+        // once the button was released.
+        panStartPoint = null;
+      }
     });
 
     let lastTimeout;

@@ -9,7 +9,7 @@ const {
 
 
 class VisualEditor {
-  constructor({ domElementId, renderer, panzoom }) {
+  constructor({ domElementId, renderer, panzoom, inputHandler }) {
     this.el = document.getElementById(domElementId);
 
     const clearButton = document.createElement('button');
@@ -48,8 +48,9 @@ class VisualEditor {
 
     let dragObj = null;
     let dragOffset;
-    renderer.onMouseDown((point) => {
-      console.log(point);
+
+    inputHandler.onMouseDown((clickPoint) => {
+      const point = renderer.toWorldCoordinates(clickPoint);
 
       this.handleClick(point, this._model);
 
@@ -102,12 +103,15 @@ class VisualEditor {
       }
     });
 
-    renderer.onMouseUp((point) => {
+    inputHandler.onMouseUp((clickPoint) => {
+      //const point = renderer.toWorldCoordinates(clickPoint);
       dragObj = null;
       panzoom.enable();
     });
 
-    renderer.onMouseMove((point) => {
+    inputHandler.onMouseMove((clickPoint) => {
+
+      const point = renderer.toWorldCoordinates(clickPoint);
 
       this.handleMouseMove(point);
 
@@ -122,10 +126,6 @@ class VisualEditor {
           this._onChangeCallback();
         }
       }
-    });
-
-    renderer.onContextMenu(() => {
-      this.setMode('move');
     });
   }
 

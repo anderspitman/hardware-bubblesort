@@ -33,72 +33,17 @@ class ANMLRenderer {
 
     this._scale = 1.0;
 
-    this.canvas.addEventListener('mousedown', (e) => {
-
-      if (this.onMouseDownCallback !== undefined) {
-        const clickPoint = new Vector2({
-          x: e.clientX,
-          y: e.clientY,
-        });
-
-        const worldOrigin = this.getActualCenter();
-        const worldPoint = clickPoint.subtract(worldOrigin);
-        worldPoint.y = -worldPoint.y;
-
-        worldPoint.x /= this._scale;
-        worldPoint.y /= this._scale;
-
-        this.onMouseDownCallback(worldPoint);
-      }
-    });
-
-    this.canvas.addEventListener('mouseup', (e) => {
-
-      if (this.onMouseUpCallback !== undefined) {
-
-        const clickPoint = new Vector2({
-          x: e.clientX,
-          y: e.clientY,
-        });
-
-        const worldOrigin = this.getActualCenter();
-        const worldPoint = clickPoint.subtract(worldOrigin);
-
-        worldPoint.y = -worldPoint.y;
-        worldPoint.x /= this._scale;
-        worldPoint.y /= this._scale;
-
-        this.onMouseUpCallback(worldPoint);
-      }
-    });
-
-    this.canvas.addEventListener('mousemove', (e) => {
-
-      if (this.onMouseMoveCallback !== undefined) {
-
-        const clickPoint = new Vector2({
-          x: e.clientX,
-          y: e.clientY,
-        });
-
-        const worldOrigin = this.getActualCenter();
-        const worldPoint = clickPoint.subtract(worldOrigin);
-        worldPoint.y = -worldPoint.y;
-        worldPoint.x /= this._scale;
-        worldPoint.y /= this._scale;
-        this.onMouseMoveCallback(worldPoint);
-      }
-    });
-
-    this.canvas.addEventListener('contextmenu', (e) => {
-      if (this.onContextMenuCallback !== undefined) {
-        this.onContextMenuCallback();
-      }
-
-      e.preventDefault();
-    });
-
+    
     this.setViewportCenter({ x: 0, y: 0 });
+  }
+
+  toWorldCoordinates(clickPoint) {
+    const worldOrigin = this.getActualCenter();
+    const worldPoint = clickPoint.subtract(worldOrigin);
+    worldPoint.y = -worldPoint.y;
+    worldPoint.x /= this._scale;
+    worldPoint.y /= this._scale;
+    return worldPoint;
   }
 
   setScale(scale) {
@@ -273,22 +218,6 @@ class ANMLRenderer {
     this.ctx.strokeStyle = saveStroke;
     this.ctx.fillStyle = saveFill;
     this.ctx.lineWidth = savedLineWidth;
-  }
-
-  onMouseDown(callback) {
-    this.onMouseDownCallback = callback;
-  }
-
-  onMouseUp(callback) {
-    this.onMouseUpCallback = callback;
-  }
-
-  onMouseMove(callback) {
-    this.onMouseMoveCallback = callback;
-  }
-
-  onContextMenu(callback) {
-    this.onContextMenuCallback = callback;
   }
 
   drawGrid() {

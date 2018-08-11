@@ -18,6 +18,7 @@ const {
   BubbleSort,
 } = require('../lib/wild_logic/src/index');
 const { PannerZoomer } = require('./panzoom');
+const { InputHandler } = require('./input_handler');
 
 
 fetch('/test.anml').then(response => {
@@ -32,11 +33,13 @@ function main(anmlFileText) {
   let model = parser.parse(anmlFileText);
   const renderer = new ANMLRenderer({ domParentId: 'renderer' });
   const panzoom = new PannerZoomer({ domElementId: 'renderer' });
+  const inputHandler = new InputHandler({ domElementId: 'renderer' });
   const codeEditor = new CodeEditor({ domParentId: 'code_editor' });
   const visualEditor = new VisualEditor({
     domElementId: 'visual_editor',
     renderer,
     panzoom,
+    inputHandler,
   });
 
   //renderer.setScale(0.05);
@@ -46,6 +49,7 @@ function main(anmlFileText) {
   });
   
   panzoom.onPan((x, y) => {
+    console.log("peter");
   });
 
   panzoom.onPanEnded((x, y) => {
