@@ -44,12 +44,7 @@ function main(anmlFileText) {
 
   //renderer.setScale(0.05);
 
-  visualEditor.onChange(() => {
-    update();
-  });
-  
   panzoom.onPan((x, y) => {
-    console.log("peter");
   });
 
   panzoom.onPanEnded((x, y) => {
@@ -72,6 +67,10 @@ function main(anmlFileText) {
     }
     zoom = zoomScale;
     lastTimeout = setTimeout(renderZoom, 500);
+  });
+
+  model.addUpdateListener(() => {
+    update();
   });
 
   codeEditor.onChange((text) => {

@@ -24,10 +24,32 @@ function processMagicValue(shape, value) {
 class ANMLModel {
   constructor() {
     this._objects = [];
+    this._listeners = [];
+  }
+
+  addUpdateListener(callback) {
+    this._listeners.push(callback);
+  }
+
+  notifyUpdate() {
+    for (let cb of this._listeners) {
+      cb(this);
+    }
   }
 
   add(shape) {
     this._objects.push(shape);
+    this.notifyUpdate();
+  }
+
+  remove(obj) {
+    for (let i = 0; i < this._objects.length; i++) {
+      if (this._objects[i] === obj) {
+        this._objects.splice(i, 1);
+        this.notifyUpdate();
+        break;
+      }
+    }
   }
 
   getSymbolTable() {

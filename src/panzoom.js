@@ -32,7 +32,8 @@ class PannerZoomer {
       if (this._enabled) {
         panStartPoint = null;
 
-        if (this._pan) {
+        if (this._panned) {
+          this._panned = false;
 
           if (this._onPanEnded) {
             this._onPanEnded(-this._pan.x, this._pan.y);
@@ -53,6 +54,7 @@ class PannerZoomer {
             y: e.clientY,
           });
 
+          this._panned = true;
           this._pan = movePoint.subtract(panStartPoint);
           this._pan.x += this._centerX;
           this._pan.y += this._centerY;

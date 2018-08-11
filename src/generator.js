@@ -40,7 +40,6 @@ class ANMLGenerator {
       str += this.generateUserDefinedShapeDef(def, '');
     }
 
-    console.log(model.getObjects());
     for (let shape of model.getObjects()) {
       str += this.generateItem(shape, '');    
       str += '\n';

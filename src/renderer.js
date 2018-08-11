@@ -48,7 +48,6 @@ class ANMLRenderer {
 
   setScale(scale) {
     this._scale *= scale;
-    console.log(this._scale);
   }
 
   getViewportCenter() {
