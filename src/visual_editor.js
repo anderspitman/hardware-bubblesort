@@ -143,7 +143,7 @@ class CreateRectangleHandler extends BasicShapeHandler {
 }
 
 
-class WireHander extends Handler {
+class MultiLineHander extends Handler {
 
   start() {
     this.w = null;
@@ -192,6 +192,77 @@ class WireHander extends Handler {
 }
 
 
+class WireHander extends Handler {
+
+  start() {
+    this.w = null;
+  }
+
+  mouseDown(point, model) {
+    if (this.w === null) {
+      this.w = new MultiLineModel();
+      this.w.setX(point.x);
+      this.w.setY(point.y);
+      const startPoint = new PointModel();
+      this.w.appendPoint(startPoint);
+      model.add(this.w);
+    }
+
+    const x = this.w.getX();
+    const y = this.w.getY();
+    const nextPoint = new PointModel();
+    nextPoint.setX(point.x - x);
+    nextPoint.setY(point.y - y);
+    this.w.appendPoint(nextPoint);
+    model.notifyUpdate();
+  }
+
+  mouseMove(point, model) {
+
+    if (this.w === null) {
+      return;
+    }
+
+    const points = this.w.getPoints();
+    const x = this.w.getX();
+    const y = this.w.getY();
+
+    const offsetX = point.x - x;
+    const offsetY = point.y - y;
+
+    const lastPoint = points[points.length - 2];
+    const newPoint = points[points.length - 1];
+
+    const lastX = lastPoint.getX();
+    const lastY = lastPoint.getY();
+
+    const xDiff = Math.abs(offsetX - lastX);
+    const yDiff = Math.abs(offsetY - lastY);
+
+    if (xDiff > yDiff) {
+      // make a horizontal line
+      newPoint.setX(offsetX);
+      newPoint.setY(lastY);
+    }
+    else {
+      // make a vertical line
+      newPoint.setX(lastX);
+      newPoint.setY(offsetY);
+    }
+
+    model.notifyUpdate();
+  }
+
+  stop(model) {
+    const points = this.w.getPoints();
+    // remove the last point
+    points.splice(points.length - 1, 1);
+    model.notifyUpdate();
+    this.w = null;
+  }
+}
+
+
 class VisualEditor {
   constructor({ domElementId, renderer, panzoom, inputHandler }) {
     this.el = document.getElementById(domElementId);
@@ -220,7 +291,7 @@ class VisualEditor {
     const wireButton = document.createElement('button');
     wireButton.innerHTML = "Wire";
     wireButton.addEventListener('click', (e) => {
-      changeHandler(createWireHandler);
+      changeHandler(wireHandler);
     });
     this.el.appendChild(wireButton);
 
@@ -230,7 +301,7 @@ class VisualEditor {
       handler = newHandler;
     };
 
-    const createWireHandler = new WireHander();
+    const wireHandler = new WireHander();
     const circleHandler = new CreateCircleHandler();
     const rectangleHandler = new CreateRectangleHandler();
 

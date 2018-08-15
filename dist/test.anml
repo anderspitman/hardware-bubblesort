@@ -397,27 +397,22 @@
 #  (y 3500)
 #)
 
-(MultiLine
-  (x 20)
-  (strokeWidth 5)
-  (strokeColor red)
-  (points
-    (Point
-      (x 0) (y 0)
-    )
-    (Point
-      (x 100) (y 100)
-    )
-    (Point
-      (x 200) (y 20)
-    )
-  )
-)
-
 #(MultiLine
+#  (x 20)
+#  (strokeWidth 5)
+#  (strokeColor red)
 #  (points
-#    ((x 0) (y 0))
-#    ((x 0) (y 0))
-#    ((x 0) (y 0))
+#    (Point
+#      (x 0) (y 0)
+#    )
+#    (Point
+#      (x 100) (y 100)
+#    )
+#    (Point
+#      (x 200) (y 20)
+#    )
 #  )
 #)
+
+(XnorGate
+)
