@@ -143,7 +143,7 @@ class CreateRectangleHandler extends BasicShapeHandler {
 }
 
 
-class CreateWireHander extends Handler {
+class WireHander extends Handler {
 
   start() {
     this.w = null;
@@ -155,15 +155,15 @@ class CreateWireHander extends Handler {
       this.w.setX(point.x);
       this.w.setY(point.y);
       const startPoint = new PointModel();
-      startPoint.setX(point.x);
-      startPoint.setY(point.y);
       this.w.appendPoint(startPoint);
       model.add(this.w);
     }
 
+    const x = this.w.getX();
+    const y = this.w.getY();
     const nextPoint = new PointModel();
-    nextPoint.setX(point.x);
-    nextPoint.setY(point.y);
+    nextPoint.setX(point.x - x);
+    nextPoint.setY(point.y - y);
     this.w.appendPoint(nextPoint);
     model.notifyUpdate();
   }
@@ -172,9 +172,11 @@ class CreateWireHander extends Handler {
 
     if (this.w !== null) {
       const points = this.w.getPoints();
+      const x = this.w.getX();
+      const y = this.w.getY();
       const lastPoint = points[points.length - 1];
-      lastPoint.setX(point.x);
-      lastPoint.setY(point.y);
+      lastPoint.setX(point.x - x);
+      lastPoint.setY(point.y - y);
 
       model.notifyUpdate();
     }
@@ -228,7 +230,7 @@ class VisualEditor {
       handler = newHandler;
     };
 
-    const createWireHandler = new CreateWireHander();
+    const createWireHandler = new WireHander();
     const circleHandler = new CreateCircleHandler();
     const rectangleHandler = new CreateRectangleHandler();
 
