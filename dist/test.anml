@@ -398,6 +398,7 @@
 #)
 
 (MultiLine
+  (x 20)
   (strokeWidth 5)
   (strokeColor red)
   (points
