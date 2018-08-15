@@ -372,6 +372,11 @@ class ANMLRenderer {
       const offsetX = cumulativeOffset.x + point.getX();
       const offsetY = cumulativeOffset.y + point.getY();
       this.ctx.lineTo(this._x(offsetX), this._y(offsetY));
+
+      if (point.getShow()) {
+        this.ctx.arc(this._x(offsetX), this._y(offsetY), 10, 0, Math.PI*2); 
+        this.ctx.moveTo(this._x(offsetX), this._y(offsetY));
+      }
     }
 
     this.ctx.stroke();

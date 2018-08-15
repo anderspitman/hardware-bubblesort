@@ -29,12 +29,16 @@ class MoveHandler extends Handler {
     this.panzoom = panzoom;
     this.dragObj = null;
     this.dragOffset = null;
+    this.dragLineHoriz = null;
+    this.dragLineVert = null;
   }
   stop() {
     this.model = null;
     this.panzoom = null;
     this.dragObj = null;
     this.dragOffset = null;
+    this.dragLineHoriz = null;
+    this.dragLineVert = null;
   }
 
   mouseDown(point) {
@@ -42,38 +46,75 @@ class MoveHandler extends Handler {
     let hitShape = false;
 
     for (let shape of this.model.getObjects()) {
-      if (shape instanceof PointModel) {
-        continue;
-      }
+      if (shape.constructor === MultiLineModel) {
+        if (shape.intersectsLastPoint(point)) {
+          const points = shape.getPoints();
+          const lastPoint = points[points.length - 1];
+          const secondLastPoint = points[points.length - 2];
+          const thirdLastPoint = points[points.length - 3];
 
-      const intersects = shape.intersects(point);
+          const objPos = new Vector2({ x: lastPoint.getX(), y: lastPoint.getY() });
 
-      if (intersects && shape.getName() !== 'box') {
-        hitShape = true;
+          const lastIsHorizontal = lastPoint.getY() === secondLastPoint.getY();
+          const lastIsVertical = lastPoint.getX() === secondLastPoint.getX();
+          const secondLastIsHorizontal = secondLastPoint.getY() === thirdLastPoint.getY();
+          const secondLastIsVertical = secondLastPoint.getX() === thirdLastPoint.getX();
 
-        //checkSwitches(shape);
-        
-        const objPos = new Vector2({ x: shape.getX(), y: shape.getY() });
-        this.dragOffset = point.subtract(objPos);
-        this.dragObj = shape;
-        this.panzoom.disable();
+          if (lastIsHorizontal) {
+            this.dragLineHoriz = [lastPoint];
+            this.dragOffset = point.subtract(objPos);
 
-        if (shape instanceof GroupModel) {
-
-          const groupPos = objPos;
-          const relativePoint = point.subtract(groupPos);
-
-          for (let child of shape.getChildren()) {
-            const childPos = new Vector2({ x: child.getX(), y: child.getY() });
-            if (child.intersects(relativePoint)) {
-              hitShape = true;
-              checkSwitches(child);
-              break;
+            if (secondLastIsVertical) {
+              this.dragLineVert = [lastPoint, secondLastPoint];
             }
+
+            this.panzoom.disable();
+            break;
+          }
+          else if (lastIsVertical) {
+            this.dragLineVert = [lastPoint];
+            this.dragOffset = point.subtract(objPos);
+
+            if (secondLastIsHorizontal) {
+              this.dragLineHoriz = [lastPoint, secondLastPoint];
+            }
+
+            this.panzoom.disable();
+            break;
           }
         }
+      }
+      else {
 
-        break;
+        const intersects = shape.intersects(point);
+
+        if (intersects && shape.getName() !== 'box') {
+          hitShape = true;
+
+          //checkSwitches(shape);
+          
+          const objPos = new Vector2({ x: shape.getX(), y: shape.getY() });
+          this.dragOffset = point.subtract(objPos);
+          this.dragObj = shape;
+          this.panzoom.disable();
+
+          if (shape instanceof GroupModel) {
+
+            const groupPos = objPos;
+            const relativePoint = point.subtract(groupPos);
+
+            for (let child of shape.getChildren()) {
+              const childPos = new Vector2({ x: child.getX(), y: child.getY() });
+              if (child.intersects(relativePoint)) {
+                hitShape = true;
+                checkSwitches(child);
+                break;
+              }
+            }
+          }
+
+          break;
+        }
       }
     }
 
@@ -85,13 +126,49 @@ class MoveHandler extends Handler {
 
   mouseUp(point) {
     this.dragObj = null;
+    this.dragLineHoriz = null;
+    this.dragLineVert = null;
     this.panzoom.enable();
   }
 
-  mouseMove(point) {
+  mouseMove(point, model) {
+
+    let changed = false;
+
     if (this.dragObj !== null && this.dragOffset !== null) {
       this.dragObj.setX(point.x - this.dragOffset.x);
       this.dragObj.setY(point.y - this.dragOffset.y);
+      changed = true;
+    }
+
+    if (this.dragLineHoriz !== null && this.dragOffset !== null) {
+      for (let vertex of this.dragLineHoriz) {
+        vertex.setX(point.x - this.dragOffset.x);
+      }
+      changed = true;
+    }
+
+    if (this.dragLineVert !== null && this.dragOffset !== null) {
+      for (let vertex of this.dragLineVert) {
+        vertex.setY(point.y - this.dragOffset.y);
+      }
+      changed = true;
+    }
+
+    for (let obj of model.getObjects()) {
+      if (obj.constructor === MultiLineModel) {
+        const lastPoint = obj.getLastPoint();
+        if (obj.intersectsLastPoint(point)) {
+          lastPoint.setShow(true);
+        }
+        else {
+          lastPoint.setShow(false);
+        }
+        changed = true;
+      }
+    }
+
+    if (changed) {
       this.model.notifyUpdate();
     }
   }
@@ -201,9 +278,9 @@ class WireHander extends Handler {
   mouseDown(point, model) {
     if (this.w === null) {
       this.w = new MultiLineModel();
-      this.w.setX(point.x);
-      this.w.setY(point.y);
       const startPoint = new PointModel();
+      startPoint.setX(point.x);
+      startPoint.setY(point.y);
       this.w.appendPoint(startPoint);
       model.add(this.w);
     }

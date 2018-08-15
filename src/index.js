@@ -182,7 +182,7 @@ function main(anmlFileText) {
     //console.log(`Update time: ${updateTime - startTime}`);
     renderer.render(model);
     const renderTime = timeNowSeconds();
-    console.log(`Render time: ${renderTime - updateTime}`);
+    //console.log(`Render time: ${renderTime - updateTime}`);
     codeEditor.update(model);
     const editTime = timeNowSeconds();
     visualEditor.update(model);

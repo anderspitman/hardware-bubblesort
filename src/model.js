@@ -250,6 +250,29 @@ class ObjectModel {
 
 
 class PointModel extends ObjectModel {
+  constructor() {
+    super();
+    this.setShow(this.defaultShow());
+  }
+
+  defaultShow() {
+    return false;
+  }
+  getShow() {
+    return this._show;
+  }
+  setShow(value) {
+    this._show = value;
+  }
+
+  intersects(point) {
+    const x = processMagicValue(this, this.getX());
+    const y = processMagicValue(this, this.getY());
+    const radius = 10;
+    const thisCenter = new Vector2({ x, y });
+    const distance = point.subtract(thisCenter).getLength();
+    return distance <= radius;
+  }
 }
 
 
@@ -716,12 +739,27 @@ class MultiLineModel extends ShapeModel {
     this._points = value;
   }
 
+  getLastPoint() {
+    const points = this.getPoints();
+    const lastPoint = points[points.length - 1];
+    return lastPoint;
+  }
+
   appendPoint(point) {
     this._points.push(point);
   }
 
   intersects(point) {
     return false;
+  }
+
+  intersectsLastPoint(point) {
+    const offsetX = point.x - this.getX();
+    const offsetY = point.y - this.getY();
+
+    const lastPoint = this.getLastPoint();
+
+    return lastPoint.intersects(new Vector2({ x: offsetX, y: offsetY }));
   }
 }
 
