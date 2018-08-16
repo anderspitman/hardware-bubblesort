@@ -286,7 +286,7 @@ class ShapeModel extends ObjectModel {
   }
 
   defaultStrokeWidth() {
-    return 1;
+    return 3;
   }
   getStrokeWidth() {
     return this._strokeWidth;
@@ -761,6 +761,67 @@ class MultiLineModel extends ShapeModel {
 
     return lastPoint.intersects(new Vector2({ x: offsetX, y: offsetY }));
   }
+
+  intersectsLine(point) {
+
+    const points = this.getPoints();
+
+    if (points.length < 2) {
+      return null;
+    }
+
+    for (let i = 0; i < points.length - 1; i++) {
+      const line = {
+        start: points[i],
+        end: points[i+1],
+      };
+
+      if (this._isHorizontal(line)) {
+        line.type = 'horizontal';
+        const rw = Math.abs(line.end.getX() - line.start.getX());
+        const rh = this.getStrokeWidth();
+        const rx = (line.start.getX() + line.end.getX()) / 2;
+        const ry = line.start.getY();
+        if (pointIntersectsRectangle(point.x, point.y, rx, ry, rw, rh)) {
+          return line;
+        }
+      }
+      else if (this._isVertical(line)) {
+        line.type = 'vertical';
+        const rw = this.getStrokeWidth();
+        const rh = Math.abs(line.end.getY() - line.start.getY());
+        const rx = line.start.getX();
+        const ry = (line.start.getY() + line.end.getY()) / 2;
+        if (pointIntersectsRectangle(point.x, point.y, rx, ry, rw, rh)) {
+          return line;
+        }
+      }
+    }
+
+    return null;
+  }
+
+  _isHorizontal(line) {
+    return line.start.getY() === line.end.getY();
+  }
+
+  _isVertical(line) {
+    return line.start.getX() === line.end.getX();
+  }
+}
+
+function pointIntersectsRectangle(px, py, rx, ry, width, height) {
+  const x = rx;
+  const y = ry;
+
+  const halfWidth = width / 2;
+  const halfHeight = height / 2;
+
+  const withinX = px >= x - halfWidth &&
+    px <= (x + halfWidth);
+  const withinY = py >= y - halfHeight &&
+    py <= (y + halfHeight);
+  return withinX && withinY;
 }
 
 

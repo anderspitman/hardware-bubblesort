@@ -80,6 +80,11 @@ function main(anmlFileText) {
       const parseTime = timeNowSeconds() - start;
       console.log(`Parse time: ${parseTime}`);
       model = newModel;
+
+      model.addUpdateListener(() => {
+        update();
+      });
+
       update();
     }
     catch (e) {

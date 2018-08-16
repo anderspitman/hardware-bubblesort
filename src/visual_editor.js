@@ -25,29 +25,45 @@ class Handler {
 class MoveHandler extends Handler {
 
   start(model, panzoom) {
-    this.model = model;
     this.panzoom = panzoom;
     this.dragObj = null;
     this.dragOffset = null;
     this.dragLineHoriz = null;
     this.dragLineVert = null;
+    this.moveLineHoriz = null;
+    this.moveLineVert = null;
   }
   stop() {
-    this.model = null;
     this.panzoom = null;
     this.dragObj = null;
     this.dragOffset = null;
     this.dragLineHoriz = null;
     this.dragLineVert = null;
+    this.moveLineVert = null;
   }
 
-  mouseDown(point) {
+  mouseDown(point, model) {
 
     let hitShape = false;
 
-    for (let shape of this.model.getObjects()) {
+    for (let shape of model.getObjects()) {
       if (shape.constructor === MultiLineModel) {
+
+        const line = shape.intersectsLine(point);
+        if (line) {
+          if (line.type === 'horizontal') {
+            this.moveLineHoriz = line;
+          }
+          else if (line.type === 'vertical') {
+            this.moveLineVert = line;
+          }
+          this.dragOffset = new Vector2({ x: 0, y: 0 });
+          this.panzoom.disable();
+          hitShape = true;
+        }
+
         if (shape.intersectsLastPoint(point)) {
+          hitShape = true;
           const points = shape.getPoints();
           const lastPoint = points[points.length - 1];
           const secondLastPoint = points[points.length - 2];
@@ -128,6 +144,8 @@ class MoveHandler extends Handler {
     this.dragObj = null;
     this.dragLineHoriz = null;
     this.dragLineVert = null;
+    this.moveLineHoriz = null;
+    this.moveLineVert = null;
     this.panzoom.enable();
   }
 
@@ -145,6 +163,18 @@ class MoveHandler extends Handler {
       for (let vertex of this.dragLineHoriz) {
         vertex.setX(point.x - this.dragOffset.x);
       }
+      changed = true;
+    }
+
+    if (this.moveLineHoriz !== null && this.dragOffset !== null) {
+      this.moveLineHoriz.start.setY(point.y - this.dragOffset.y);
+      this.moveLineHoriz.end.setY(point.y - this.dragOffset.y);
+      changed = true;
+    }
+
+    if (this.moveLineVert !== null && this.dragOffset !== null) {
+      this.moveLineVert.start.setX(point.x - this.dragOffset.x);
+      this.moveLineVert.end.setX(point.x - this.dragOffset.x);
       changed = true;
     }
 
@@ -169,7 +199,7 @@ class MoveHandler extends Handler {
     }
 
     if (changed) {
-      this.model.notifyUpdate();
+      model.notifyUpdate();
     }
   }
 }
