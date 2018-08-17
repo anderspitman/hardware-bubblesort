@@ -48,6 +48,12 @@ class ANMLRenderer {
 
   setScale(scale) {
     this._scale *= scale;
+
+    const center = this.getViewportCenter();
+    this.setViewportCenter({
+      x: center.x / scale,
+      y: center.y / scale,
+    });
   }
 
   getViewportCenter() {
