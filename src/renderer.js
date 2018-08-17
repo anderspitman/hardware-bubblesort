@@ -365,17 +365,21 @@ class ANMLRenderer {
     if (start !== undefined) {
       const offsetX = cumulativeOffset.x + start.getX();
       const offsetY = cumulativeOffset.y + start.getY();
-      this.ctx.moveTo(this._x(offsetX), this._y(offsetY));
+      const x = offsetX * this._scale;
+      const y = offsetY * this._scale;
+      this.ctx.moveTo(this._x(x), this._y(y));
     }
 
     for (let point of points.slice(1)) {
       const offsetX = cumulativeOffset.x + point.getX();
       const offsetY = cumulativeOffset.y + point.getY();
-      this.ctx.lineTo(this._x(offsetX), this._y(offsetY));
+      const x = offsetX * this._scale;
+      const y = offsetY * this._scale;
+      this.ctx.lineTo(this._x(x), this._y(y));
 
       if (point.getShow()) {
-        this.ctx.arc(this._x(offsetX), this._y(offsetY), 10, 0, Math.PI*2); 
-        this.ctx.moveTo(this._x(offsetX), this._y(offsetY));
+        this.ctx.arc(this._x(x), this._y(y), 10, 0, Math.PI*2); 
+        this.ctx.moveTo(this._x(x), this._y(y));
       }
     }
 
