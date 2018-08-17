@@ -115,6 +115,12 @@ function main(anmlFileText) {
   const bsort = new BubbleSort(numValues);
   data.bubbleSort = bsort;
 
+  const xnor = new createXnorGate();
+  data.xnor = xnor;
+  connectPorts(sw1.out(), xnor.inA());
+  connectPorts(sw2.out(), xnor.inB());
+
+
   data.sw1 = sw1;
   data.sw2 = sw2;
   data.sw3 = sw3;
@@ -133,16 +139,20 @@ function main(anmlFileText) {
   sw7.setSwitchState(0);
   sw8.setSwitchState(0);
 
+  visualEditor.onObjClick((obj) => {
+    checkSwitches(obj);
+    update();
+  });
+
   //let val = 0;
   //setInterval(function() {
-  //  const start = timeNowSeconds();
-  //  bsort.setInputValue(0, val);
-  //  //console.log(`Time: ${timeNowSeconds() - start}`);
-  //  val++;
-  //  if (val > numValues) {
-  //    val = 0;
-  //  }
-
+  //  //const start = timeNowSeconds();
+  //  //bsort.setInputValue(0, val);
+  //  ////console.log(`Time: ${timeNowSeconds() - start}`);
+  //  //val++;
+  //  //if (val > numValues) {
+  //  //  val = 0;
+  //  //}
   //  requestAnimationFrame(update);
 
   //}, 1000);

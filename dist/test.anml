@@ -7,8 +7,8 @@
   (Rectangle
     (strokeColor LOW_COLOR)
     (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-    (width 100)
-    (height 100)
+    (width 20)
+    (height 20)
   )
 )
 
@@ -97,15 +97,33 @@
     (x -27)
     (y 24)
   )
+  
   (NandGate
     (dataKey _nand1)
     (x -27)
     (y -25)
   )
+  
   (NandGate
     (dataKey _nand2)
     (x 70)
     (y -15)
+  )
+  (MultiLine
+    (strokeColor $data._or._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 9.948933579513827) (y 23.830390369021245))
+      (Point (x 30.141635306935548) (y 23.830390369021245))
+      (Point (x 30.141635306935548) (y -4.026139012117743))
+      (Point (x 46.46382049119668) (y -4.026139012117743))
+    )
+  )
+  (MultiLine
+    (strokeColor $data._nand2._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 11.643158764772938) (y -25.136165183762138))
+      (Point (x 46.02856221961638) (y -25.136165183762138))
+    )
   )
 )
 
@@ -245,68 +263,51 @@
   )
 )
 
-
-#(Group
-#  (x -800)
-#  (y 800)
-#  (children
-#    (Switch
-#      (name sw1)
-#      (dataKey sw1)
-#      (y 300)
-#    )
-#    (Switch
-#      (name sw2)
-#      (dataKey sw2)
-#      (y 200)
-#    )
-#    (Switch
-#      (name sw3)
-#      (dataKey sw3)
-#      (y 100)
-#    )
-#    (Switch
-#      (name sw4)
-#      (dataKey sw4)
-#    )
-#    (Switch
-#      (name sw5)
-#      (dataKey sw5)
-#      (y -100)
-#    )
-#    (Switch
-#      (name sw6)
-#      (dataKey sw6)
-#      (y -200)
-#    )
-#    (Switch
-#      (name sw7)
-#      (dataKey sw7)
-#      (y -300)
-#    )
-#    (Switch
-#      (name sw8)
-#      (dataKey sw8)
-#      (y -400)
-#    )
-#  )
-#)
-
-#(Rectangle
-#  (name box)
-#  (strokeColor red)
-#  (fillColor none)
-#  (width 200)
-#  (height 200)
-#)
-#
-#(Rectangle
-#  (name box)
-#  (strokeColor blue)
-#  (fillColor none)
-#  (width 400)
-#  (height 400)
-#)
+(Group
+  (x -200)
+  (children
+    (Switch
+      (name sw1)
+      (dataKey sw1)
+      (y 80)
+    )
+    (Switch
+      (name sw2)
+      (dataKey sw2)
+      (y 60)
+    )
+    (Switch
+      (name sw3)
+      (dataKey sw3)
+      (y 40)
+    )
+    (Switch
+      (name sw4)
+      (dataKey sw4)
+      (y 20)
+    )
+    (Switch
+      (name sw5)
+      (dataKey sw5)
+      (y -20)
+    )
+    (Switch
+      (name sw6)
+      (dataKey sw6)
+      (y -40)
+    )
+    (Switch
+      (name sw7)
+      (dataKey sw7)
+      (y -60)
+    )
+    (Switch
+      (name sw8)
+      (dataKey sw8)
+      (y -80)
+    )
+  )
+)
 
 (def SwapIfGreater4
   (Comparator4
@@ -414,18 +415,6 @@
 #  )
 #)
 
-(MultiLine
-  (points
-    (Point (x 0) (y 100))
-    (Point (x 0) (y 10))
-    (Point (x 100) (y 10))
-    (Point (x 100) (y 100))
-  )
-)
-
-(Circle
-)
-
-(Circle
-  (x 30)
+(XnorGate
+  (dataKey xnor)
 )

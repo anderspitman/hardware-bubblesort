@@ -71,6 +71,7 @@ class PannerZoomer {
         // disabled (ie when placing a shape), which caused it to start panning
         // once the button was released.
         panStartPoint = null;
+        console.log("cancel");
       }
     });
 

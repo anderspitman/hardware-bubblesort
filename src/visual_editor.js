@@ -42,7 +42,7 @@ class MoveHandler extends Handler {
     this.moveLineVert = null;
   }
 
-  mouseDown(point, model) {
+  mouseDown(point, model, objClickCallback) {
 
     let hitShape = false;
 
@@ -104,10 +104,12 @@ class MoveHandler extends Handler {
 
         const intersects = shape.intersects(point);
 
-        if (intersects && shape.getName() !== 'box') {
+        if (intersects) {
+          console.log("yolo");
+          this.panzoom.disable();
           hitShape = true;
 
-          //checkSwitches(shape);
+          objClickCallback(shape);
           
           const objPos = new Vector2({ x: shape.getX(), y: shape.getY() });
           this.dragOffset = point.subtract(objPos);
@@ -123,7 +125,7 @@ class MoveHandler extends Handler {
               const childPos = new Vector2({ x: child.getX(), y: child.getY() });
               if (child.intersects(relativePoint)) {
                 hitShape = true;
-                checkSwitches(child);
+                objClickCallback(child);
                 break;
               }
             }
@@ -135,7 +137,7 @@ class MoveHandler extends Handler {
     }
 
     if (!hitShape) {
-      console.log("hit canvas");
+      this.panzoom.enable();
     }
 
   }
@@ -146,7 +148,7 @@ class MoveHandler extends Handler {
     this.dragLineVert = null;
     this.moveLineHoriz = null;
     this.moveLineVert = null;
-    this.panzoom.enable();
+    //this.panzoom.enable();
   }
 
   mouseMove(point, model) {
@@ -420,8 +422,11 @@ class VisualEditor {
 
     inputHandler.onMouseDown((clickPoint) => {
       const point = renderer.toWorldCoordinates(clickPoint);
-      handler.mouseDown(point, this._model);
-
+      handler.mouseDown(point, this._model, (obj) => {
+        if (this._onObjClick !== undefined) {
+          this._onObjClick(obj);
+        }
+      });
     });
 
     inputHandler.onMouseUp((clickPoint) => {
@@ -436,6 +441,10 @@ class VisualEditor {
       handler.mouseMove(point, this._model);
 
     });
+  }
+
+  onObjClick(callback) {
+    this._onObjClick = callback;
   }
 
   update(model) {
