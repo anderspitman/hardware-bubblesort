@@ -187,6 +187,59 @@
     (dataKey _or)
     (x 142)
   )
+  (MultiLine
+    (strokeColor $data._a1Compb1._xnor._nand2._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -6.3614642755872675) (y 88.21230462147678))
+      (Point (x 13.14702616954702) (y 88.21230462147678))
+      (Point (x 13.14702616954702) (y 83.12313320100697))
+      (Point (x 33.07961423305379) (y 83.12313320100697))
+    )
+  )
+  (MultiLine
+    (strokeColor $data._a1Compb1._xnor._nand2._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 13.14702616954702) (y 82.69903558263448))
+      (Point (x 13.14702616954702) (y -41.137468982131))
+      (Point (x 34.77600470654373) (y -41.137468982131))
+    )
+  )
+  (MultiLine
+    (strokeColor $data._a1Compb1._gt._and._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -53.436299914933045) (y 32.231418996308825))
+      (Point (x 56.404983243540435) (y 32.231418996308825))
+      (Point (x 56.404983243540435) (y 11.450635696057082))
+      (Point (x 125.53289503825542) (y 11.450635696057082))
+    )
+  )
+  (MultiLine
+    (strokeColor $data._a0Compb0._xnor._nand2._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -7.2096595123322365) (y -64.03874037424517))
+      (Point (x 18.660295208389318) (y -64.03874037424517))
+      (Point (x 18.660295208389318) (y 62.76644751912771))
+      (Point (x 33.07961423305379) (y 62.76644751912771))
+    )
+  )
+  (MultiLine
+    (strokeColor $data._a0Compb0._gt._and._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -53.86039753330553) (y -120.4437236177856))
+      (Point (x 25.869954720721555) (y -120.4437236177856))
+      (Point (x 25.869954720721555) (y -60.64595942726528))
+      (Point (x 34.77600470654373) (y -60.64595942726528))
+    )
+  )
+  (MultiLine
+    (strokeColor $data._andGt._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 88.63640223984926) (y -51.315811823070625))
+      (Point (x 106.02440459312112) (y -51.315811823070625))
+      (Point (x 106.02440459312112) (y -9.330147604194659))
+      (Point (x 125.53289503825542) (y -9.330147604194659))
+    )
+  )
 )
 
 (def Comparator4
@@ -392,11 +445,11 @@
   )
 )
 
-#(BubbleSort
-#  (dataKey bubbleSort)
-#  (x -4000)
-#  (y 3500)
-#)
+(BubbleSort
+  (dataKey bubbleSort)
+  (x -4000)
+  (y 3500)
+)
 
 #(MultiLine
 #  (x 20)
@@ -415,6 +468,3 @@
 #  )
 #)
 
-(XnorGate
-  (dataKey xnor)
-)

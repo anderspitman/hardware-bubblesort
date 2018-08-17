@@ -115,10 +115,12 @@ function main(anmlFileText) {
   const bsort = new BubbleSort(numValues);
   data.bubbleSort = bsort;
 
-  const xnor = new createXnorGate();
-  data.xnor = xnor;
-  connectPorts(sw1.out(), xnor.inA());
-  connectPorts(sw2.out(), xnor.inB());
+  const comp2 = new Comparator2();
+  data.comp2 = comp2;
+  connectPorts(sw1.out(), comp2.inA1());
+  connectPorts(sw2.out(), comp2.inA0());
+  connectPorts(sw3.out(), comp2.inB1());
+  connectPorts(sw4.out(), comp2.inB0());
 
 
   data.sw1 = sw1;
