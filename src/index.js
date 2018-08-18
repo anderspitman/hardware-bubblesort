@@ -122,6 +122,12 @@ function main(anmlFileText) {
   connectPorts(sw3.out(), comp2.inB1());
   connectPorts(sw4.out(), comp2.inB0());
 
+  const xnor = createXnorGate();
+  data.xnor = xnor;
+  connectPorts(sw1.out(), xnor.inA());
+  connectPorts(sw2.out(), xnor.inB());
+
+
 
   data.sw1 = sw1;
   data.sw2 = sw2;

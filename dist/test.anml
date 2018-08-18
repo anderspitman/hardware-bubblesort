@@ -1,6 +1,6 @@
 (def LOW_COLOR #505050)
 (def HIGH_COLOR #71ed55)
-(def WIRE_WIDTH 3)
+(def WIRE_WIDTH 6)
 (def BACKGROUND_COLOR #ffffff)
 
 (def Switch
@@ -24,14 +24,14 @@
   (Rectangle
     (x -6)
     (strokeColor none)
-    (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (fillColor $data.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (width 36)
     (height 40)
   )
   (Arc
     (x 10)
     (strokeColor none)
-    (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (fillColor $data.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (radius 20)
     (startAngle -1.57)
     (endAngle 1.57)
@@ -42,13 +42,13 @@
   (Rectangle
     (x -6)
     (strokeColor none)
-    (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (fillColor $data.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (width 35)
     (height 40)
   )
   (Triangle
     (strokeColor none)
-    (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (fillColor $data.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (x1 10) (y1 20)
     (x2 40) (y2 0)
     (x3 10) (y3 -20)
@@ -66,7 +66,7 @@
 (def NotGate
   (Triangle
     (strokeColor none)
-    (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (fillColor $data.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (x1 -15) (y1 15)
     (x2 15) (y2 0)
     (x3 -15) (y3 -15)
@@ -74,7 +74,7 @@
   (Circle
     (x 18)
     (strokeColor none)
-    (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (fillColor $data.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (radius 5)
   )
 )
@@ -86,7 +86,7 @@
   (Circle
     (x 34)
     (strokeColor none)
-    (fillColor $data._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (fillColor $data._not.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (radius 5)
   )
 )
@@ -110,7 +110,8 @@
     (y -15)
   )
   (MultiLine
-    (strokeColor $data._or._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._or.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
       (Point (x 9.948933579513827) (y 23.830390369021245))
       (Point (x 30.141635306935548) (y 23.830390369021245))
@@ -119,7 +120,8 @@
     )
   )
   (MultiLine
-    (strokeColor $data._nand2._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._nand1.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
       (Point (x 11.643158764772938) (y -25.136165183762138))
       (Point (x 46.02856221961638) (y -25.136165183762138))
@@ -145,7 +147,7 @@
   )
   (Line
     (strokeWidth WIRE_WIDTH)
-    (strokeColor $data._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (strokeColor $data._not.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (x1 -13) (y1 -10)
     (x2 9) (y2 -10)
   )
@@ -165,79 +167,94 @@
 (def Comparator2
   (Comparator1
     (dataKey _a1Compb1)
-    (x -115)
-    (y 73)
+    (x -115.38554328942953)
+    (y 68.37348052684563)
   )
+  
   (Comparator1
     (dataKey _a0Compb0)
     (x -116)
-    (y -79)
+    (y -76.68674026342282)
   )
+  
   (AndGate
     (dataKey _andEq)
     (x 57)
     (y 73)
   )
+  
   (AndGate
     (dataKey _andGt)
     (x 59)
     (y -51)
   )
+  
   (OrGate
     (dataKey _or)
     (x 142)
+    (y 18.120534603187977)
   )
+  
   (MultiLine
-    (strokeColor $data._a1Compb1._xnor._nand2._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._a1Compb1.outPortEq._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -6.3614642755872675) (y 88.21230462147678))
-      (Point (x 13.14702616954702) (y 88.21230462147678))
-      (Point (x 13.14702616954702) (y 83.12313320100697))
+      (Point (x -6.3614642755872675) (y 82.89180722734923))
+      (Point (x 3.2771179601510165) (y 82.89180722734923))
+      (Point (x 3.2771179601510165) (y 83.12313320100697))
       (Point (x 33.07961423305379) (y 83.12313320100697))
     )
   )
+  
   (MultiLine
-    (strokeColor $data._a1Compb1._xnor._nand2._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._a1Compb1.outPortEq._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x 13.14702616954702) (y 82.69903558263448))
-      (Point (x 13.14702616954702) (y -41.137468982131))
+      (Point (x 3.2771179601510165) (y 82.69903558263448))
+      (Point (x 3.2771179601510165) (y -41.137468982131))
       (Point (x 34.77600470654373) (y -41.137468982131))
     )
   )
+  
   (MultiLine
-    (strokeColor $data._a1Compb1._gt._and._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._a0Compb0.outPortEq._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -53.436299914933045) (y 32.231418996308825))
-      (Point (x 56.404983243540435) (y 32.231418996308825))
-      (Point (x 56.404983243540435) (y 11.450635696057082))
-      (Point (x 125.53289503825542) (y 11.450635696057082))
-    )
-  )
-  (MultiLine
-    (strokeColor $data._a0Compb0._xnor._nand2._not._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-    (points
-      (Point (x -7.2096595123322365) (y -64.03874037424517))
-      (Point (x 18.660295208389318) (y -64.03874037424517))
-      (Point (x 18.660295208389318) (y 62.76644751912771))
+      (Point (x -7.2096595123322365) (y -61.68692630872501))
+      (Point (x 14.457873353607425) (y -61.68692630872501))
+      (Point (x 14.457873353607425) (y 62.76644751912771))
       (Point (x 33.07961423305379) (y 62.76644751912771))
     )
   )
+  
   (MultiLine
-    (strokeColor $data._a0Compb0._gt._and._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._a0Compb0.outPortGt._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -53.86039753330553) (y -120.4437236177856))
-      (Point (x 25.869954720721555) (y -120.4437236177856))
+      (Point (x -53.86039753330553) (y -117.59070327600706))
+      (Point (x 25.869954720721555) (y -117.59070327600706))
       (Point (x 25.869954720721555) (y -60.64595942726528))
       (Point (x 34.77600470654373) (y -60.64595942726528))
     )
   )
+  
   (MultiLine
+    (strokeWidth WIRE_WIDTH)
     (strokeColor $data._andGt._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
       (Point (x 88.63640223984926) (y -51.315811823070625))
-      (Point (x 106.02440459312112) (y -51.315811823070625))
-      (Point (x 106.02440459312112) (y -9.330147604194659))
-      (Point (x 125.53289503825542) (y -9.330147604194659))
+      (Point (x 97.73522387038619) (y -51.315811823070625))
+      (Point (x 97.73522387038619) (y 9.638582235738284))
+      (Point (x 127.84615477483261) (y 9.638582235738284))
+    )
+  )
+  
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._a1Compb1.outPortGt._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -53.39774558599009) (y 27.373573549496726))
+      (Point (x 125.87988399874199) (y 27.373573549496726))
     )
   )
 )
@@ -445,26 +462,13 @@
   )
 )
 
-(BubbleSort
-  (dataKey bubbleSort)
-  (x -4000)
-  (y 3500)
-)
-
-#(MultiLine
-#  (x 20)
-#  (strokeWidth 5)
-#  (strokeColor red)
-#  (points
-#    (Point
-#      (x 0) (y 0)
-#    )
-#    (Point
-#      (x 100) (y 100)
-#    )
-#    (Point
-#      (x 200) (y 20)
-#    )
-#  )
+#(BubbleSort
+#  (dataKey bubbleSort)
+#  (x -4000)
+#  (y 3500)
 #)
+
+(Comparator2
+  (dataKey comp2)
+)
 

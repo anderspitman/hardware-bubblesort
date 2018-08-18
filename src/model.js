@@ -16,6 +16,9 @@ function processMagicValue(shape, value) {
   else if (value instanceof DataValueModel) {
     return getDataByPath(shape.getData(), value.getPath());
   }
+  else if (value.constructor === ConstantDefinitionModel) {
+    return value.getValue();
+  }
   else {
     return value;
   }
@@ -779,16 +782,17 @@ class MultiLineModel extends ShapeModel {
       if (this._isHorizontal(line)) {
         line.type = 'horizontal';
         const rw = Math.abs(line.end.getX() - line.start.getX());
-        const rh = this.getStrokeWidth();
+        const rh = processMagicValue(this, this.getStrokeWidth());
         const rx = (line.start.getX() + line.end.getX()) / 2;
         const ry = line.start.getY();
         if (pointIntersectsRectangle(point.x, point.y, rx, ry, rw, rh)) {
+          console.log(rh);
           return line;
         }
       }
       else if (this._isVertical(line)) {
         line.type = 'vertical';
-        const rw = this.getStrokeWidth();
+        const rw = processMagicValue(this, this.getStrokeWidth());
         const rh = Math.abs(line.end.getY() - line.start.getY());
         const rx = line.start.getX();
         const ry = (line.start.getY() + line.end.getY()) / 2;
