@@ -32,6 +32,8 @@ class MoveHandler extends Handler {
     this.dragLineVert = null;
     this.moveLineHoriz = null;
     this.moveLineVert = null;
+    this.movePoint = null;
+    this.moveStartPoint = null;
   }
   stop() {
     this.panzoom = null;
@@ -40,6 +42,8 @@ class MoveHandler extends Handler {
     this.dragLineHoriz = null;
     this.dragLineVert = null;
     this.moveLineVert = null;
+    this.movePoint = null;
+    this.moveStartPoint = null;
   }
 
   mouseDown(point, model, objClickCallback) {
@@ -62,42 +66,16 @@ class MoveHandler extends Handler {
           hitShape = true;
         }
 
-        if (shape.intersectsLastPoint(point)) {
+        const hitPoint = shape.intersectsPoint(point);
+        if (hitPoint !== null) {
           hitShape = true;
-          const points = shape.getPoints();
-          const lastPoint = points[points.length - 1];
-          const secondLastPoint = points[points.length - 2];
-          const thirdLastPoint = points[points.length - 3];
-
-          const objPos = new Vector2({ x: lastPoint.getX(), y: lastPoint.getY() });
-
-          const lastIsHorizontal = lastPoint.getY() === secondLastPoint.getY();
-          const lastIsVertical = lastPoint.getX() === secondLastPoint.getX();
-          const secondLastIsHorizontal = secondLastPoint.getY() === thirdLastPoint.getY();
-          const secondLastIsVertical = secondLastPoint.getX() === thirdLastPoint.getX();
-
-          if (lastIsHorizontal) {
-            this.dragLineHoriz = [lastPoint];
-            this.dragOffset = point.subtract(objPos);
-
-            if (secondLastIsVertical) {
-              this.dragLineVert = [lastPoint, secondLastPoint];
-            }
-
-            this.panzoom.disable();
-            break;
-          }
-          else if (lastIsVertical) {
-            this.dragLineVert = [lastPoint];
-            this.dragOffset = point.subtract(objPos);
-
-            if (secondLastIsHorizontal) {
-              this.dragLineHoriz = [lastPoint, secondLastPoint];
-            }
-
-            this.panzoom.disable();
-            break;
-          }
+          this.movePoint = hitPoint;
+          this.moveStartPoint = new Vector2({
+            x: hitPoint.getX(),
+            y: hitPoint.getY()
+          });
+          this.panzoom.disable();
+          break;
         }
       }
       else {
@@ -105,7 +83,6 @@ class MoveHandler extends Handler {
         const intersects = shape.intersects(point);
 
         if (intersects) {
-          console.log("yolo");
           this.panzoom.disable();
           hitShape = true;
 
@@ -148,10 +125,12 @@ class MoveHandler extends Handler {
     this.dragLineVert = null;
     this.moveLineHoriz = null;
     this.moveLineVert = null;
+    this.movePoint = null;
+    this.moveStartPoint = null;
     //this.panzoom.enable();
   }
 
-  mouseMove(point, model) {
+  mouseMove(point, model, inputHandler) {
 
     let changed = false;
 
@@ -164,6 +143,31 @@ class MoveHandler extends Handler {
     if (this.dragLineHoriz !== null && this.dragOffset !== null) {
       for (let vertex of this.dragLineHoriz) {
         vertex.setX(point.x - this.dragOffset.x);
+      }
+      changed = true;
+    }
+
+    if (this.movePoint !== null && this.moveStartPoint !== null) {
+      if (inputHandler.getKeyState('shift')) {
+        const xDiff = Math.abs(point.x - this.moveStartPoint.x);
+        const yDiff = Math.abs(point.y - this.moveStartPoint.y);
+
+        if (xDiff > yDiff) {
+          // only move along x
+          console.log("x");
+          this.movePoint.setX(point.x);
+          this.movePoint.setY(this.moveStartPoint.y);
+        }
+        else {
+          // only move along y
+          console.log("y");
+          this.movePoint.setX(this.moveStartPoint.x);
+          this.movePoint.setY(point.y);
+        }
+      }
+      else {
+        this.movePoint.setX(point.x);
+        this.movePoint.setY(point.y);
       }
       changed = true;
     }
@@ -189,14 +193,15 @@ class MoveHandler extends Handler {
 
     for (let obj of model.getObjects()) {
       if (obj.constructor === MultiLineModel) {
-        const lastPoint = obj.getLastPoint();
-        if (obj.intersectsLastPoint(point)) {
-          lastPoint.setShow(true);
+        for (let linePoint of obj.getPoints()) {
+          if (linePoint.intersects(point)) {
+            linePoint.setShow(true);
+          }
+          else {
+            linePoint.setShow(false);
+          }
+          changed = true;
         }
-        else {
-          lastPoint.setShow(false);
-        }
-        changed = true;
       }
     }
 
@@ -438,7 +443,7 @@ class VisualEditor {
 
       const point = renderer.toWorldCoordinates(clickPoint);
 
-      handler.mouseMove(point, this._model);
+      handler.mouseMove(point, this._model, inputHandler);
 
     });
   }

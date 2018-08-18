@@ -16,6 +16,8 @@ const {
   SwapIfGreater4,
   Swap4Set,
   BubbleSort,
+  Mux1,
+  Mux2,
 } = require('../lib/wild_logic/src/index');
 const { PannerZoomer } = require('./panzoom');
 const { InputHandler } = require('./input_handler');
@@ -138,6 +140,19 @@ function main(anmlFileText) {
   connectPorts(sw1.out(), xnor.inA());
   connectPorts(sw2.out(), xnor.inB());
 
+  const mux1 = new Mux1();
+  data.mux1 = mux1;
+  connectPorts(sw1.out(), mux1.inA());
+  connectPorts(sw2.out(), mux1.inB());
+  connectPorts(sw3.out(), mux1.inS());
+
+  const mux2 = new Mux2();
+  data.mux2 = mux2;
+  connectPorts(sw1.out(), mux2.inA1());
+  connectPorts(sw2.out(), mux2.inA0());
+  connectPorts(sw3.out(), mux2.inB1());
+  connectPorts(sw4.out(), mux2.inB0());
+  connectPorts(sw5.out(), mux2.inS());
 
 
   data.sw1 = sw1;

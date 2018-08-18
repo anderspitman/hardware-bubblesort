@@ -765,6 +765,19 @@ class MultiLineModel extends ShapeModel {
     return lastPoint.intersects(new Vector2({ x: offsetX, y: offsetY }));
   }
 
+  intersectsPoint(point) {
+    const offsetX = point.x - this.getX();
+    const offsetY = point.y - this.getY();
+
+    for (let point of this.getPoints()) {
+      if (point.intersects(new Vector2({ x: offsetX, y: offsetY }))) {
+        return point;
+      }
+    }
+
+    return null;
+  }
+
   intersectsLine(point) {
 
     const points = this.getPoints();

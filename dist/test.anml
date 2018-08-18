@@ -362,7 +362,69 @@
   )
   (OrGate
     (dataKey _or)
-    (x 84)
+    (x 83.64950610051862)
+    (y -0.7009877989627853)
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._inS._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -103.22045339726996) (y 12.617780381330116))
+      (Point (x -103.22045339726996) (y -12.267286481848723))
+      (Point (x -32.07019180254738) (y -12.267286481848723))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._inS._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -115.83823377860008) (y 12.617780381330116))
+      (Point (x -90.25217911645846) (y 12.617780381330116))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._not.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -52.04834407298672) (y 11.91679258236733))
+      (Point (x -32.07019180254738) (y 11.91679258236733))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._inA._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -32.07019180254738) (y 37.85334114399035))
+      (Point (x -116.18872767808148) (y 37.85334114399035))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._inB._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -32.07019180254738) (y -37.152353345027564))
+      (Point (x -115.1372459796373) (y -37.152353345027564))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._and1.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 22.256362617068397) (y 24.88506686317884))
+      (Point (x 43.986984384914706) (y 24.88506686317884))
+      (Point (x 43.986984384914706) (y 9.463335285997587))
+      (Point (x 67.82056954964936) (y 9.463335285997587))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._and2.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 22.256362617068397) (y -25.23556076266023))
+      (Point (x 43.986984384914706) (y -25.23556076266023))
+      (Point (x 43.986984384914706) (y -11.56629868288594))
+      (Point (x 67.11958175068658) (y -11.56629868288594))
+    )
   )
 )
 
@@ -526,6 +588,16 @@
 #  (y 3500)
 #)
 
-(Comparator4
-  (dataKey comp4)
+#(Mux2
+#  (dataKey mux2)
+#)
+
+(Mux1
+  (dataKey _muxX)
+  (y 54)
+)
+
+(Mux1
+  (dataKey _muxY)
+  (y -54)
 )

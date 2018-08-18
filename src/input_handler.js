@@ -43,6 +43,14 @@ class InputHandler {
       }
     });
 
+    this.keys = [];
+    document.addEventListener('keyup', (e) => {
+      this.keys[e.keyCode] = false;
+    });
+    document.addEventListener('keydown', (e) => {
+      this.keys[e.keyCode] = true;
+    });
+
   }
 
   onMouseDown(callback) {
@@ -55,6 +63,17 @@ class InputHandler {
 
   onMouseMove(callback) {
     this.onMouseMoveCallback = callback;
+  }
+
+  getKeyState(keyName) {
+    let keyCode;
+    switch(keyName) {
+      case 'shift':
+        keyCode = 16;
+        break;
+    }
+
+    return this.keys[keyCode];
   }
 
 }
