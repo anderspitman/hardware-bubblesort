@@ -18,6 +18,7 @@ const {
   BubbleSort,
   Mux1,
   Mux2,
+  Mux4,
 } = require('../lib/wild_logic/src/index');
 const { PannerZoomer } = require('./panzoom');
 const { InputHandler } = require('./input_handler');
@@ -102,6 +103,7 @@ function main(anmlFileText) {
   const sw6 = createSwitch();
   const sw7 = createSwitch();
   const sw8 = createSwitch();
+  const sw9 = createSwitch();
 
   const data = {};
   const swap4Set = new Swap4Set();
@@ -154,6 +156,18 @@ function main(anmlFileText) {
   connectPorts(sw4.out(), mux2.inB0());
   connectPorts(sw5.out(), mux2.inS());
 
+  const mux4 = new Mux4();
+  data.mux4 = mux4;
+  connectPorts(sw1.out(), mux4.inA3());
+  connectPorts(sw2.out(), mux4.inA2());
+  connectPorts(sw3.out(), mux4.inA1());
+  connectPorts(sw4.out(), mux4.inA0());
+  connectPorts(sw5.out(), mux4.inB3());
+  connectPorts(sw6.out(), mux4.inB2());
+  connectPorts(sw7.out(), mux4.inB1());
+  connectPorts(sw8.out(), mux4.inB0());
+  connectPorts(sw9.out(), mux4.inS());
+
 
   data.sw1 = sw1;
   data.sw2 = sw2;
@@ -163,6 +177,7 @@ function main(anmlFileText) {
   data.sw6 = sw6;
   data.sw7 = sw7;
   data.sw8 = sw8;
+  data.sw9 = sw9;
 
   sw1.setSwitchState(0);
   sw2.setSwitchState(0);
@@ -171,7 +186,7 @@ function main(anmlFileText) {
   sw5.setSwitchState(0);
   sw6.setSwitchState(0);
   sw7.setSwitchState(0);
-  sw8.setSwitchState(0);
+  sw9.setSwitchState(0);
 
   visualEditor.onObjClick((obj) => {
     checkSwitches(obj);
@@ -216,6 +231,9 @@ function main(anmlFileText) {
         break;
       case 'sw8':
         flipSwitch(sw8);
+        break;
+      case 'sw9':
+        flipSwitch(sw9);
         break;
     }
   }

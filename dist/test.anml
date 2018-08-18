@@ -501,10 +501,98 @@
     (dataKey _muxX)
     (y 106)
   )
-  
   (Mux2
     (dataKey _muxY)
     (y -106)
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortS._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -240.60701268542252) (y 198.0739020558704))
+      (Point (x -172.5) (y 198.0739020558704))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortS._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -174.16843111809294) (y 198.0739020558704))
+      (Point (x -174.16843111809294) (y -14.281190430360562))
+      (Point (x -171.6847458258563) (y -14.281190430360562))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA3._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -171.06382450279716) (y 152.7466454725521))
+      (Point (x -239.98609136236337) (y 152.7466454725521))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA2._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -169.82198185667886) (y 121.70057931959435))
+      (Point (x -239.98609136236337) (y 121.70057931959435))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA1._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -171.06382450279716) (y -59.60844701367887))
+      (Point (x -187.2077789023352) (y -59.60844701367887))
+      (Point (x -187.2077789023352) (y 96.24280507416901))
+      (Point (x -239.98609136236337) (y 96.24280507416901))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA0._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -169.82198185667886) (y -90.03359184357745))
+      (Point (x -199.6262053635183) (y -90.03359184357745))
+      (Point (x -199.6262053635183) (y 65.19673892121126))
+      (Point (x -239.36517003930422) (y 65.19673892121126))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortB3._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -235.6396421009493) (y -103.69386095087886))
+      (Point (x -225.7049009320028) (y -103.69386095087886))
+      (Point (x -225.7049009320028) (y 47.810941875554924))
+      (Point (x -167.33829656444223) (y 47.810941875554924))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortB2._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -235.0187207778901) (y -134.11900578077746))
+      (Point (x -212.66555314776053) (y -134.11900578077746))
+      (Point (x -212.66555314776053) (y 14.902111753419717))
+      (Point (x -167.33829656444223) (y 14.902111753419717))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortB1._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -167.33829656444223) (y -164.54415061067604))
+      (Point (x -235.0187207778901) (y -164.54415061067604))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortB0._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -166.71737524138308) (y -197.45298073281126))
+      (Point (x -235.6396421009493) (y -197.45298073281126))
+    )
   )
 )
 
@@ -634,6 +722,11 @@
       (dataKey sw8)
       (y -80)
     )
+    (Switch
+      (name sw9)
+      (dataKey sw9)
+      (y -120)
+    )
   )
 )
 
@@ -644,6 +737,6 @@
 #  (y 3500)
 #)
 
-(Mux2
-  (dataKey mux2)
+(Mux4
+  (dataKey mux4)
 )
