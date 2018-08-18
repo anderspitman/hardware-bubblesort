@@ -433,65 +433,69 @@
     (dataKey _muxX)
     (y 54)
   )
+  
   (Mux1
     (dataKey _muxY)
     (y -54)
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortS._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
       (Point (x -115.7171556610243) (y 66.71055536999182))
-      (Point (x -135.21716415379115) (y 66.71055536999182))
-      (Point (x -135.21716415379115) (y 91.85530316329644))
-      (Point (x -172.6777067846327) (y 91.85530316329644))
+      (Point (x -137.78295474494467) (y 66.71055536999182))
+      (Point (x -137.78295474494467) (y 0))
+      (Point (x -148.04611710955882) (y 0))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortS._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
       (Point (x -115.7171556610243) (y -41.56580757668722))
-      (Point (x -135.21716415379115) (y -41.56580757668722))
-      (Point (x -135.21716415379115) (y 65.68423913353041))
+      (Point (x -138.29611286317538) (y -41.56580757668722))
+      (Point (x -138.29611286317538) (y -1.5394743546921192))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA1._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -116.230313779255) (y 91.85530316329644))
-      (Point (x -121.87505307979276) (y 91.85530316329644))
-      (Point (x -121.87505307979276) (y 46.69738875899428))
-      (Point (x -171.1382324299406) (y 46.69738875899428))
+      (Point (x -145.99348463663597) (y 91.85530316329644))
+      (Point (x -112.12504883340935) (y 91.85530316329644))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA0._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -116.230313779255) (y -16.421059783382603))
-      (Point (x -160.87507006532644) (y -16.421059783382603))
-      (Point (x -160.87507006532644) (y 15.907901665151897))
-      (Point (x -170.11191619347917) (y 15.907901665151897))
+      (Point (x -114.6908394245629) (y -18.98685037453614))
+      (Point (x -114.6908394245629) (y 81.07898268045162))
+      (Point (x -145.99348463663597) (y 81.07898268045162))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortB1._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
       (Point (x -115.20399754279359) (y 16.934217901613312))
-      (Point (x -148.0461171095588) (y 16.934217901613312))
-      (Point (x -148.0461171095588) (y -58.50002547830053))
-      (Point (x -167.54612560232565) (y -58.50002547830053))
+      (Point (x -126.49347614386913) (y 16.934217901613312))
+      (Point (x -126.49347614386913) (y -80.56582456222091))
+      (Point (x -149.07243334602023) (y -80.56582456222091))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortB0._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
       (Point (x -115.20399754279359) (y -91.34214504506573))
-      (Point (x -167.03296748409494) (y -91.34214504506573))
+      (Point (x -149.07243334602023) (y -91.34214504506573))
     )
   )
 )
@@ -499,99 +503,114 @@
 (def Mux4
   (Mux2
     (dataKey _muxX)
+    (x 60)
     (y 106)
   )
+  
   (Mux2
     (dataKey _muxY)
+    (x 60)
     (y -106)
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortS._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -240.60701268542252) (y 198.0739020558704))
-      (Point (x -172.5) (y 198.0739020558704))
+      (Point (x -148) (y 0.8264462809917351))
+      (Point (x -91.16253970368497) (y 0.8264462809917351))
+      (Point (x -91.16253970368497) (y -105.7851239669421))
+      (Point (x -87.19008264462805) (y -105.7851239669421))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortS._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -174.16843111809294) (y 198.0739020558704))
-      (Point (x -174.16843111809294) (y -14.281190430360562))
-      (Point (x -171.6847458258563) (y -14.281190430360562))
+      (Point (x -87.19008264462805) (y 106.12109885011006))
+      (Point (x -91.16253970368497) (y 106.12109885011006))
+      (Point (x -91.16253970368497) (y 2.822369650268884))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA3._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -171.06382450279716) (y 152.7466454725521))
-      (Point (x -239.98609136236337) (y 152.7466454725521))
+      (Point (x -85.53719008264459) (y 197.52066115702468))
+      (Point (x -148) (y 197.52066115702468))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA2._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -169.82198185667886) (y 121.70057931959435))
-      (Point (x -239.98609136236337) (y 121.70057931959435))
+      (Point (x -85.53719008264459) (y 186.77685950413215))
+      (Point (x -148) (y 186.77685950413215))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA1._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -171.06382450279716) (y -59.60844701367887))
-      (Point (x -187.2077789023352) (y -59.60844701367887))
-      (Point (x -187.2077789023352) (y 96.24280507416901))
-      (Point (x -239.98609136236337) (y 96.24280507416901))
+      (Point (x -85.53719008264459) (y -14.049586776859497))
+      (Point (x -103.01649223481428) (y -14.049586776859497))
+      (Point (x -103.01649223481428) (y 175.20661157024784))
+      (Point (x -148) (y 175.20661157024784))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA0._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -169.82198185667886) (y -90.03359184357745))
-      (Point (x -199.6262053635183) (y -90.03359184357745))
-      (Point (x -199.6262053635183) (y 65.19673892121126))
-      (Point (x -239.36517003930422) (y 65.19673892121126))
+      (Point (x -85.53719008264459) (y -24.793388429752053))
+      (Point (x -114.8704447659436) (y -24.793388429752053))
+      (Point (x -114.8704447659436) (y 163.63636363636354))
+      (Point (x -148) (y 163.63636363636354))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortB3._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -235.6396421009493) (y -103.69386095087886))
-      (Point (x -225.7049009320028) (y -103.69386095087886))
-      (Point (x -225.7049009320028) (y 47.810941875554924))
-      (Point (x -167.33829656444223) (y 47.810941875554924))
+      (Point (x -148) (y -161.98347107438008))
+      (Point (x -138.57834982820222) (y -161.98347107438008))
+      (Point (x -138.57834982820222) (y 25.61983471074379))
+      (Point (x -88.84297520661153) (y 25.61983471074379))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortB2._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -235.0187207778901) (y -134.11900578077746))
-      (Point (x -212.66555314776053) (y -134.11900578077746))
-      (Point (x -212.66555314776053) (y 14.902111753419717))
-      (Point (x -167.33829656444223) (y 14.902111753419717))
+      (Point (x -148) (y -174.3801652892561))
+      (Point (x -127.28887122712669) (y -174.3801652892561))
+      (Point (x -127.28887122712669) (y 14.876033057851233))
+      (Point (x -88.84297520661153) (y 14.876033057851233))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortB1._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -167.33829656444223) (y -164.54415061067604))
-      (Point (x -235.0187207778901) (y -164.54415061067604))
+      (Point (x -89.03080390683692) (y -186.4627545241006))
+      (Point (x -148) (y -186.4627545241006))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortB0._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
-      (Point (x -166.71737524138308) (y -197.45298073281126))
-      (Point (x -235.6396421009493) (y -197.45298073281126))
+      (Point (x -88.27948910593534) (y -197.45298073281126))
+      (Point (x -148) (y -197.45298073281126))
     )
   )
 )
@@ -737,6 +756,27 @@
 #  (y 3500)
 #)
 
-(Mux4
-  (dataKey mux4)
-)
+#(SwapIfGreater4
+#  (dataKey swap4)
+#)
+
+#(Mux4
+#  (dataKey mux4)
+#)
+
+(Comparator4
+    (dataKey _comp4)
+    (x -315)
+  )
+  
+  (Mux4
+    (dataKey _muxX)
+    (x 475)
+    (y 215)
+  )
+  
+  (Mux4
+    (dataKey _muxY)
+    (x 475)
+    (y -215)
+  )

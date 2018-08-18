@@ -168,6 +168,17 @@ function main(anmlFileText) {
   connectPorts(sw8.out(), mux4.inB0());
   connectPorts(sw9.out(), mux4.inS());
 
+  const swap4 = new SwapIfGreater4();
+  data.swap4 = swap4;
+  connectPorts(sw1.out(), swap4.inA3());
+  connectPorts(sw2.out(), swap4.inA2());
+  connectPorts(sw3.out(), swap4.inA1());
+  connectPorts(sw4.out(), swap4.inA0());
+  connectPorts(sw5.out(), swap4.inB3());
+  connectPorts(sw6.out(), swap4.inB2());
+  connectPorts(sw7.out(), swap4.inB1());
+  connectPorts(sw8.out(), swap4.inB0());
+
 
   data.sw1 = sw1;
   data.sw2 = sw2;
