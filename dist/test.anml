@@ -433,10 +433,66 @@
     (dataKey _muxX)
     (y 54)
   )
-  
   (Mux1
     (dataKey _muxY)
     (y -54)
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortS._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -115.7171556610243) (y 66.71055536999182))
+      (Point (x -135.21716415379115) (y 66.71055536999182))
+      (Point (x -135.21716415379115) (y 91.85530316329644))
+      (Point (x -172.6777067846327) (y 91.85530316329644))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortS._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -115.7171556610243) (y -41.56580757668722))
+      (Point (x -135.21716415379115) (y -41.56580757668722))
+      (Point (x -135.21716415379115) (y 65.68423913353041))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA1._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -116.230313779255) (y 91.85530316329644))
+      (Point (x -121.87505307979276) (y 91.85530316329644))
+      (Point (x -121.87505307979276) (y 46.69738875899428))
+      (Point (x -171.1382324299406) (y 46.69738875899428))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA0._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -116.230313779255) (y -16.421059783382603))
+      (Point (x -160.87507006532644) (y -16.421059783382603))
+      (Point (x -160.87507006532644) (y 15.907901665151897))
+      (Point (x -170.11191619347917) (y 15.907901665151897))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortB1._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -115.20399754279359) (y 16.934217901613312))
+      (Point (x -148.0461171095588) (y 16.934217901613312))
+      (Point (x -148.0461171095588) (y -58.50002547830053))
+      (Point (x -167.54612560232565) (y -58.50002547830053))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortB0._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -115.20399754279359) (y -91.34214504506573))
+      (Point (x -167.03296748409494) (y -91.34214504506573))
+    )
   )
 )
 
@@ -588,16 +644,6 @@
 #  (y 3500)
 #)
 
-#(Mux2
-#  (dataKey mux2)
-#)
-
-(Mux1
-  (dataKey _muxX)
-  (y 54)
-)
-
-(Mux1
-  (dataKey _muxY)
-  (y -54)
+(Mux2
+  (dataKey mux2)
 )
