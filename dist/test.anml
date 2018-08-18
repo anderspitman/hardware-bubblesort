@@ -262,18 +262,18 @@
 (def Comparator4
   (Comparator2
     (dataKey _comp1)
-    (x -111)
-    (y -158)
+    (x -110)
+    (y 155)
   )
   (Comparator2
     (dataKey _comp2)
-    (x -110)
-    (y 155)
+    (x -111)
+    (y -158)
   )
   (AndGate
     (dataKey _andEq)
     (x 264)
-    (y -89)
+    (y -75)
   )
   (AndGate
     (dataKey _andGt)
@@ -284,6 +284,63 @@
     (dataKey _orGt)
     (x 260)
     (y 122)
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._comp1.outPortGt._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 70) (y 173))
+      (Point (x 149) (y 173))
+      (Point (x 149) (y 132))
+      (Point (x 243) (y 132))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._comp1.outPortEq._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -23) (y 227))
+      (Point (x 88) (y 227))
+      (Point (x 88) (y 69))
+      (Point (x 122) (y 69))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._comp1.outPortEq._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 88) (y 69))
+      (Point (x 88) (y -65))
+      (Point (x 240) (y -65))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._comp2.outPortGt._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 70) (y -140))
+      (Point (x 106) (y -140))
+      (Point (x 106) (y 49))
+      (Point (x 122) (y 49))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._comp2.outPortEq._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -24) (y -85))
+      (Point (x 240) (y -85))
+    )
+  )
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._andGt.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 176) (y 59))
+      (Point (x 201) (y 59))
+      (Point (x 201) (y 113))
+      (Point (x 243) (y 113))
+    )
   )
 )
 
@@ -330,52 +387,6 @@
   (Mux2
     (dataKey _muxY)
     (y -106)
-  )
-)
-
-(Group
-  (x -200)
-  (children
-    (Switch
-      (name sw1)
-      (dataKey sw1)
-      (y 80)
-    )
-    (Switch
-      (name sw2)
-      (dataKey sw2)
-      (y 60)
-    )
-    (Switch
-      (name sw3)
-      (dataKey sw3)
-      (y 40)
-    )
-    (Switch
-      (name sw4)
-      (dataKey sw4)
-      (y 20)
-    )
-    (Switch
-      (name sw5)
-      (dataKey sw5)
-      (y -20)
-    )
-    (Switch
-      (name sw6)
-      (dataKey sw6)
-      (y -40)
-    )
-    (Switch
-      (name sw7)
-      (dataKey sw7)
-      (y -60)
-    )
-    (Switch
-      (name sw8)
-      (dataKey sw8)
-      (y -80)
-    )
   )
 )
 
@@ -462,13 +473,59 @@
   )
 )
 
+(Group
+  (x -300)
+  (children
+    (Switch
+      (name sw1)
+      (dataKey sw1)
+      (y 80)
+    )
+    (Switch
+      (name sw2)
+      (dataKey sw2)
+      (y 60)
+    )
+    (Switch
+      (name sw3)
+      (dataKey sw3)
+      (y 40)
+    )
+    (Switch
+      (name sw4)
+      (dataKey sw4)
+      (y 20)
+    )
+    (Switch
+      (name sw5)
+      (dataKey sw5)
+      (y -20)
+    )
+    (Switch
+      (name sw6)
+      (dataKey sw6)
+      (y -40)
+    )
+    (Switch
+      (name sw7)
+      (dataKey sw7)
+      (y -60)
+    )
+    (Switch
+      (name sw8)
+      (dataKey sw8)
+      (y -80)
+    )
+  )
+)
+
+
 #(BubbleSort
 #  (dataKey bubbleSort)
 #  (x -4000)
 #  (y 3500)
 #)
 
-(Comparator2
-  (dataKey comp2)
+(Comparator4
+  (dataKey comp4)
 )
-

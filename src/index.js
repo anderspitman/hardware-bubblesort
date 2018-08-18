@@ -122,6 +122,17 @@ function main(anmlFileText) {
   connectPorts(sw3.out(), comp2.inB1());
   connectPorts(sw4.out(), comp2.inB0());
 
+  const comp4 = new Comparator4();
+  data.comp4 = comp4;
+  connectPorts(sw1.out(), comp4.inA3());
+  connectPorts(sw2.out(), comp4.inA2());
+  connectPorts(sw3.out(), comp4.inA1());
+  connectPorts(sw4.out(), comp4.inA0());
+  connectPorts(sw5.out(), comp4.inB3());
+  connectPorts(sw6.out(), comp4.inB2());
+  connectPorts(sw7.out(), comp4.inB1());
+  connectPorts(sw8.out(), comp4.inB0());
+
   const xnor = createXnorGate();
   data.xnor = xnor;
   connectPorts(sw1.out(), xnor.inA());
