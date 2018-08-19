@@ -197,6 +197,7 @@ function main(anmlFileText) {
   sw5.setSwitchState(0);
   sw6.setSwitchState(0);
   sw7.setSwitchState(0);
+  sw8.setSwitchState(0);
   sw9.setSwitchState(0);
 
   visualEditor.onObjClick((obj) => {
