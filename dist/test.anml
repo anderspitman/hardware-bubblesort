@@ -94,8 +94,8 @@
 (def XnorGate
   (OrGate
     (dataKey _or)
-    (x -27)
-    (y 24)
+    (x -27.63726163542071)
+    (y 23.68136918228965)
   )
   
   (NandGate
@@ -109,6 +109,7 @@
     (x 70)
     (y -15)
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data._or.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
@@ -119,12 +120,53 @@
       (Point (x 46.46382049119668) (y -4.026139012117743))
     )
   )
+  
   (MultiLine
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data._nand1.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
     (points
       (Point (x 11.643158764772938) (y -25.136165183762138))
       (Point (x 46.02856221961638) (y -25.136165183762138))
+    )
+  )
+  
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._nand1.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -50.82161542480185) (y -13.701125161545326))
+      (Point (x -60.38053995611254) (y -13.701125161545326))
+      (Point (x -60.38053995611254) (y 33.137605041877066))
+      (Point (x -80.77291228957534) (y 33.137605041877066))
+    )
+  )
+  
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._nand1.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -42.218583346622225) (y 14.975648432386752))
+      (Point (x -71.85124939368538) (y 14.975648432386752))
+      (Point (x -71.85124939368538) (y -36.00528240127027))
+      (Point (x -81.0915431072857) (y -36.00528240127027))
+    )
+  )
+  
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._nand1.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -58.19423177900897) (y 33.137605041877066))
+      (Point (x -40.76762988830507) (y 33.137605041877066))
+    )
+  )
+  
+  (MultiLine
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data._nand1.outPort._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x -70.66494121658181) (y -36.00528240127027))
+      (Point (x -50.140246242512205) (y -36.00528240127027))
     )
   )
 )
@@ -939,10 +981,14 @@
 #  (y 3500)
 #)
 
-(SwapIfGreater4
-  (dataKey swap4)
-)
+#(SwapIfGreater4
+#  (dataKey swap4)
+#)
 
 #(Mux4
 #  (dataKey mux4)
 #)
+
+(XnorGate
+  (dataKey xnor)
+)
