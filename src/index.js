@@ -119,6 +119,11 @@ function main(anmlFileText) {
   const bsort = new BubbleSort(numValues);
   data.bubbleSort = bsort;
 
+  const comp1 = new Comparator1();
+  data.comp1 = comp1;
+  connectPorts(sw1.out(), comp1.inA());
+  connectPorts(sw2.out(), comp1.inB());
+
   const comp2 = new Comparator2();
   data.comp2 = comp2;
   connectPorts(sw1.out(), comp2.inA1());
