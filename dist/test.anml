@@ -1058,12 +1058,116 @@
   )
 )
 
+# TODO: Initially drew these all too low, which is why they're all adjusted by
+# +1000 y. Should probably go through and just add 1000 to the actual values
+# at some point.
+(def SwapIfGreater4Wires
+  (SwapIfGreater4
+  )
+  (MultiLine
+    (y 1000)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA0._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 518.7484920200001) (y -376.09265671450004))
+      (Point (x 531.4682999999999) (y -376.09265671450004))
+      (Point (x 531.4682999999999) (y -474.8049214149992))
+      (Point (x -711.8181818181806) (y -474.8049214149992))
+      (Point (x -711.8181818181806) (y -942.2727272727254))
+      (Point (x -669.999999999999) (y -942.2727272727254))
+    )
+  )
+  (MultiLine
+    (y 1000)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA1._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 519.2672405120201) (y -268.1499149999992))
+      (Point (x 545.6407879999999) (y -268.1499149999992))
+      (Point (x 545.6407879999999) (y -491.9536318949992))
+      (Point (x -699.090909090908) (y -491.9536318949992))
+      (Point (x -699.090909090908) (y -871.3636363636347))
+      (Point (x -669.999999999999) (y -871.3636363636347))
+    )
+  )
+  (MultiLine
+    (y 1000)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA2._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 519.2672405120201) (y -165.07727499999947))
+      (Point (x 561.5848369999999) (y -165.07727499999947))
+      (Point (x 561.5848369999999) (y -509.1023423749992))
+      (Point (x -686.3636363636352) (y -509.1023423749992))
+      (Point (x -686.3636363636352) (y -787.7272727272713))
+      (Point (x -669.999999999999) (y -787.7272727272713))
+    )
+  )
+  (MultiLine
+    (y 1000)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.inPortA3._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 519.2672405120201) (y -55.56259499999974))
+      (Point (x 579.3004469999998) (y -55.56259499999974))
+      (Point (x 579.3004469999998) (y -528.3946416649992))
+      (Point (x -673.6363636363626) (y -528.3946416649992))
+      (Point (x -673.6363636363626) (y -713.1818181818169))
+      (Point (x -669.999999999999) (y -713.1818181818169))
+    )
+  )
+  (MultiLine
+    (y 1000)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortX3._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 519.2672405120201) (y -625.6831349999985))
+      (Point (x 610) (y -625.6831349999985))
+      (Point (x 610) (y -56.56749999999984))
+      (Point (x 730.7189999999997) (y -56.56749999999984))
+    )
+  )
+  (MultiLine
+    (y 1000)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortX2._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 519.2672405120201) (y -733.5873049999982))
+      (Point (x 625) (y -733.5873049999982))
+      (Point (x 625) (y -129.77249999999984))
+      (Point (x 730.7189999999997) (y -129.77249999999984))
+    )
+  )
+  (MultiLine
+    (y 1000)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortX1._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 519.2672405120201) (y -838.270454999998))
+      (Point (x 640) (y -838.270454999998))
+      (Point (x 640) (y -212.29449999999983))
+      (Point (x 729.3879999999997) (y -212.29449999999983))
+    )
+  )
+  (MultiLine
+    (y 1000)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortX0._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 519.2672405120201) (y -946.1746249999978))
+      (Point (x 655) (y -946.1746249999978))
+      (Point (x 655) (y -284.1684999999998))
+      (Point (x 730.7189999999997) (y -284.1684999999998))
+    )
+  )
+)
+
 (def Swap4Set
   (List
     (dataKey _swaps)
     (of
-      (SwapIfGreater4
-        (y $index * -1200)
+      (SwapIfGreater4Wires
+        (y $index * -1000)
       )
     )
   )
@@ -1174,12 +1278,26 @@
 )
 
 
-#(BubbleSort
-#  (dataKey bubbleSort)
+(BubbleSort
+  (dataKey bubbleSort)
 #  (x -4000)
 #  (y 3500)
+)
+
+#(SwapIfGreater4
+#  (dataKey swap4)
+#  (x 1400)
+#)
+#
+#(SwapIfGreater4
+#  (dataKey swap4)
+#  (y -1030)
+#)
+#
+#(SwapIfGreater4
+#  (dataKey swap4)
 #)
 
-(SwapIfGreater4
-  (dataKey swap4)
-)
+#(SwapIfGreater4Wires
+#  (dataKey swap4)
+#)

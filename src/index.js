@@ -184,7 +184,6 @@ function main(anmlFileText) {
   connectPorts(sw7.out(), swap4.inB1());
   connectPorts(sw8.out(), swap4.inB0());
 
-
   data.sw1 = sw1;
   data.sw2 = sw2;
   data.sw3 = sw3;
@@ -210,18 +209,18 @@ function main(anmlFileText) {
     update();
   });
 
-  //let val = 0;
-  //setInterval(function() {
-  //  //const start = timeNowSeconds();
-  //  //bsort.setInputValue(0, val);
-  //  ////console.log(`Time: ${timeNowSeconds() - start}`);
-  //  //val++;
-  //  //if (val > numValues) {
-  //  //  val = 0;
-  //  //}
-  //  requestAnimationFrame(update);
+  let val = 0;
+  setInterval(function() {
+    const start = timeNowSeconds();
+    bsort.setInputValue(0, val);
+    //console.log(`Time: ${timeNowSeconds() - start}`);
+    val++;
+    if (val > numValues) {
+      val = 0;
+    }
+    requestAnimationFrame(update);
 
-  //}, 1000);
+  }, 1000);
 
   function checkSwitches(clickedObj) {
     switch (clickedObj.getName()) {
@@ -266,7 +265,7 @@ function main(anmlFileText) {
     //console.log(`Update time: ${updateTime - startTime}`);
     renderer.render(model);
     const renderTime = timeNowSeconds();
-    //console.log(`Render time: ${renderTime - updateTime}`);
+    console.log(`Render time: ${renderTime - updateTime}`);
     codeEditor.update(model);
     const editTime = timeNowSeconds();
     visualEditor.update(model);
