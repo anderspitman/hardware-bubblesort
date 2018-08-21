@@ -70,6 +70,7 @@ function main(anmlFileText) {
     }
     zoom = zoomScale;
     lastTimeout = setTimeout(renderZoom, 500);
+    //renderZoom();
   });
 
   model.addUpdateListener(() => {
@@ -115,7 +116,7 @@ function main(anmlFileText) {
   data.circs = [10, 15, 20, 25];
   data.circ = 5;
 
-  const numValues = 8;
+  const numValues = 3;
   const bsort = new BubbleSort(numValues);
   data.bubbleSort = bsort;
 

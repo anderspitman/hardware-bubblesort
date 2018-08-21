@@ -48,12 +48,7 @@ class ANMLRenderer {
 
   setScale(scale) {
     this._scale *= scale;
-
-    const center = this.getViewportCenter();
-    this.setViewportCenter({
-      x: center.x / scale,
-      y: center.y / scale,
-    });
+    this.updateViewport();
   }
 
   getViewportCenter() {
@@ -80,8 +75,13 @@ class ANMLRenderer {
   setViewportCenter({ x, y }) {
     this._viewPortCenterX = x;
     this._viewPortCenterY = y;
-    x = -x * this._scale;
-    y = y * this._scale;
+    this.updateViewport();
+  }
+
+  updateViewport() {
+    const center = this.getViewportCenter();
+    const x = -center.x * this._scale;
+    const y = center.y * this._scale;
     this._actualCenterX = x + (this.canvas.width / 2);
     this._actualCenterY = y + (this.canvas.height / 2 );
   }
