@@ -7,8 +7,8 @@
   (Rectangle
     (strokeColor LOW_COLOR)
     (fillColor $data._out._state == 0 ? LOW_COLOR : HIGH_COLOR)
-    (width 20)
-    (height 20)
+    (width 100)
+    (height 100)
   )
 )
 
@@ -1314,7 +1314,7 @@
     (of
       (Binary4Input
         (x -800)
-        (y $index * -1030)
+        (y $index * -900)
       )
     )
   )
@@ -1323,68 +1323,68 @@
     (of
       (Binary4Output
         (x 9200)
-        (y $index * -1030)
+        (y $index * -900)
       )
     )
   )
 )
 
-(Group
-  (x -700)
-  (children
-    (Switch
-      (name sw1)
-      (dataKey sw1)
-      (y 80)
-    )
-    (Switch
-      (name sw2)
-      (dataKey sw2)
-      (y 60)
-    )
-    (Switch
-      (name sw3)
-      (dataKey sw3)
-      (y 40)
-    )
-    (Switch
-      (name sw4)
-      (dataKey sw4)
-      (y 20)
-    )
-    (Switch
-      (name sw5)
-      (dataKey sw5)
-      (y -20)
-    )
-    (Switch
-      (name sw6)
-      (dataKey sw6)
-      (y -40)
-    )
-    (Switch
-      (name sw7)
-      (dataKey sw7)
-      (y -60)
-    )
-    (Switch
-      (name sw8)
-      (dataKey sw8)
-      (y -80)
-    )
-    (Switch
-      (name sw9)
-      (dataKey sw9)
-      (y -120)
-    )
-  )
-)
+#(Group
+#  (x -700)
+#  (children
+#    (Switch
+#      (name sw1)
+#      (dataKey sw1)
+#      (y 80)
+#    )
+#    (Switch
+#      (name sw2)
+#      (dataKey sw2)
+#      (y 60)
+#    )
+#    (Switch
+#      (name sw3)
+#      (dataKey sw3)
+#      (y 40)
+#    )
+#    (Switch
+#      (name sw4)
+#      (dataKey sw4)
+#      (y 20)
+#    )
+#    (Switch
+#      (name sw5)
+#      (dataKey sw5)
+#      (y -20)
+#    )
+#    (Switch
+#      (name sw6)
+#      (dataKey sw6)
+#      (y -40)
+#    )
+#    (Switch
+#      (name sw7)
+#      (dataKey sw7)
+#      (y -60)
+#    )
+#    (Switch
+#      (name sw8)
+#      (dataKey sw8)
+#      (y -80)
+#    )
+#    (Switch
+#      (name sw9)
+#      (dataKey sw9)
+#      (y -120)
+#    )
+#  )
+#)
 
 
 (BubbleSort
   (dataKey bubbleSort)
-#  (x -4000)
-#  (y 3500)
+  (x -4000)
+  (y 3500)
 )
 
 #(SwapIfGreater4

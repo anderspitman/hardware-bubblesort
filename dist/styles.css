@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
 }
@@ -9,17 +13,21 @@ body {
 }
 
 #renderer {
-    width: 49vw;
-    height: 95vh;
+    width: 100%;
+    height: 99vh;
 }
 
-#editor {
-    width: 49vw;
-    height: 95vh;
+#input_panel {
+    width: 45px;
+    height: 99vh;
+    position: relative;
+    background-color: #333333;
 }
 
-#editor textarea {
-    width: 50vw;
-    height: 95vh;
-    resize: none;
+.number-input {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    position: absolute;
 }
