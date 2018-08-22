@@ -181,6 +181,10 @@ class ANMLRenderer {
       }
     }
 
+    if (this.processAttr(shape, shape.getShow(), data) === 'false') {
+      return;
+    }
+
     const saveStroke = this.ctx.strokeStyle;
     const strokeColor = shape.getStrokeColor();
     this.ctx.strokeStyle = this.processAttr(shape, strokeColor, data);

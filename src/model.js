@@ -204,6 +204,7 @@ class ObjectModel {
     this._data = this.defaultData();
     this._x = this.defaultX();
     this._y = this.defaultY();
+    this.setShow(this.defaultShow());
   }
 
   getName() {
@@ -249,23 +250,26 @@ class ObjectModel {
   setY(value) {
     this._y = value;
   }
-}
-
-
-class PointModel extends ObjectModel {
-  constructor() {
-    super();
-    this.setShow(this.defaultShow());
-  }
 
   defaultShow() {
-    return false;
+    return true;
   }
   getShow() {
     return this._show;
   }
   setShow(value) {
     this._show = value;
+  }
+}
+
+
+class PointModel extends ObjectModel {
+  constructor() {
+    super();
+  }
+
+  defaultShow() {
+    return false;
   }
 
   intersects(point) {

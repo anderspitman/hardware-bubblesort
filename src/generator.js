@@ -250,6 +250,11 @@ class ANMLGenerator {
       str += indent + `  (dataKey ${dataKey})\n`;
     }
 
+    const show = s.getShow();
+    if (show !== undefined && show != s.defaultShow()) {
+      str += this.generateAttrs(s, ['show'], indent);
+    }
+
     const attrs = [ 'x', 'y' ];
 
     str += this.generateAttrs(s, attrs, indent);
@@ -324,9 +329,10 @@ class ANMLGenerator {
     let str = indent + '(' + key + ' ';
     const trueVal = this._symbolOrValue(v.getTrueValue());
     const falseVal = this._symbolOrValue(v.getFalseValue());
-    const path =
-      `$data.${v.getPath().join('.')} ${v.getCondition()} ${v.getCheckValue()} ? ${trueVal} : ${falseVal}`;
-    str += path + ')';
+    const path = ['$data'].concat(v.getPath()).join('.');
+    const ternaryStr = path + 
+      ` ${v.getCondition()} ${v.getCheckValue()} ? ${trueVal} : ${falseVal}`;
+    str += ternaryStr + ')';
     return str;
   }
 
