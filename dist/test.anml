@@ -1064,7 +1064,58 @@
 (def SwapIfGreater4Wires
   (SwapIfGreater4
   )
+
+# Wires for first row only
   (MultiLine
+    (show $data.isFirst == 1 ? true : false)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortX3._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 518.3264455281691) (y 373.62185312391205))
+      (Point (x 609.326445528169) (y 373.62185312391205))
+      (Point (x 609.326445528169) (y 286.6218531239121))
+      (Point (x 730.326445528169) (y 286.6218531239121))
+    )
+  )
+  
+  (MultiLine
+    (show $data.isFirst == 1 ? true : false)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortX2._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 518.3264455281691) (y 265.6218531239121))
+      (Point (x 608.326445528169) (y 265.6218531239121))
+      (Point (x 608.326445528169) (y 212.62185312391213))
+      (Point (x 730.326445528169) (y 212.62185312391213))
+    )
+  )
+  
+  (MultiLine
+    (show $data.isFirst == 1 ? true : false)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortX1._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 518.3264455281691) (y 162.62185312391216))
+      (Point (x 607.326445528169) (y 162.62185312391216))
+      (Point (x 607.326445528169) (y 128.6218531239122))
+      (Point (x 730.326445528169) (y 128.6218531239122))
+    )
+  )
+  
+  (MultiLine
+    (show $data.isFirst == 1 ? true : false)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortX0._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (points
+      (Point (x 518.3264455281691) (y 53.62185312391224))
+      (Point (x 635.326445528169) (y 53.62185312391224))
+      (Point (x 635.326445528169) (y 58.62185312391224))
+      (Point (x 730.326445528169) (y 58.62185312391224))
+    )
+  )
+
+  (MultiLine
+    (show $data.isFirst == 1 ? false : true)
     (y 1000)
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA0._state == 0 ? LOW_COLOR : HIGH_COLOR)
@@ -1078,6 +1129,7 @@
     )
   )
   (MultiLine
+    (show $data.isFirst == 1 ? false : true)
     (y 1000)
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA1._state == 0 ? LOW_COLOR : HIGH_COLOR)
@@ -1091,6 +1143,7 @@
     )
   )
   (MultiLine
+    (show $data.isFirst == 1 ? false : true)
     (y 1000)
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA2._state == 0 ? LOW_COLOR : HIGH_COLOR)
@@ -1104,6 +1157,7 @@
     )
   )
   (MultiLine
+    (show $data.isFirst == 1 ? false : true)
     (y 1000)
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.inPortA3._state == 0 ? LOW_COLOR : HIGH_COLOR)
@@ -1116,7 +1170,9 @@
       (Point (x -669.999999999999) (y -713.1818181818169))
     )
   )
+
   (MultiLine
+    (show $data.isFirst == 1 ? false : true)
     (y 1000)
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.outPortX3._state == 0 ? LOW_COLOR : HIGH_COLOR)
@@ -1128,6 +1184,7 @@
     )
   )
   (MultiLine
+    (show $data.isFirst == 1 ? false : true)
     (y 1000)
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.outPortX2._state == 0 ? LOW_COLOR : HIGH_COLOR)
@@ -1139,6 +1196,7 @@
     )
   )
   (MultiLine
+    (show $data.isFirst == 1 ? false : true)
     (y 1000)
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.outPortX1._state == 0 ? LOW_COLOR : HIGH_COLOR)
@@ -1150,6 +1208,7 @@
     )
   )
   (MultiLine
+    (show $data.isFirst == 1 ? false : true)
     (y 1000)
     (strokeWidth WIRE_WIDTH)
     (strokeColor $data.outPortX0._state == 0 ? LOW_COLOR : HIGH_COLOR)
@@ -1158,6 +1217,50 @@
       (Point (x 655) (y -946.1746249999978))
       (Point (x 655) (y -284.1684999999998))
       (Point (x 730.7189999999997) (y -284.1684999999998))
+    )
+  )
+
+  (MultiLine
+    (show $data.isLast == 1 ? true : false)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortY3._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (x 520)
+    (points
+      (Point (x 0) (y -55.54999999999999))
+      (Point (x $data.wireLength) (y -55.54999999999999))
+    )
+  )
+  
+  (MultiLine
+    (show $data.isLast == 1 ? true : false)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortY2._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (x 520)
+    (points
+      (Point (x 0) (y -163.34999999999997))
+      (Point (x $data.wireLength) (y -163.34999999999997))
+    )
+  )
+  
+  (MultiLine
+    (show $data.isLast == 1 ? true : false)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortY1._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (x 520)
+    (points
+      (Point (x 0) (y -266.74999999999994))
+      (Point (x $data.wireLength) (y -266.74999999999994))
+    )
+  )
+  
+  (MultiLine
+    (show $data.isLast == 1 ? true : false)
+    (strokeWidth WIRE_WIDTH)
+    (strokeColor $data.outPortY0._state == 0 ? LOW_COLOR : HIGH_COLOR)
+    (x 520)
+    (points
+      (Point (x 0) (y -375.6499999999999))
+      (Point (x $data.wireLength) (y -375.6499999999999))
     )
   )
 )
@@ -1291,13 +1394,9 @@
 #
 #(SwapIfGreater4
 #  (dataKey swap4)
-#  (y -1030)
+#  (y -1000)
 #)
 #
 #(SwapIfGreater4
-#  (dataKey swap4)
-#)
-
-#(SwapIfGreater4Wires
 #  (dataKey swap4)
 #)

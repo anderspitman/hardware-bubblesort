@@ -212,7 +212,7 @@ class ANMLRenderer {
       this.drawLine(shape, offsetVec);
     }
     else if (shape instanceof MultiLineModel) {
-      this.drawMultiLine(shape, offsetVec);
+      this.drawMultiLine(shape, offsetVec, data);
     }
     else if (shape instanceof GroupModel) {
       this.drawSymbol(shape, offsetVec);
@@ -373,16 +373,18 @@ class ANMLRenderer {
     const start = points[0];
 
     if (start !== undefined) {
-      const offsetX = cumulativeOffset.x + start.getX();
-      const offsetY = cumulativeOffset.y + start.getY();
+      start.setData(data);
+      const offsetX = cumulativeOffset.x + processMagicValue(start, start.getX());
+      const offsetY = cumulativeOffset.y + processMagicValue(start, start.getY());
       const x = offsetX * this._scale;
       const y = offsetY * this._scale;
       this.ctx.moveTo(this._x(x), this._y(y));
     }
 
     for (let point of points.slice(1)) {
-      const offsetX = cumulativeOffset.x + point.getX();
-      const offsetY = cumulativeOffset.y + point.getY();
+      point.setData(data);
+      const offsetX = cumulativeOffset.x + processMagicValue(point, point.getX());
+      const offsetY = cumulativeOffset.y + processMagicValue(point, point.getY());
       const x = offsetX * this._scale;
       const y = offsetY * this._scale;
       this.ctx.lineTo(this._x(x), this._y(y));

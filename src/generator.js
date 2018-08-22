@@ -200,10 +200,10 @@ class ANMLGenerator {
 
   generatePoint(p, indent) {
     let str = '';
-    //str += indent + '(Point\n';
-    //str += this.generateObjectAttrs(p, indent);
-    //str += indent + ')\n';
-    str += indent + `(Point (x ${p.getX()}) (y ${p.getY()}))\n`;
+    str += indent + '(Point\n';
+    str += this.generateObjectAttrs(p, indent);
+    str += indent + ')\n';
+    //str += indent + `(Point (x ${p.getX()}) (y ${p.getY()}))\n`;
     return str;
   }
 

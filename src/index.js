@@ -114,9 +114,9 @@ function main(anmlFileText) {
   swap4Set.addSwap();
   data.swap4Set = swap4Set;
   data.circs = [10, 15, 20, 25];
-  data.circ = 5;
+  data.circ = 100;
 
-  const numValues = 3;
+  const numValues = 8;
   const bsort = new BubbleSort(numValues);
   data.bubbleSort = bsort;
 
@@ -266,7 +266,7 @@ function main(anmlFileText) {
     //console.log(`Update time: ${updateTime - startTime}`);
     renderer.render(model);
     const renderTime = timeNowSeconds();
-    console.log(`Render time: ${renderTime - updateTime}`);
+    //console.log(`Render time: ${renderTime - updateTime}`);
     codeEditor.update(model);
     const editTime = timeNowSeconds();
     visualEditor.update(model);
