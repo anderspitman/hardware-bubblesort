@@ -11,15 +11,19 @@ class InputPanel {
     const el = this.el;
 
     const dim = el.getBoundingClientRect();
-    console.log(dim);
-    const slotSize = dim.height / numInputs;
+    const inputHeight = dim.height / numInputs;
+    const inputWidth = dim.width;
 
     for (let i = 0; i < numInputs; i++) {
+      const inputEl = document.createElement('div');
+      inputEl.style.height = inputHeight + 'px';
+      inputEl.style.width = inputWidth + 'px';
+      el.appendChild(inputEl);
+
       const input = new NumberInput({
-        parentDomElement: el,
+        parentDomElement: inputEl,
         lowerLimit: 0,
         upperLimit: 15,
-        yOffset: (slotSize * i) + (slotSize / 2),
       });
 
       input.setValue(i);
@@ -38,33 +42,69 @@ class InputPanel {
 }
 
 class NumberInput {
-  constructor({ parentDomElement, lowerLimit, upperLimit, yOffset }) {
-    const el = document.createElement('input');
-    el.type = 'text';
+  constructor({ parentDomElement, lowerLimit, upperLimit }) {
+    const el = document.createElement('span');
     el.className = 'number-input';
-    el.style = `top: ${yOffset}px`;
     parentDomElement.appendChild(el);
 
-    this.el = el;
-    this._lowerLimit = lowerLimit;
-    this._upperLimit = upperLimit;
+    const dim = parentDomElement.getBoundingClientRect();
+    el.style.width = dim.width + 'px';
 
-    el.addEventListener('change', (e) => {
-      if (!this._validValue(el.value)) {
-        alert(`Must enter a number between ${lowerLimit} and ${upperLimit}`);
-        el.value = '';
-        return;
-      }
-
-      if (this._changeCallback !== undefined) {
-        this._changeCallback(Number(el.value));
+    const upBtn = new Button({
+      parentDomElement: el,
+      text: 'Up',
+      onClick: (e) => {
+        this.incrementValue();
       }
     });
+
+    const text = document.createElement('div');
+    text.className = 'number-input__text';
+    el.appendChild(text);
+
+    const downBtn = new Button({
+      parentDomElement: el,
+      text: 'Down',
+      onClick: (e) => {
+        this.decrementValue();
+      }
+    });
+
+    this.el = el;
+    this.text = text;
+    this._lowerLimit = lowerLimit;
+    this._upperLimit = upperLimit;
+    this._currentValue = 0;
+
+    this.setValue(this._currentValue);
+  }
+
+  incrementValue() {
+    let newValue = this._currentValue + 1;
+
+    if (newValue > this._upperLimit) {
+      newValue = this._lowerLimit;
+    }
+    this.setValue(newValue);
+  }
+
+  decrementValue() {
+    let newValue = this._currentValue - 1;
+
+    if (newValue < this._lowerLimit) {
+      newValue = this._upperLimit;
+    }
+    this.setValue(newValue);
   }
 
   setValue(value) {
     if (this._validValue(value)) {
-      this.el.value = value;
+      this._currentValue = value;
+      this.text.innerHTML = String(value);
+
+      if (this._changeCallback !== undefined) {
+        this._changeCallback(value);
+      }
     }
   }
 
@@ -73,10 +113,24 @@ class NumberInput {
   }
 
   _validValue(value) {
-    console.log(value);
-    return !(isNaN(value) ||
-      value < this._lowerLimit ||
-      value > this._upperLimit);
+    return value >= this._lowerLimit && value <= this._upperLimit;
+  }
+}
+
+class Button {
+  constructor({ parentDomElement, text, onClick }) {
+
+    const dim = parentDomElement.getBoundingClientRect();
+
+    const btn = document.createElement('input');
+    btn.type = 'button';
+    btn.value = text;
+    //btn.style.width = dim.width + 'px';
+    // todo figure out how to get effing CSS to do this without hardcoding here
+    btn.style.width = '45px';
+    parentDomElement.appendChild(btn);
+
+    btn.addEventListener('click', onClick);
   }
 }
 
@@ -89,6 +143,43 @@ fetch('/test.anml').then(response => {
 })
 
 function main(anmlFileText) {
+
+  const numValues = 8;
+
+  // set up layout
+  const container = document.getElementById('container');
+  const rendererEl = document.getElementById('renderer');
+  const inputEl = document.getElementById('input_panel');
+  const outputEl = document.getElementById('output_panel');
+
+  container.style.height = window.innerHeight + 'px';
+  //container.style.height = window.innerHeight + 'px';
+
+  const containerDim = container.getBoundingClientRect();
+  const rendererDim = rendererEl.getBoundingClientRect();
+  const inDim = inputEl.getBoundingClientRect();
+  const outDim = outputEl.getBoundingClientRect();
+
+  const renderWidth = containerDim.width - (inDim.width + outDim.width);
+  rendererEl.style.width = renderWidth + 'px';
+  rendererEl.style.height = containerDim.height + 'px';
+
+  const inputPanel = new InputPanel({
+    domElementId: 'input_panel',
+    numInputs: numValues,
+  });
+
+  inputPanel.onInputChange((i, value) => {
+    bsort.setInputValue(i, value);
+    update();
+  });
+
+  const outputPanel = new InputPanel({
+    domElementId: 'output_panel',
+    numInputs: numValues,
+  });
+
+
   const parser = new ANMLParser();
   let model = parser.parse(anmlFileText);
   const renderer = new ANMLRenderer({ domParentId: 'renderer' });
@@ -124,7 +215,6 @@ function main(anmlFileText) {
 
   const data = {};
 
-  const numValues = 8;
   const bsort = new BubbleSort(numValues);
   data.bubbleSort = bsort;
 
@@ -132,18 +222,7 @@ function main(anmlFileText) {
     bsort.setInputValue(i, i);
   }
 
-  const inputPanel = new InputPanel({
-    domElementId: 'input_panel',
-    numInputs: numValues,
-  });
-
-  inputPanel.onInputChange((i, value) => {
-    bsort.setInputValue(i, value);
-    update();
-  });
-
-
-  //let val = 0;
+    //let val = 0;
   //setInterval(function() {
   //  const start = timeNowSeconds();
   //  bsort.setInputValue(0, val);
