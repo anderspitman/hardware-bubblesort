@@ -38,3 +38,10 @@ body {
     text-align: center;
     background-color: #eeeeee;
 }
+
+#bottom-banner {
+    text-align: center;
+    color: white;
+    padding: 5px;
+    background-color: #333333;
+}

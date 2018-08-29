@@ -243,6 +243,7 @@ function main(anmlFileText) {
   const rendererEl = document.getElementById('renderer');
   const inputEl = document.getElementById('input_panel');
   const outputEl = document.getElementById('output_panel');
+  const bottomEl = document.getElementById('bottom-banner');
 
   container.style.height = window.innerHeight + 'px';
   //container.style.height = window.innerHeight + 'px';
@@ -251,10 +252,11 @@ function main(anmlFileText) {
   const rendererDim = rendererEl.getBoundingClientRect();
   const inDim = inputEl.getBoundingClientRect();
   const outDim = outputEl.getBoundingClientRect();
+  const bottomDim = bottomEl.getBoundingClientRect();
 
   const renderWidth = containerDim.width - (inDim.width + outDim.width);
   rendererEl.style.width = renderWidth + 'px';
-  rendererEl.style.height = containerDim.height + 'px';
+  rendererEl.style.height = (containerDim.height - bottomDim.height) + 'px';
 
   const inputPanel = new InputPanel({
     domElementId: 'input_panel',
