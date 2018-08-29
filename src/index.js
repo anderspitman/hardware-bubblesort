@@ -5,6 +5,10 @@ const { BubbleSort } = require('../lib/wild_logic/src/index');
 const { PannerZoomer } = require('./panzoom');
 
 
+const MIN = 0;
+const MAX = 15;
+
+
 class InputPanel {
   constructor({ domElementId, numInputs }) {
     this.el = document.getElementById(domElementId);
@@ -43,28 +47,41 @@ class InputPanel {
 
 class NumberInput {
   constructor({ parentDomElement, lowerLimit, upperLimit }) {
-    const el = document.createElement('span');
+    const el = document.createElement('div');
     el.className = 'number-input';
     parentDomElement.appendChild(el);
 
     const dim = parentDomElement.getBoundingClientRect();
+    console.log(dim);
+
     el.style.width = dim.width + 'px';
+    el.style.height = dim.height + 'px';
+
+    const upCont = document.createElement('div');
+    upCont.style.width = dim.width + 'px';
+    upCont.style.height = (dim.height / 6) + 'px';
+    el.appendChild(upCont);
 
     const upBtn = new Button({
-      parentDomElement: el,
-      text: 'Up',
+      parentDomElement: upCont,
+      imageUrl: '/up_arrow.svg',
       onClick: (e) => {
         this.incrementValue();
       }
     });
 
     const text = document.createElement('div');
-    text.className = 'number-input__text';
+    text.className = 'number-text';
     el.appendChild(text);
 
+    const downCont = document.createElement('div');
+    downCont.style.width = dim.width + 'px';
+    downCont.style.height = (dim.height / 6) + 'px';
+    el.appendChild(downCont);
+
     const downBtn = new Button({
-      parentDomElement: el,
-      text: 'Down',
+      parentDomElement: downCont,
+      imageUrl: '/down_arrow.svg',
       onClick: (e) => {
         this.decrementValue();
       }
@@ -118,19 +135,94 @@ class NumberInput {
 }
 
 class Button {
-  constructor({ parentDomElement, text, onClick }) {
+  constructor({ parentDomElement, imageUrl, onClick }) {
 
     const dim = parentDomElement.getBoundingClientRect();
 
-    const btn = document.createElement('input');
-    btn.type = 'button';
-    btn.value = text;
-    //btn.style.width = dim.width + 'px';
-    // todo figure out how to get effing CSS to do this without hardcoding here
-    btn.style.width = '45px';
+    //const btn = document.createElement('input');
+    //const btn = document.createElement('div');
+    const btn = document.createElement('img');
+    btn.src = imageUrl;
+    btn.style.width = dim.width + 'px';
+    btn.style.height = dim.height + 'px';
+    btn.style.backgroundColor = '#71ed55';
     parentDomElement.appendChild(btn);
 
     btn.addEventListener('click', onClick);
+  }
+}
+
+
+class OutputPanel {
+  constructor({ domElementId, numOutputs }) {
+    this.el = document.getElementById(domElementId);
+    const el = this.el;
+
+    const dim = el.getBoundingClientRect();
+    const width = dim.width;
+    const height = dim.height / numOutputs;
+
+    this._outputs = [];
+
+    for (let i = 0; i < numOutputs; i++) {
+      const outputEl = document.createElement('div');
+      outputEl.style.height = height + 'px';
+      outputEl.style.width = width + 'px';
+      el.appendChild(outputEl);
+
+      const output = new NumberOutput({
+        parentDomElement: outputEl,
+        lowerLimit: MIN,
+        upperLimit: MAX,
+      });
+
+      this._outputs.push(output);
+
+      output.setValue(i);
+    }
+  }
+
+  setOutputValue(index, value) {
+    this._outputs[index].setValue(value);
+  }
+}
+
+class NumberOutput {
+  constructor({ parentDomElement, lowerLimit, upperLimit }) {
+
+    const MAX_HEIGHT = 20;
+
+    const el = document.createElement('span');
+    el.className = 'number-output';
+    parentDomElement.appendChild(el);
+
+    const dim = parentDomElement.getBoundingClientRect();
+    el.style.width = dim.width + 'px';
+
+    const text = document.createElement('div');
+    text.className = 'number-text';
+    text.style.fontSize =
+      (dim.height > MAX_HEIGHT ? MAX_HEIGHT : dim.height) + 'px';
+    el.appendChild(text);
+
+    this.el = el;
+    this.text = text;
+    this._lowerLimit = lowerLimit;
+    this._upperLimit = upperLimit;
+    this._currentValue = 0;
+
+    this.setValue(this._currentValue);
+  }
+
+  setValue(value) {
+    if (this._validValue(value)) {
+      this._currentValue = value;
+      this.text.innerHTML = String(value);
+    }
+  }
+
+  _validValue(value) {
+    return value >= this._lowerLimit && value <= this._upperLimit;
   }
 }
 
@@ -171,12 +263,13 @@ function main(anmlFileText) {
 
   inputPanel.onInputChange((i, value) => {
     bsort.setInputValue(i, value);
+
     update();
   });
 
-  const outputPanel = new InputPanel({
+  const outputPanel = new OutputPanel({
     domElementId: 'output_panel',
-    numInputs: numValues,
+    numOutputs: numValues,
   });
 
 
@@ -236,6 +329,12 @@ function main(anmlFileText) {
   //}, 1000);
 
   function update() {
+
+    for (let i = 0; i < numValues; i++) {
+      const outValue = bsort.getOutputValue(i);
+      outputPanel.setOutputValue(i, outValue);
+    }
+
     requestAnimationFrame(render);
   }
 

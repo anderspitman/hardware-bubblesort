@@ -20,27 +20,21 @@ body {
 }
 
 #input_panel {
-    width: 45px;
-    height: 100%;
-    /*position: relative;*/
+    width: 20px;
     background-color: #333333;
 }
 
 #output_panel {
-    width: 45px;
-    height: 100%;
-    /*position: relative;*/
+    width: 25px;
     background-color: #333333;
 }
 
 .number-input {
-    /*position: absolute;*/
 }
-.number-input__text {
+
+.number-text {
     font-family: Courier;
-    font-size: 14px;
     font-weight: bold;
     text-align: center;
     background-color: #eeeeee;
-    width: 100%;
 }
