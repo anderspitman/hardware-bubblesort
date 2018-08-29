@@ -1,7 +1,7 @@
-(def LOW_COLOR #505050)
+(def LOW_COLOR #808080)
 (def HIGH_COLOR #71ed55)
 (def WIRE_WIDTH 6)
-(def BACKGROUND_COLOR #ffffff)
+(def BACKGROUND_COLOR #000000)
 
 (def Switch
   (Rectangle

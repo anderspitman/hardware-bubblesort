@@ -5,10 +5,11 @@
 body {
     margin: 0;
     overflow: hidden;
+    background-color: #000000;
 }
 
 #container {
-    /*width: 960px;*/
+    max-width: 960px;
     display: flex;
     flex-direction: row;
     margin: 0 auto;
