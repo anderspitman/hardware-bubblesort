@@ -15,6 +15,7 @@ const {
   LineModel,
   MultiLineModel,
   UserDefinedShapeModel,
+  TextModel,
 } = require('./model');
 const { getDataByPath } = require('./utils');
 const _ = require('lodash');
@@ -223,6 +224,9 @@ class ANMLRenderer {
     else if (shape instanceof UserDefinedShapeModel) {
       this.drawSymbol(shape, offsetVec, data);
     }
+    else if (shape.constructor === TextModel) {
+      this.drawText(shape, offsetVec, data);
+    }
 
     this.ctx.strokeStyle = saveStroke;
     this.ctx.fillStyle = saveFill;
@@ -420,6 +424,41 @@ class ANMLRenderer {
 
     //this.drawSymbol(l, offsetVec, data);
     this.drawSymbol(l, offsetVec);
+  }
+
+  drawText(t, offsetVec) {
+    let x = processMagicValue(t, t.getX());
+    let y = processMagicValue(t, t.getY());
+
+    if (offsetVec !== undefined) {
+      x += offsetVec.x;
+      y += offsetVec.y;
+    }
+
+    x *= this._scale;
+    y *= this._scale;
+
+    this.ctx.beginPath();
+
+    const fillColor = processMagicValue(t, t.getFillColor());
+    const strokeColor = processMagicValue(t, t.getFillColor());
+    const fontSize = this._scale * processMagicValue(t, t.getFontSize());
+    const fontFamily = processMagicValue(t, t.getFontFamily());
+    const font = fontSize + 'px' + ' ' + fontFamily;
+
+    const text = processMagicValue(t, t.getText());
+
+    console.log(fillColor);
+
+    this.ctx.font = font;
+    this.ctx.textAlign = 'center';
+
+    if (fillColor !== 'none') {
+      this.ctx.fillText(text, this._x(x), this._y(y));
+    }
+    else if (strokeColor !== 'none') {
+      this.ctx.strokeText(text, this._x(x), this._y(y));
+    }
   }
 
   drawSymbol(s, offsetVec, data) {

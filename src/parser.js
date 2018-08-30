@@ -18,6 +18,7 @@ const {
   TriangleModel,
   LineModel,
   MultiLineModel,
+  TextModel,
 } = require('./model');
 //const _ = require('lodash');
 
@@ -95,6 +96,7 @@ class ANMLParser {
       case 'Line':
       case 'MultiLine':
       case 'Point':
+      case 'Text':
         tokens.unshift(type);
         return this._parsePrimitiveObject(tokens);
       case 'Group':
@@ -173,6 +175,9 @@ class ANMLParser {
         break;
       case 'Point':
         Con = PointModel;
+        break;
+      case 'Text':
+        Con = TextModel;
         break;
       default:
         tokens.unshift(type);
@@ -268,6 +273,10 @@ class ANMLParser {
       tokens.unshift(tok);
       const childs = this._parseChildren(tokens);
       return childs;
+    }
+    else if (tok.startsWith('"')) {
+      tokens.unshift(tok);
+      return this._parseStringValue(tokens);
     }
     else {
       if (!isNaN(tok)) {

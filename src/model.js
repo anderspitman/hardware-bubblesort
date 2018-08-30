@@ -846,6 +846,46 @@ function pointIntersectsRectangle(px, py, rx, ry, width, height) {
 }
 
 
+class TextModel extends ShapeModel {
+  constructor() {
+    super();
+    this.setFontFamily(this.defaultFontFamily());
+    this.setFontSize(this.defaultFontSize());
+    this.setText(this.defaultText());
+  }
+
+  defaultFontFamily() {
+    return 'Courier New';
+  }
+  getFontFamily() {
+    return this._fontFamily;
+  }
+  setFontFamily(value) {
+    this._fontFamily = value;
+  }
+
+  defaultFontSize() {
+    return 16;
+  }
+  getFontSize() {
+    return this._fontSize;
+  }
+  setFontSize(value) {
+    this._fontSize = value;
+  }
+
+  defaultText() {
+    return "Hi there";
+  }
+  getText() {
+    return this._text;
+  }
+  setText(value) {
+    this._text = value;
+  }
+}
+
+
 module.exports = {
   processMagicValue,
   ANMLModel,
@@ -866,4 +906,5 @@ module.exports = {
   TriangleModel,
   LineModel,
   MultiLineModel,
+  TextModel,
 };

@@ -1380,12 +1380,16 @@
 #  )
 #)
 
-
-(BubbleSort
-  (dataKey bubbleSort)
-  (x -4000)
-  (y 3500)
+(Text
+  (text "This is a great day")
+  (fontFamily "Courier New")
 )
+
+#(BubbleSort
+#  (dataKey bubbleSort)
+#  (x -4000)
+#  (y 3500)
+#)
 
 #(SwapIfGreater4
 #  (dataKey swap4)
@@ -1400,3 +1404,4 @@
 #(SwapIfGreater4
 #  (dataKey swap4)
 #)
+

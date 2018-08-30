@@ -6,3 +6,5 @@ even require it.
 * Consider adding signal definitions to objects to control what happens on
 events.
 * Separate input logic from renderer into it's own class
+
+* Implement generator for text

@@ -280,7 +280,7 @@ function main(anmlFileText) {
   const renderer = new ANMLRenderer({ domParentId: 'renderer' });
   const panzoom = new PannerZoomer({ domElementId: 'renderer' });
 
-  renderer.setScale(0.03);
+  //renderer.setScale(0.03);
 
   panzoom.onPanEnded((x, y) => {
     renderer.translateViewPortCenter(x, y);
