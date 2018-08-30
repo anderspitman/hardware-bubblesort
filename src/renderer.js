@@ -182,6 +182,8 @@ class ANMLRenderer {
       }
     }
 
+    shape.setData(data);
+
     if (this.processAttr(shape, shape.getShow(), data) === 'false') {
       return;
     }
@@ -225,7 +227,7 @@ class ANMLRenderer {
       this.drawSymbol(shape, offsetVec, data);
     }
     else if (shape.constructor === TextModel) {
-      this.drawText(shape, offsetVec, data);
+      this.drawText(shape, offsetVec);
     }
 
     this.ctx.strokeStyle = saveStroke;
@@ -438,8 +440,6 @@ class ANMLRenderer {
     x *= this._scale;
     y *= this._scale;
 
-    this.ctx.beginPath();
-
     const fillColor = processMagicValue(t, t.getFillColor());
     const strokeColor = processMagicValue(t, t.getFillColor());
     const fontSize = this._scale * processMagicValue(t, t.getFontSize());
@@ -447,8 +447,6 @@ class ANMLRenderer {
     const font = fontSize + 'px' + ' ' + fontFamily;
 
     const text = processMagicValue(t, t.getText());
-
-    console.log(fillColor);
 
     this.ctx.font = font;
     this.ctx.textAlign = 'center';

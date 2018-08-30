@@ -52,7 +52,6 @@ class NumberInput {
     parentDomElement.appendChild(el);
 
     const dim = parentDomElement.getBoundingClientRect();
-    console.log(dim);
 
     el.style.width = dim.width + 'px';
     el.style.height = dim.height + 'px';
@@ -280,7 +279,7 @@ function main(anmlFileText) {
   const renderer = new ANMLRenderer({ domParentId: 'renderer' });
   const panzoom = new PannerZoomer({ domElementId: 'renderer' });
 
-  //renderer.setScale(0.03);
+  renderer.setScale(0.03);
 
   panzoom.onPanEnded((x, y) => {
     renderer.translateViewPortCenter(x, y);

@@ -8,3 +8,5 @@ events.
 * Separate input logic from renderer into it's own class
 
 * Implement generator for text
+* Might be able to avoid re-rendering when zooming out, which will make things
+sharper.

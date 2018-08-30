@@ -1277,6 +1277,15 @@
 )
 
 (def Binary4Input
+  (Text
+#    (dataKey value)
+    (x -280)
+    (y -60)
+    (text $data.value)
+#    (text 0)
+    (fontSize 300)
+    (fillColor HIGH_COLOR)
+  )
   (List
     (y 200)
     (dataKey _switches)
@@ -1380,16 +1389,11 @@
 #  )
 #)
 
-(Text
-  (text "This is a great day")
-  (fontFamily "Courier New")
+(BubbleSort
+  (dataKey bubbleSort)
+  (x -4000)
+  (y 3500)
 )
-
-#(BubbleSort
-#  (dataKey bubbleSort)
-#  (x -4000)
-#  (y 3500)
-#)
 
 #(SwapIfGreater4
 #  (dataKey swap4)
