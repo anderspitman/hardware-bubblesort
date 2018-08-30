@@ -1278,13 +1278,12 @@
 
 (def Binary4Input
   (Text
-#    (dataKey value)
     (x -280)
     (y -60)
-    (text $data.value)
-#    (text 0)
-    (fontSize 300)
     (fillColor HIGH_COLOR)
+    (text $data.value)
+    (fontSize 300)
+    (fontWeight bold)
   )
   (List
     (y 200)
@@ -1298,6 +1297,14 @@
 )
 
 (def Binary4Output
+  (Text
+    (x 280)
+    (y -60)
+    (fillColor HIGH_COLOR)
+    (text $data.value)
+    (fontSize 300)
+    (fontWeight bold)
+  )
   (List
     (y 200)
     (dataKey _outputs)

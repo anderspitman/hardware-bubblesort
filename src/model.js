@@ -851,6 +851,7 @@ class TextModel extends ShapeModel {
     super();
     this.setFontFamily(this.defaultFontFamily());
     this.setFontSize(this.defaultFontSize());
+    this.setFontWeight(this.defaultFontWeight());
     this.setText(this.defaultText());
   }
 
@@ -872,6 +873,16 @@ class TextModel extends ShapeModel {
   }
   setFontSize(value) {
     this._fontSize = value;
+  }
+
+  defaultFontWeight() {
+    return 'normal';
+  }
+  getFontWeight() {
+    return this._fontWeight;
+  }
+  setFontWeight(value) {
+    this._fontWeight = value;
   }
 
   defaultText() {
