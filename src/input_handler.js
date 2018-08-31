@@ -5,12 +5,32 @@ class InputHandler {
   constructor({ domElementId }) {
     this.el = document.getElementById(domElementId);
 
+    function calculateOffset(element) {
+      let parent = element.parentElement;
+
+      let offsetTop = element.offsetTop;
+      let offsetLeft = element.offsetLeft;
+
+      while (parent) {
+        offsetTop += parent.offsetTop;
+        offsetLeft += parent.offsetLeft;
+        parent = parent.parentElement;
+      }
+
+      return {
+        offsetTop,
+        offsetLeft,
+      };
+    }
+
     this.el.addEventListener('mousedown', (e) => {
+
+      const offset = calculateOffset(e.target);
 
       if (this.onMouseDownCallback !== undefined) {
         const clickPoint = new Vector2({
-          x: e.clientX,
-          y: e.clientY,
+          x: e.clientX - offset.offsetLeft,
+          y: e.clientY - offset.offsetTop,
         });
 
         this.onMouseDownCallback(clickPoint);
@@ -18,12 +38,14 @@ class InputHandler {
     });
 
     this.el.addEventListener('mouseup', (e) => {
+      
+      const offset = calculateOffset(e.target);
 
       if (this.onMouseUpCallback !== undefined) {
 
         const clickPoint = new Vector2({
-          x: e.clientX,
-          y: e.clientY,
+          x: e.clientX - offset.offsetLeft,
+          y: e.clientY - offset.offsetTop,
         });
 
         this.onMouseUpCallback(clickPoint);
@@ -32,11 +54,13 @@ class InputHandler {
 
     this.el.addEventListener('mousemove', (e) => {
 
+      const offset = calculateOffset(e.target);
+
       if (this.onMouseMoveCallback !== undefined) {
 
         const clickPoint = new Vector2({
-          x: e.clientX,
-          y: e.clientY,
+          x: e.clientX - offset.offsetLeft,
+          y: e.clientY - offset.offsetTop,
         });
 
         this.onMouseMoveCallback(clickPoint);

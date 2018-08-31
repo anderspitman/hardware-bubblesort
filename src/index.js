@@ -25,14 +25,14 @@ function main(anmlFileText) {
   // set up layout
   const container = document.getElementById('container');
   const rendererEl = document.getElementById('renderer');
-  const bottomEl = document.getElementById('bottom-banner');
+  const bannerEl = document.getElementById('banner');
 
   container.style.height = window.innerHeight + 'px';
   //container.style.height = window.innerHeight + 'px';
 
   const containerDim = container.getBoundingClientRect();
   const rendererDim = rendererEl.getBoundingClientRect();
-  const bottomDim = bottomEl.getBoundingClientRect();
+  const bottomDim = bannerEl.getBoundingClientRect();
 
   const renderWidth = containerDim.width;
   rendererEl.style.width = renderWidth + 'px';

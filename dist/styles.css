@@ -18,29 +18,12 @@ body {
     height: 100%;
 }
 
-#input_panel {
-    width: 20px;
-    background-color: #333333;
-}
-
-#output_panel {
-    width: 25px;
-    background-color: #333333;
-}
-
-.number-input {
-}
-
-.number-text {
-    font-family: Courier;
+#banner {
+    font-family: Courier New;
     font-weight: bold;
+    font-size: 2vh;
     text-align: center;
-    background-color: #eeeeee;
-}
-
-#bottom-banner {
-    text-align: center;
-    color: white;
+    color: #71ed55;
     padding: 5px;
     background-color: #333333;
 }
