@@ -1379,7 +1379,7 @@
     (dataKey _outputs)
     (of
       (Binary4Output
-        (x 9200)
+        (x $data.offsetX)
         (y $index * -900)
       )
     )
@@ -1437,9 +1437,64 @@
 #  )
 #)
 
+(def NumberInput
+  (UpButton
+    (name up)
+    (y 310)
+  )
+  (Text
+    (fillColor HIGH_COLOR)
+    (text $data.value)
+    (fontSize 300)
+    (fontWeight bold)
+  )
+  (DownButton
+    (name down)
+    (y -110)
+  )
+)
+
+(def LabeledInput
+  (NumberInput
+    (name numberInput)
+    (x 1600)
+  )
+  (Text
+    (x -200)
+    (y 50)
+    (text "Number of values:")
+    (fontSize 300)
+    (fontWeight bold)
+    (fillColor HIGH_COLOR)
+  )
+  (Text
+    (x -200)
+    (y -150)
+    (text "[rendering will be slow with too many]")
+    (fontSize 130)
+    (fontWeight bold)
+    (fillColor HIGH_COLOR)
+  )
+  (Rectangle
+    (y 70)
+    (width 4000)
+    (height 800)
+    (fillColor none)
+    (strokeColor HIGH_COLOR)
+    (strokeWidth 40)
+  )
+)
+
+(LabeledInput
+  (name labeledInput)
+  (dataKey numValues)
+#  (x 1200)
+  (y 1800)
+)
+
 (BubbleSort
   (name bsort)
   (dataKey bubbleSort)
-  (x -4000)
-  (y 3500)
+  (x -1200)
+  (y 800)
 )

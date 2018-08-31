@@ -20,7 +20,7 @@ fetch('/test.anml').then(response => {
 
 function main(anmlFileText) {
 
-  const numValues = 8;
+  let numValues = 4;
 
   // set up layout
   const container = document.getElementById('container');
@@ -46,28 +46,53 @@ function main(anmlFileText) {
   const inputHandler = new InputHandler({ domElementId: 'renderer' });
 
   const data = {};
+  let decrementInputValue;
+  let incrementInputValue;
+  let bsort;
 
-  const bsort = new BubbleSort(numValues);
-  data.bubbleSort = bsort;
-
-  for (let i = 0; i < numValues; i++) {
-    bsort.setInputValue(i, i);
+  function incrementNumValues() {
+    numValues++;
+    initBsort();
+    update();
   }
 
-  const incrementInputValue = (index) => {
-    bsort.incrementInputValue(index);
+  function decrementNumValues() {
+    numValues--;
+    if (numValues < 2) {
+      numValues = 2;
+    }
+    initBsort();
     update();
-  };
+  }
 
-  const decrementInputValue = (index) => {
-    bsort.decrementInputValue(index);
-    update();
-  };
+  function initBsort() {
+
+    data.numValues = { value: numValues };
+
+    bsort = new BubbleSort(numValues);
+    data.bubbleSort = bsort;
+
+    for (let i = 0; i < numValues; i++) {
+      bsort.setInputValue(i, i);
+    }
+
+    incrementInputValue = (index) => {
+      bsort.incrementInputValue(index);
+      update();
+    };
+
+    decrementInputValue = (index) => {
+      bsort.decrementInputValue(index);
+      update();
+    };
+  }
+
+  initBsort();
 
   // Limit by smallest dimension.
   // TODO: this doesn't work very well. Needs to be updated once we have
   // access to the shape dimensions, which I'm planning to add eventually.
-  const scaleFactor = 0.00004;
+  const scaleFactor = 0.00006;
   let scale;
   if (renderWidth > renderHeight) {
     scale = scaleFactor * renderWidth;
@@ -128,7 +153,26 @@ function main(anmlFileText) {
             break;
           }
         }
-        break;
+      }
+      else if (name === 'labeledInput') {
+        for (let child of obj.getChildren()) {
+          if (child.getName() === 'numberInput') {
+            for (let inChild of child.getChildren()) {
+              if (inChild.getName() === 'up') {
+                if (inChild.intersectsGlobal(point)) {
+                  incrementNumValues();
+                }
+              }
+              else if (inChild.getName() === 'down') {
+                if (inChild.intersectsGlobal(point)) {
+                  decrementNumValues();
+                }
+              }
+            }
+
+            break;
+          }
+        }
       }
     }
   });
