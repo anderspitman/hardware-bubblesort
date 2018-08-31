@@ -35,6 +35,7 @@ function main(anmlFileText) {
   const bottomDim = bannerEl.getBoundingClientRect();
 
   const renderWidth = containerDim.width;
+  const renderHeight = containerDim.height;
   rendererEl.style.width = renderWidth + 'px';
   rendererEl.style.height = (containerDim.height - bottomDim.height) + 'px';
 
@@ -63,7 +64,19 @@ function main(anmlFileText) {
     update();
   };
 
-  renderer.setScale(0.04);
+  // Limit by smallest dimension.
+  // TODO: this doesn't work very well. Needs to be updated once we have
+  // access to the shape dimensions, which I'm planning to add eventually.
+  const scaleFactor = 0.00004;
+  let scale;
+  if (renderWidth > renderHeight) {
+    scale = scaleFactor * renderWidth;
+  }
+  else {
+    scale = scaleFactor * renderHeight;
+  }
+
+  renderer.setScale(scale);
 
   panzoom.onPanEnded((x, y) => {
     renderer.translateViewPortCenter(x, y);
