@@ -268,16 +268,14 @@ class ObjectModel {
 
   intersectsGlobal(point) {
     let parent = this._parent;
+    // compensate for ancestor offsets to determine the equivalent point in
+    // local (model) space.
     const localPoint = new Vector2({ x: point.x, y: point.y });
     while (parent !== null) {
-      console.log("parentage");
       localPoint.x -= processMagicValue(parent, parent.getX());
       localPoint.y -= processMagicValue(parent, parent.getY());
       parent = parent._parent;
     }
-
-    console.log("final point");
-    console.log(localPoint);
 
     return this.intersects(localPoint);
   }
@@ -551,7 +549,6 @@ class RectangleModel extends ShapeModel {
     const x = processMagicValue(this, this.getX());
     const y = processMagicValue(this, this.getY());
 
-    console.log(x, y);
     const halfWidth = this.getWidth() / 2;
     const halfHeight = this.getHeight() / 2;
 

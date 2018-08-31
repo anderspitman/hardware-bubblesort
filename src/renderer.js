@@ -450,7 +450,6 @@ class ANMLRenderer {
     const fontSize = this._scale * processMagicValue(t, t.getFontSize());
     const fontFamily = processMagicValue(t, t.getFontFamily());
     const fontWeight = processMagicValue(t, t.getFontWeight());
-    console.log(fontWeight);
     const font = fontWeight + ' ' + fontSize + 'px' + ' ' + fontFamily;
 
     const text = processMagicValue(t, t.getText());

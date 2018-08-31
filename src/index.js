@@ -90,12 +90,8 @@ function main(anmlFileText) {
   inputHandler.onMouseDown((clickPoint) => {
 
     const point = renderer.toWorldCoordinates(clickPoint);
-    console.log(point);
 
     for (let obj of model.getObjects()) {
-      //if (obj.intersects(point)) {
-      //  console.log(obj);
-      //}
       const name = obj.getName();
       if (name === 'bsort') {
         for (let child of obj.getChildren()) {
@@ -105,15 +101,12 @@ function main(anmlFileText) {
               const input = inputs[i];
               for (let child of input.getChildren()) {
                 if (child.getName() === 'up') {
-                  console.log(child.getX(), child.getY(), point);
                   if (child.intersectsGlobal(point)) {
-                    console.log("handle up");
                     incrementInputValue(i);
                   }
                 }
                 else if (child.getName() === 'down') {
                   if (child.intersectsGlobal(point)) {
-                    console.log("handle down");
                     decrementInputValue(i);
                   }
                 }
