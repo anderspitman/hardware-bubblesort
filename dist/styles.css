@@ -9,7 +9,6 @@ body {
 }
 
 #container {
-    max-width: 960px;
     display: flex;
     flex-direction: row;
     margin: 0 auto;
