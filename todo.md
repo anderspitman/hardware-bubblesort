@@ -10,3 +10,5 @@ events.
 * Implement generator for text
 * Might be able to avoid re-rendering when zooming out, which will make things
 sharper.
+
+* Handle click coordinates when the canvas is offset in the viewport

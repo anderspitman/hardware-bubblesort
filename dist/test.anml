@@ -1276,7 +1276,42 @@
   )
 )
 
+(def UpButton
+  (Rectangle
+    (width 200)
+    (height 150)
+    (fillColor LOW_COLOR)
+  )
+  (Triangle
+    (strokeColor none)
+    (fillColor Black)
+    (x1 0) (y1 50)
+    (x2 50) (y2 -50)
+    (x3 -50) (y3 -50)
+  )
+)
+
+(def DownButton
+  (Rectangle
+    (width 200)
+    (height 150)
+    (fillColor LOW_COLOR)
+  )
+  (Triangle
+    (strokeColor none)
+    (fillColor Black)
+    (x1 0) (y1 -50)
+    (x2 50) (y2 50)
+    (x3 -50) (y3 50)
+  )
+)
+
 (def Binary4Input
+  (UpButton
+    (name up)
+    (x -280)
+    (y 250)
+  )
   (Text
     (x -280)
     (y -60)
@@ -1284,6 +1319,11 @@
     (text $data.value)
     (fontSize 300)
     (fontWeight bold)
+  )
+  (DownButton
+    (name down)
+    (x -280)
+    (y -170)
   )
   (List
     (y 200)
@@ -1326,6 +1366,7 @@
     )
   )
   (List
+    (name inputs)
     (dataKey _inputs)
     (of
       (Binary4Input
@@ -1397,22 +1438,8 @@
 #)
 
 (BubbleSort
+  (name bsort)
   (dataKey bubbleSort)
   (x -4000)
   (y 3500)
 )
-
-#(SwapIfGreater4
-#  (dataKey swap4)
-#  (x 1400)
-#)
-#
-#(SwapIfGreater4
-#  (dataKey swap4)
-#  (y -1000)
-#)
-#
-#(SwapIfGreater4
-#  (dataKey swap4)
-#)
-

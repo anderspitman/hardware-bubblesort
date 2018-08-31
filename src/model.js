@@ -205,6 +205,7 @@ class ObjectModel {
     this._x = this.defaultX();
     this._y = this.defaultY();
     this.setShow(this.defaultShow());
+    this._parent = null;
   }
 
   getName() {
@@ -259,6 +260,26 @@ class ObjectModel {
   }
   setShow(value) {
     this._show = value;
+  }
+
+  intersects(point) {
+    return false;
+  }
+
+  intersectsGlobal(point) {
+    let parent = this._parent;
+    const localPoint = new Vector2({ x: point.x, y: point.y });
+    while (parent !== null) {
+      console.log("parentage");
+      localPoint.x -= processMagicValue(parent, parent.getX());
+      localPoint.y -= processMagicValue(parent, parent.getY());
+      parent = parent._parent;
+    }
+
+    console.log("final point");
+    console.log(localPoint);
+
+    return this.intersects(localPoint);
   }
 }
 
@@ -346,7 +367,7 @@ class UserDefinedShapeModel extends ShapeModel {
     return this._children;
   }
   setChildren(value) {
-    this._children = value;
+    setChildren.bind(this)(value);
   }
 
   intersects(point) {
@@ -373,7 +394,7 @@ class GroupModel extends ShapeModel {
     return this._children;
   }
   setChildren(value) {
-    this._children = value;
+    setChildren.bind(this)(value);
   }
 
   intersects(point) {
@@ -418,7 +439,7 @@ class ListModel extends ShapeModel {
     return this._children;
   }
   setChildren(value) {
-    this._children = value;
+    setChildren.bind(this)(value);
   }
 
   intersects(point) {
@@ -530,6 +551,7 @@ class RectangleModel extends ShapeModel {
     const x = processMagicValue(this, this.getX());
     const y = processMagicValue(this, this.getY());
 
+    console.log(x, y);
     const halfWidth = this.getWidth() / 2;
     const halfHeight = this.getHeight() / 2;
 
@@ -894,6 +916,13 @@ class TextModel extends ShapeModel {
   setText(value) {
     this._text = value;
   }
+}
+
+function setChildren(children) {
+  for (let child of children) {
+    child._parent = this;
+  }
+  this._children = children;
 }
 
 

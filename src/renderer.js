@@ -39,11 +39,16 @@ class ANMLRenderer {
   }
 
   toWorldCoordinates(clickPoint) {
+    //console.log(clickPoint);
     const worldOrigin = this.getActualCenter();
+    //console.log(worldOrigin);
     const worldPoint = clickPoint.subtract(worldOrigin);
+    //console.log(worldPoint);
+    //console.log(this._scale);
     worldPoint.y = -worldPoint.y;
     worldPoint.x /= this._scale;
     worldPoint.y /= this._scale;
+    //console.log(worldPoint);
     return worldPoint;
   }
 
