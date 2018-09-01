@@ -26,6 +26,11 @@ function main(anmlFileText) {
   const container = document.getElementById('container');
   const rendererEl = document.getElementById('renderer');
   const bannerEl = document.getElementById('banner');
+  const bannerText = bannerEl.innerHTML;
+  //const bannerTextColor = '#71ed55';
+  const bannerTextColor = bannerEl.style.color;
+  //const bannerBgColor = '#333333';
+  const bannerBgColor = bannerEl.style.backgroundColor;
 
   container.style.height = window.innerHeight + 'px';
   //container.style.height = window.innerHeight + 'px';
@@ -53,7 +58,7 @@ function main(anmlFileText) {
   function incrementNumValues() {
     numValues++;
     initBsort();
-    update();
+    fullUpdate();
   }
 
   function decrementNumValues() {
@@ -62,7 +67,7 @@ function main(anmlFileText) {
       numValues = 2;
     }
     initBsort();
-    update();
+    fullUpdate();
   }
 
   function initBsort() {
@@ -78,12 +83,12 @@ function main(anmlFileText) {
 
     incrementInputValue = (index) => {
       bsort.incrementInputValue(index);
-      update();
+      fullUpdate();
     };
 
     decrementInputValue = (index) => {
       bsort.decrementInputValue(index);
-      update();
+      fullUpdate();
     };
   }
 
@@ -104,15 +109,25 @@ function main(anmlFileText) {
   renderer.setScale(scale);
 
   panzoom.onPanEnded((x, y) => {
-    renderer.translateViewPortCenter(x, y);
-    panzoom.resetPan();
-    update();
+    requestAnimationFrame(() => {
+      bannerEl.innerHTML = "rendering...";
+      requestAnimationFrame(() => {
+        renderer.translateViewPortCenter(x, y);
+        panzoom.resetPan();
+        update();
+      });
+    });
   });
 
   const renderZoom = () => {
-    renderer.setScale(zoom);
-    panzoom.resetZoom();
-    update();
+    requestAnimationFrame(() => {
+      bannerEl.innerHTML = "rendering...";
+      requestAnimationFrame(() => {
+        renderer.setScale(zoom);
+        panzoom.resetZoom();
+        update();
+      });
+    });
   };
 
   let lastTimeout;
@@ -186,7 +201,7 @@ function main(anmlFileText) {
   //});
 
   model.addUpdateListener(() => {
-    update();
+    fullUpdate();
   });
 
   
@@ -204,24 +219,39 @@ function main(anmlFileText) {
 
   //}, 1000);
 
+  function fullUpdate() {
+    requestAnimationFrame(() => {
+      bannerEl.innerHTML = "rendering...";
+      //bannerEl.style.backgroundColor = bannerBgColor;
+      //bannerEl.style.color = 'red';
+      //render();
+      requestAnimationFrame(update);
+    });
+  }
+
   function update() {
 
     for (let i = 0; i < numValues; i++) {
       const outValue = bsort.getOutputValue(i);
     }
 
-    requestAnimationFrame(render);
+    render();
   }
 
   function render() {
+
     const startTime = timeNowSeconds();
     model.update(data);
     const updateTime = timeNowSeconds();
     //console.log(`Update time: ${updateTime - startTime}`);
     renderer.render(model);
     const renderTime = timeNowSeconds();
-    //console.log(`Render time: ${renderTime - updateTime}`);
+    console.log(`Render time: ${renderTime - updateTime}`);
     const editTime = timeNowSeconds();
+
+    bannerEl.innerHTML = bannerText;
+    bannerEl.style.color = bannerTextColor;
+    bannerEl.style.backgroundColor = bannerBgColor;
   }
 
   update();
