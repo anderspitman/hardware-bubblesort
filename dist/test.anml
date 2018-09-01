@@ -1278,8 +1278,8 @@
 
 (def UpButton
   (Rectangle
-    (width 200)
-    (height 150)
+    (width 300)
+    (height 250)
     (fillColor LOW_COLOR)
   )
   (Triangle
@@ -1293,8 +1293,8 @@
 
 (def DownButton
   (Rectangle
-    (width 200)
-    (height 150)
+    (width 300)
+    (height 250)
     (fillColor LOW_COLOR)
   )
   (Triangle
@@ -1309,11 +1309,11 @@
 (def Binary4Input
   (UpButton
     (name up)
-    (x -280)
-    (y 250)
+    (x -300)
+    (y 300)
   )
   (Text
-    (x -280)
+    (x -300)
     (y -60)
     (fillColor HIGH_COLOR)
     (text $data.value)
@@ -1322,8 +1322,8 @@
   )
   (DownButton
     (name down)
-    (x -280)
-    (y -170)
+    (x -300)
+    (y -220)
   )
   (List
     (y 200)
@@ -1440,7 +1440,7 @@
 (def NumberInput
   (UpButton
     (name up)
-    (y 310)
+    (y 350)
   )
   (Text
     (fillColor HIGH_COLOR)
@@ -1450,7 +1450,7 @@
   )
   (DownButton
     (name down)
-    (y -110)
+    (y -150)
   )
 )
 
@@ -1458,6 +1458,7 @@
   (NumberInput
     (name numberInput)
     (x 1600)
+    (y -20)
   )
   (Text
     (x -200)
@@ -1478,7 +1479,7 @@
   (Rectangle
     (y 70)
     (width 4000)
-    (height 800)
+    (height 900)
     (fillColor none)
     (strokeColor HIGH_COLOR)
     (strokeWidth 40)
