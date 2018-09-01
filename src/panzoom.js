@@ -15,20 +15,16 @@ class PannerZoomer {
 
     let panStartPoint;
 
-    const SCALE_MULTIPLIER = 1.10;
     const SCALE_MIN = 0.001;
     const SCALE_MAX = 1000;
 
-    this.parent.addEventListener('mousedown', (e) => {
+    const down = (x, y) => {
       if (this._enabled) {
-        panStartPoint = new Vector2({
-          x: e.clientX,
-          y: e.clientY,
-        });
+        panStartPoint = new Vector2({ x, y });
       }
-    });
+    };
 
-    this.parent.addEventListener('mouseup', (e) => {
+    const up = (x, y) => {
       if (this._enabled) {
         panStartPoint = null;
 
@@ -43,16 +39,12 @@ class PannerZoomer {
           this._centerY = this._pan.y;
         }
       }
-    });
+    };
 
-    this.parent.addEventListener('mousemove', (e) => {
-
+    const move = (x, y) => {
       if (this._enabled) {
         if (panStartPoint) {
-          const movePoint = new Vector2({
-            x: e.clientX,
-            y: e.clientY,
-          });
+          const movePoint = new Vector2({ x, y });
 
           this._panned = true;
           this._pan = movePoint.subtract(panStartPoint);
@@ -71,19 +63,17 @@ class PannerZoomer {
         // disabled (ie when placing a shape), which caused it to start panning
         // once the button was released.
         panStartPoint = null;
-        console.log("cancel");
       }
-    });
+    };
 
-    let lastTimeout;
-    this.parent.addEventListener('wheel', (e) => {
+    const zoom = (deltaY, scaleMultiplier) => {
       if (this._enabled) {
         let newZoom;
-        if (e.deltaY > 0) {
-          newZoom = this.getZoomingScale() / SCALE_MULTIPLIER;
+        if (deltaY > 0) {
+          newZoom = this.getZoomingScale() / scaleMultiplier;
         }
         else {
-          newZoom = this.getZoomingScale() * SCALE_MULTIPLIER;
+          newZoom = this.getZoomingScale() * scaleMultiplier;
         }
 
         this.setZoomingScale(newZoom);
@@ -93,12 +83,86 @@ class PannerZoomer {
         }
         this._zooming = true;
         //lastTimeout = setTimeout(renderZoom, 100);
-        e.preventDefault();
 
         if (this._onZoomCallback) {
           this._onZoomCallback(this._zoomScale);
         }
       }
+    };
+
+    let finger1 = new Vector2({ x: 0, y: 0 });
+    let finger2 = new Vector2({ x: 0, y: 0 });
+    let prevDist = finger1.distanceTo(finger2);
+
+    this.parent.addEventListener('mousedown', (e) => {
+      down(e.clientX, e.clientY); 
+    });
+
+    this.parent.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) {
+        finger1 = new Vector2({
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY,
+        });
+
+        finger2 = new Vector2({
+          x: e.touches[1].clientX,
+          y: e.touches[1].clientY,
+        });
+
+        prevDist = finger1.distanceTo(finger2);
+      }
+      else {
+        down(e.touches[0].clientX, e.touches[0].clientY); 
+      }
+    });
+
+    this.parent.addEventListener('mouseup', (e) => {
+      up(); 
+    });
+
+    this.parent.addEventListener('touchend', (e) => {
+      up(); 
+    });
+
+    this.parent.addEventListener('mousemove', (e) => {
+      move(e.clientX, e.clientY);
+    });
+
+    this.parent.addEventListener('touchmove', (e) => {
+      if (e.touches.length > 1) {
+
+        finger1 = new Vector2({
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY,
+        });
+
+        finger2 = new Vector2({
+          x: e.touches[1].clientX,
+          y: e.touches[1].clientY,
+        });
+
+        const dist = finger1.distanceTo(finger2);
+
+        const diff = prevDist - dist;
+
+        // make sure it's changed by enough. This was necessary because it
+        // wasn't working. I think because the changes were too small between
+        // events.
+        if (Math.abs(diff) > 1.0) {
+          zoom(diff, 1.04);
+          prevDist = dist;
+        }
+      }
+      else {
+        move(e.touches[0].clientX, e.touches[0].clientY); 
+      }
+    });
+
+    let lastTimeout;
+    this.parent.addEventListener('wheel', (e) => {
+      zoom(e.deltaY, 1.1); 
+      e.preventDefault();
     });
   }
 

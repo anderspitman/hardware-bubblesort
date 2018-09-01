@@ -23,7 +23,7 @@ class Vector2 {
     });
   }
 
-  disanceTo(other) {
+  distanceTo(other) {
     return other.subtract(this).getLength();
   }
 
