@@ -4,7 +4,6 @@ const { ANMLRenderer } = require('./renderer');
 const { BubbleSort } = require('../lib/wild_logic/src/index');
 const { PannerZoomer } = require('./panzoom');
 const { InputHandler } = require('./input_handler');
-const { RectangleModel } = require('./model');
 
 
 const MIN = 0;
@@ -192,39 +191,13 @@ function main(anmlFileText) {
     }
   });
 
-  //inputHandler.onMouseUp((clickPoint) => {
-  //  const point = renderer.toWorldCoordinates(clickPoint);
-  //});
-
-  //inputHandler.onMouseMove((clickPoint) => {
-  //  const point = renderer.toWorldCoordinates(clickPoint);
-  //});
-
   model.addUpdateListener(() => {
     fullUpdate();
   });
 
-  
-
-    //let val = 0;
-  //setInterval(function() {
-  //  const start = timeNowSeconds();
-  //  bsort.setInputValue(0, val);
-  //  //console.log(`Time: ${timeNowSeconds() - start}`);
-  //  val++;
-  //  if (val > numValues) {
-  //    val = 0;
-  //  }
-  //  requestAnimationFrame(update);
-
-  //}, 1000);
-
   function fullUpdate() {
     requestAnimationFrame(() => {
       bannerEl.innerHTML = "rendering...";
-      //bannerEl.style.backgroundColor = bannerBgColor;
-      //bannerEl.style.color = 'red';
-      //render();
       requestAnimationFrame(update);
     });
   }
@@ -246,7 +219,7 @@ function main(anmlFileText) {
     //console.log(`Update time: ${updateTime - startTime}`);
     renderer.render(model);
     const renderTime = timeNowSeconds();
-    console.log(`Render time: ${renderTime - updateTime}`);
+    //console.log(`Render time: ${renderTime - updateTime}`);
     const editTime = timeNowSeconds();
 
     bannerEl.innerHTML = bannerText;
@@ -254,5 +227,5 @@ function main(anmlFileText) {
     bannerEl.style.backgroundColor = bannerBgColor;
   }
 
-  update();
+  fullUpdate();
 }

@@ -104,7 +104,7 @@ class ANMLRenderer {
 
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-    this.drawGrid();
+    //this.drawGrid();
 
     //const viewPortOffset = new Vector2({
     //  x: this._actualCenterX,
