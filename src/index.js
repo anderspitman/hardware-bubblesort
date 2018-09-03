@@ -1,9 +1,11 @@
 const { timeNowSeconds } = require('./utils');
-const { ANMLParser } = require('./parser');
-const { ANMLRenderer } = require('./renderer');
 const { BubbleSort } = require('../lib/wild-logic');
-const { PannerZoomer } = require('./panzoom');
-const { InputHandler } = require('./input_handler');
+const {
+  PannerZoomer,
+  InputHandler,
+  Renderer,
+  Parser,
+} = require('../lib/anml');
 
 
 const MIN = 0;
@@ -43,9 +45,9 @@ function main(anmlFileText) {
   rendererEl.style.width = renderWidth + 'px';
   rendererEl.style.height = (containerDim.height - bottomDim.height) + 'px';
 
-  const parser = new ANMLParser();
+  const parser = new Parser();
   let model = parser.parse(anmlFileText);
-  const renderer = new ANMLRenderer({ domParentId: 'renderer' });
+  const renderer = new Renderer({ domParentId: 'renderer' });
   const panzoom = new PannerZoomer({ domElementId: 'renderer' });
   const inputHandler = new InputHandler({ domElementId: 'renderer' });
 
