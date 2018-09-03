@@ -1,7 +1,7 @@
 const { timeNowSeconds } = require('./utils');
 const { ANMLParser } = require('./parser');
 const { ANMLRenderer } = require('./renderer');
-const { BubbleSort } = require('../lib/wild_logic/src/index');
+const { BubbleSort } = require('../lib/wild-logic');
 const { PannerZoomer } = require('./panzoom');
 const { InputHandler } = require('./input_handler');
 
