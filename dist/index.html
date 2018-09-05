@@ -14,5 +14,10 @@
       </div>
     </div>
     <script src='/main.js'></script>
+    <script>
+      document.addEventListener('touchmove', function(e) {
+        e.preventDefault();
+      }, {passive:false});
+    </script>
   </body>
 </html>

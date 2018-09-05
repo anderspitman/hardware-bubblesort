@@ -160,7 +160,6 @@ function main(anmlFileText) {
   const bannerBgColor = bannerEl.style.backgroundColor;
 
   container.style.height = window.innerHeight + 'px';
-  //container.style.height = window.innerHeight + 'px';
 
   const containerDim = container.getBoundingClientRect();
   const rendererDim = rendererEl.getBoundingClientRect();

@@ -19,10 +19,15 @@ body {
 }
 
 #banner {
+    z-index: 1000;
+    position: absolute;
+    width: 100vw;
+    height: 50px;
     font-family: Courier New;
     font-weight: bold;
     font-size: 2vh;
     text-align: center;
+    vertical-align: middle;
     color: #71ed55;
     padding: 5px;
     background-color: #333333;
