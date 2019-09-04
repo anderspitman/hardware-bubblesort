@@ -137,7 +137,7 @@ class BubbleSort {
 }
 
 
-fetch('/parts.anml').then(response => {
+fetch('./parts.anml').then(response => {
   return response.text();
 })
 .then(text => {
